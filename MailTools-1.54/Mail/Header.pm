@@ -19,7 +19,7 @@ use strict;
 use Carp;
 use vars qw($VERSION $FIELD_NAME);
 
-$VERSION = "1.53";
+$VERSION = "1.54";
 
 my $MAIL_FROM = 'KEEP';
 my %HDR_LENGTHS = ();
@@ -153,7 +153,11 @@ sub _tag_case
  my $tag = shift;
 
  # Bug in unicode \U, perl 5.8.0 breaks when casing utf8 in regex
- utf8::downgrade($tag) if $] eq 5.008;
+ # dirty trics are needed to avoid compile-time conflicts.
+ if($] eq 5.008)
+ {   require utf8;
+     eval 'utf8::downgrade($tag)';
+ }
 
  $tag =~ s/:\Z//o;
 

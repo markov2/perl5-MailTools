@@ -12,7 +12,7 @@ use Carp;
 use strict;
 use vars qw($AUTOLOAD $VERSION);
 
-$VERSION = "1.53";
+$VERSION = "1.54";
 
 unless(defined &UNIVERSAL::can) {
     *UNIVERSAL::can = sub {
@@ -226,6 +226,9 @@ sub tag
  my $self = shift;
  my $tag = ref($self) || $self;
 
+ # Bug in unicode \U, perl 5.8.0 breaks when casting utf8 in regex
+ utf8::downgrade($tag) if $] eq 5.008;
+
  $tag =~ s/.*:://o;
  $tag =~ s/_/-/og;
  $tag =~ s/\b([a-z]+)/\L\u$1/gio;
@@ -294,6 +297,9 @@ sub AUTOLOAD
  unless(eval "require " . $pkg)
   {
    my $tag = $method;
+
+   # Bug in unicode \U, perl 5.8.0 breaks when casting utf8 in regex
+   utf8::downgrade($tag) if $] eq 5.008;
 
    $tag =~ s/_/-/og;
    $tag =~ s/\b([a-z]+)/\L\u$1/gio;

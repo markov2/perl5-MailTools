@@ -10,7 +10,7 @@ use Carp;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "1.53";
+$VERSION = "1.54";
 
 sub new {
     my $self = shift;
