@@ -1,3 +1,45 @@
+
+version 1.40: Fri Aug 24 20:15:30 CEST 2001
+
+	- mailaddress defaults to username, not gcos in Mail/Util.pm
+	  Patched by [Vivek Khera]
+
+	- Increased all version-numbers to show that maintainer-address
+	  did change.   Suggested by [Tassilo v Parseval]
+
+	  All packages in this bundle with have the same version!!!
+	  The highest number used was 1.33.
+
+
+version 1.16: Wed Aug  8 11:28:26 CEST 2001
+	by Mark Overmeer <mailtools@overmeer.net>
+
+	From now on MailTools will be maintained by Mark Overmeer
+	<mailtools@overmeer.net>
+
+	- Updated all manual-pages to include address of new maintainer.
+
+	- Prohibition to modify header should be respected in Mail::Header.
+	  Patch by [Tatsuhiko Miyagawa]
+
+	- Securely close socket in Mail::Mailer::smtp.
+	  Patch by [Heikki Korpela]
+
+	- Fixed "bad file-descriptor" errors in Mail::Mailer::smtp.
+          Patch by [Aaron J Mackey]
+
+	- Some long header-lines caused the following line in the header
+	  to be indented too.  This should be fixed.
+	  Reported by [Simon Cozens]
+
+	- Small modifications to Mail::Mailer should make the module
+	  work for os2.  Patch by [Ilya Zakharevich]
+
+	- Fix to be able to specify an index at the first addition of
+	  a header-line to the Mail::Header structure.
+	  Patch by [Lucas Fisher]
+
+
 Change 583 on 2000/09/04 by <gbarr@pobox.com> (Graham Barr)
 
 	Mail::Address

@@ -1,7 +1,7 @@
 # Mail::Internet.pm
 #
-# Copyright (c) 1995-8 Graham Barr <gbarr@pobox.com>. All rights
-# reserved. This program is free software; you can redistribute it and/or
+# Copyright (c) 1995-2001 Graham Barr <gbarr@pobox.com>. All rights reserved.
+# This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 #
 
@@ -16,7 +16,7 @@ use Mail::Header;
 use vars qw($VERSION);
 
 BEGIN {
-    $VERSION = "1.33";
+    $VERSION = "1.40";
     *AUTOLOAD = \&AutoLoader::AUTOLOAD;
 
     unless(defined &UNIVERSAL::isa) {
@@ -549,7 +549,7 @@ sub _prephdr {
 
     my $tag;
 
-    foreach $tag (qw(From Sender)) {
+    foreach $tag (qw(From Sender)) {  # Sender is deprecated
 	$hdr->add($tag,$from)
 	    unless($hdr->get($tag));
     }
@@ -945,11 +945,11 @@ L<Mail::Address>
 
 =head1 AUTHOR
 
-Graham Barr <gbarr@pobox.com>
+Graham Barr.  Maintained by Mark Overmeer <mailtools@overmeer.net>
 
 =head1 COPYRIGHT
 
-Copyright (c) 1995-7 Graham Barr. All rights reserved. This program is free
+Copyright (c) 1995-2001 Graham Barr. All rights reserved. This program is free
 software; you can redistribute it and/or modify it under the same terms
 as Perl itself.
 
