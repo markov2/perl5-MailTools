@@ -1,0 +1,5 @@
+
+use Mail::Field::Date;
+  my $dte = Mail::Field->new('Date','Tue, 13 Mar 2001 15:50:52 +1100');
+warn  my $seconds = $dte->time;
+
