@@ -12,10 +12,11 @@ sub can_cc { 0 }
 sub exec {
     my($self, $exe, $args, $to) = @_;
     my %opt   = @$args;
-    my $host  = $opt{'Server'} || undef;
-    my $debug = $opt{'Debug'}  || 0;
+    my $host  = $opt{Server} || undef;
+    $opt{Debug} ||= 0;
+
     # for Net::SMTP we do not really exec
-    my $smtp = Net::SMTP->new($host, Debug => $debug, %args)
+    my $smtp = Net::SMTP->new($host, %opt)
 	or return undef;
 
     ${*$self}{'sock'} = $smtp;

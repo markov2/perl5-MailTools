@@ -19,7 +19,7 @@ use strict;
 use Carp;
 use vars qw($VERSION $FIELD_NAME);
 
-$VERSION = "1.44";
+$VERSION = "1.45";
 
 my $MAIL_FROM = 'KEEP';
 my %HDR_LENGTHS = ();
@@ -86,7 +86,7 @@ my %STRUCTURE;
   Resent-Date Resent-From Resent-Sender Resent-To Return-Path
   list-help list-post list-unsubscribe Mailing-List
   Received References Message-ID In-Reply-To
-  Content-Length Content-Type
+  Content-Length Content-Type Content-Disposition
   Delivered-To
   Lines
   MIME-Version

@@ -1,10 +1,25 @@
 
 Unsolved problems:
 
-    - http://bugs.debian.org/104572
     - Mark Overmeer <mailtools@overmeer.net> (mailtools maintainer)
       is parsed into two separate objects.... wrong
     
+
+version 1.45: Thu May 23 10:15:59 CEST 2002
+
+	- [Mark D. Anderson] Add Content-Disposition to the list
+	  of structured header fields in Mail::Header.
+
+	- [David Weeler] Added darwin to `mail' versions which require
+	  '-I' in Mail::Mailer.
+
+	- [Leon Avery] updated Mail/Mailer/rfc822.pm to be more
+	  careful with multi-lined, multi-occurence headers.
+
+	- [Drieux] small fix in Mail/Mailer/smtp.pm which enables the
+	  passing-on of args to Net::SMTP.
+
+	- {Mark Overmeer] Put a message about Mail::Box in Mail::Internet
 
 version 1.44 Sat Mar 23 10:16:47 CET 2002
 
