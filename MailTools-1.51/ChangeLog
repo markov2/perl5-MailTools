@@ -1,4 +1,14 @@
 
+version 1.51: Tue Oct 29 14:25:28 CET 2002
+
+	- Mail::Util::maildomain() if no information about domains
+	  is found in sendmail.cf, no error should be reported.
+	  [Vaughn Skinner]
+
+	- Removed the possibility to use 'mailx', which was the
+	  default: removal from the detectionn routines and Mail/Mailer/mail.pm.
+	  Strongly suggested by [Sebastian Krahmer]
+
 version 1.50: Wed Sep  4 00:38:49 CEST 2002
 
 	- Mail::Util::domainname() Patch to remove use of S variable from

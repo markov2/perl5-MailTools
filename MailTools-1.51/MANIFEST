@@ -9,7 +9,6 @@ Mail/Filter.pm
 Mail/Header.pm			
 Mail/Internet.pm		Functions for RFC822 mail manipulations
 Mail/Mailer.pm			Simple mail agent interface
-Mail/Mailer/mail.pm
 Mail/Mailer/rfc822.pm
 Mail/Mailer/sendmail.pm
 Mail/Mailer/smtp.pm

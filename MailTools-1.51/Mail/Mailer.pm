@@ -29,12 +29,6 @@ behaviour of a method by passing C<$command> to the C<new> method.
 
 =over 4
 
-=item C<mail>
-
-Use the Unix system C<mail> program to deliver the mail.  C<$command>
-is the path to C<mail>.  Mail::Mailer will search for C<mailx>, C<Mail>
-and C<mail> (in this order).
-
 =item C<sendmail>
 
 Use the C<sendmail> program to deliver the mail.  C<$command> is the
@@ -132,7 +126,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.50";
+$VERSION = "1.51";
 
 sub Version { $VERSION }
 
@@ -141,9 +135,6 @@ sub Version { $VERSION }
 # Suggested binaries for types?  Should this be handled in the object class?
 @Mailers = (
 
-    # Body on stdin with tilde escapes
-    'mail'	=> 'mail',
-
     # Headers-blank-Body all on stdin
     'sendmail'  => '/usr/lib/sendmail;/usr/sbin/sendmail;/usr/ucblib/sendmail',
 
@@ -151,21 +142,6 @@ sub Version { $VERSION }
     'qmail'     => '/usr/sbin/qmail-inject;/var/qmail/bin/qmail-inject',
     'test'	=> undef
 );
-
-# There are several flavours of mail, which do we have ????
-
-if(my $cmd = is_exe('mailx;Mail;mail'))
-{
-    my $osname = $Config{'osname'};
-
-    if($osname =~ /(?:dgux)|(?:solaris)/io) {
-	$cmd .= " -~";
-    }
-    elsif($osname =~ m/linux|bsdos|freebsd|netbsd|openbsd|darwin/io) {
-	$cmd .= " -I";
-    }
-    push @Mailers, 'mail', $cmd;
-}
 
 if($ENV{PERL_MAILERS})
 {   push @Mailers
