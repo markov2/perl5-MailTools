@@ -1,4 +1,18 @@
 
+version 1.59: Wed Aug 13 08:13:00 CEST 2003
+
+	- Patch by [Shafiek Rasdien] which adds Mail::Internet::smtpsend
+	  option MailFrom.
+
+	- [Ziya Suzen] extended Mail::Mailer::test to provide more
+	  test information.
+
+	- Added SWE (Sender Waranted E-mail) as abbreviation in field
+	  names which is always in caps, on request by [Ronnie Paskin]
+
+	- Added SOAP and LDAP as abbreviation in field names which is
+	  always in caps.
+
 version 1.58: Tue Jan 14 14:42:29 CET 2003
 
 	- And again utf8 [Philip Molter]

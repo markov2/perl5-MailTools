@@ -20,7 +20,7 @@ use strict;
 use Carp;
 use vars qw($VERSION $FIELD_NAME);
 
-$VERSION = "1.58";
+$VERSION = "1.59";
 
 my $MAIL_FROM = 'KEEP';
 my %HDR_LENGTHS = ();
@@ -155,8 +155,9 @@ sub _tag_case
  $tag =~ s/\:$//;
 
  join('-',
-     map { /^[b-df-hj-np-tv-z]+$|^MIME$/i ? uc($_) : ucfirst(lc($_)) }
-         split('-', $tag));
+     map { /^[b-df-hj-np-tv-z]+$|^(?:MIME|SWE|SOAP|LDAP)$/i
+         ? uc($_) : ucfirst(lc($_)) }
+              split('-', $tag));
 }
 
 # format a complete line

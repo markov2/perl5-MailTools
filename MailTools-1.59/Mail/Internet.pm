@@ -17,7 +17,7 @@ use Mail::Header;
 use vars qw($VERSION);
 
 BEGIN {
-    $VERSION = "1.58";
+    $VERSION = "1.59";
     *AUTOLOAD = \&AutoLoader::AUTOLOAD;
 
     unless(defined &UNIVERSAL::isa) {
@@ -571,6 +571,7 @@ use strict;
     my $src  = shift;
     my %opt = @_;
     my $host = $opt{Host};
+    my $envelope = $opt{MailFrom} || mailaddress();
     my $noquit = 0;
     my $smtp;
     my @hello = defined $opt{Hello} ? (Hello => $opt{Hello}) : ();
@@ -621,7 +622,7 @@ use strict;
 
     # Send it
 
-    my $ok = $smtp->mail( mailaddress() ) &&
+    my $ok = $smtp->mail( $envelope ) &&
 		$smtp->to(@addr) &&
 		$smtp->data(join("", @{$hdr->header},"\n",@{$src->body}));
 
@@ -884,6 +885,11 @@ Name of the SMTP server to connect to, or a Net::SMTP object to use
 If C<Host> is not given then the SMTP host is found by attempting
 connections first to hosts specified in C<$ENV{SMTPHOSTS}>, a colon
 separated list, then C<mailhost> and C<localhost>.
+
+=item MailFrom
+
+The e-mail address which is used as sender.  By default, the mailaddress()
+method provides the address of the sender.
 
 =item To
 
