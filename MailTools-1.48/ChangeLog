@@ -1,10 +1,17 @@
 
-Unsolved problems:
+version 1.48: Wed Aug  7 22:54:56 CEST 2002
 
-    - "Mark Overmeer <mailtools@overmeer.net> (mailtools maintainer)"
-      is parsed into two separate objects.... wrong
-      Anyone with a patch?
-    
+	- Mail::Mailer::test only worked in UNIX, because it used the 'test',
+	  'sh' and 'cat' command. [Selsky] provided a patch to remove
+	  these dependencies.  It may not work on ancient perl versions, but
+	  that is not really a problem for a testing facility.
+
+	- The fix for nested comments in Mail::Address's, which went in a long
+	  time ago, broke the parser.  As example
+	   "Mark Overmeer <mailtools@overmeer.net> (mailtools maintainer)"
+	  was parsed into two separate objects.... wrong.
+          [Nicholas Oxhøj] reversed the patch.
+
 version 1.47: Fri Jul  5 12:02:55 CEST 2002
 
 	- Mail::Mailer::_cleanup_headers unfolds the header lines, but

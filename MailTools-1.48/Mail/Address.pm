@@ -11,7 +11,7 @@ use Carp;
 use vars qw($VERSION);
 use locale;
 
-$VERSION = "1.47";
+$VERSION = "1.48";
 sub Version { $VERSION }
 
 #
@@ -179,13 +179,7 @@ sub parse {
    $depth++;
   }
   elsif($_ eq '>') {
-   $depth-- if($depth);
-   unless($depth) {
-    my $o = _complete($pkg,\@phrase, \@address, \@comment);
-    push(@objs, $o) if(defined $o);
-    $depth = 0;
-    $next = _find_next($idx,$tokens,$len);
-   }
+   $depth-- if $depth;
   }
   elsif($_ eq ',') {
    warn "Unmatched '<>' in $line" if($depth);

@@ -1,4 +1,4 @@
-<SOFTPKG NAME="MailTools" VERSION="1,47,0,0">
+<SOFTPKG NAME="MailTools" VERSION="1,48,0,0">
 	<TITLE>MailTools</TITLE>
 	<ABSTRACT>Various Mail related modules</ABSTRACT>
 	<AUTHOR>Mark Overmeer &lt;mailtools@overmeer.net&gt;</AUTHOR>

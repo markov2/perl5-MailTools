@@ -57,8 +57,8 @@ Use qmail's qmail-inject program to deliver the mail.
 
 =item C<test>
 
-Used for debugging, this calls C</bin/echo> to display the data.  No
-mail is ever sent.  C<$command> is ignored.
+Used for debugging, this displays the data on STDOUT.  No mail is ever
+sent.  C<$command> is ignored.
 
 =back
 
@@ -132,7 +132,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.47";
+$VERSION = "1.48";
 
 sub Version { $VERSION }
 
@@ -142,14 +142,14 @@ sub Version { $VERSION }
 @Mailers = (
 
     # Body on stdin with tilde escapes
-    'mail'	=> 	'mail',
+    'mail'	=> 'mail',
 
     # Headers-blank-Body all on stdin
-    'sendmail'  =>      '/usr/lib/sendmail;/usr/sbin/sendmail;/usr/ucblib/sendmail',
+    'sendmail'  => '/usr/lib/sendmail;/usr/sbin/sendmail;/usr/ucblib/sendmail',
 
-    'smtp'	=> 	undef,
-    'qmail'     =>      '/usr/sbin/qmail-inject;/var/qmail/bin/qmail-inject',
-    'test'	=> 	'test'
+    'smtp'	=> undef,
+    'qmail'     => '/usr/sbin/qmail-inject;/var/qmail/bin/qmail-inject',
+    'test'	=> undef
 );
 
 # There are several flavours of mail, which do we have ????
