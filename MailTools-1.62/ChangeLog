@@ -1,4 +1,11 @@
 
+version 1.62: Wed Mar 24 13:29:27 CET 2004
+
+	- [Reuven M. Lerner], removed warning by Mail::Address::host()
+	  when no e-mail address is provided.
+
+	- [Ville Skytta] contributed another Mail::Mailer::testfile fix
+
 version 1.61: Wed Mar 10 10:51:44 CET 2004
 
 	- [Erik Van Roode] Mail::Mailer::test.pm -> Mail::Mailer::testfile.pm

@@ -49,7 +49,7 @@ from C<Net::SMTP>.
 
 Use qmail's qmail-inject program to deliver the mail.
 
-=item C<test>
+=item C<testfile>
 
 Used for debugging, this displays the data on STDOUT.  No mail is ever
 sent.  C<$command> is ignored.
@@ -126,7 +126,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.61";
+$VERSION = "1.62";
 
 sub Version { $VERSION }
 
@@ -140,7 +140,7 @@ sub Version { $VERSION }
 
     'smtp'	=> undef,
     'qmail'     => '/usr/sbin/qmail-inject;/var/qmail/bin/qmail-inject',
-    'test'	=> undef
+    'testfile'	=> undef
 );
 
 if($ENV{PERL_MAILERS})

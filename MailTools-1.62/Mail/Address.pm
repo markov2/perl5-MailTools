@@ -12,7 +12,7 @@ use Carp;
 use vars qw($VERSION);
 use locale;
 
-$VERSION = "1.61";
+$VERSION = "1.62";
 sub Version { $VERSION }
 
 #
@@ -301,7 +301,7 @@ sub name
 
 sub host {
  my $me = shift;
- my $addr = $me->address;
+ my $addr = $me->address || '';
  my $i = rindex($addr,'@');
 
  my $host = ($i >= 0) ? substr($addr,$i+1) : undef;
