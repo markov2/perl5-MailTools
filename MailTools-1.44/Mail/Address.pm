@@ -11,7 +11,7 @@ use Carp;
 use vars qw($VERSION);
 use locale;
 
-$VERSION = "1.43";
+$VERSION = "1.44";
 sub Version { $VERSION }
 
 #

@@ -1,8 +1,24 @@
 
 Unsolved problems:
 
-    http://bugs.debian.org/104572
+    - http://bugs.debian.org/104572
+    - Mark Overmeer <mailtools@overmeer.net> (mailtools maintainer)
+      is parsed into two separate objects.... wrong
     
+
+version 1.44 Sat Mar 23 10:16:47 CET 2002
+
+	- [Andreas Marcel Riechert] add -I to mailx for netbsd and
+	  openbsd too.
+
+	- [Nate Mueller] Do respect user's X-Mailer in Mail::Internet
+	  above own line.
+
+	- [Alexey Egorov] Header-line without body lost line-separator
+	  in Mail::Header.pm
+
+	- [Bo Adler] and [Iosif Fettich] Found that I removed a blank
+	  before 'sub smtpsend' which caused AutoSplit to misbehave.
 
 version 1.43: Fri Feb  8 09:43:25 CET 2002
 

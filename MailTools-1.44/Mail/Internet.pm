@@ -16,7 +16,7 @@ use Mail::Header;
 use vars qw($VERSION);
 
 BEGIN {
-    $VERSION = "1.43";
+    $VERSION = "1.44";
     *AUTOLOAD = \&AutoLoader::AUTOLOAD;
 
     unless(defined &UNIVERSAL::isa) {
@@ -533,9 +533,10 @@ sub _prephdr {
 
     $hdr->delete('Received');
 
-    $hdr->replace('X-Mailer', "Perl5 Mail::Internet v" . $Mail::Internet::VERSION);
+    $hdr->replace('X-Mailer', "Perl5 Mail::Internet v".$Mail::Internet::VERSION)
+        unless $hdr->count('X-Mailer');
 
-    my $name = eval { local $SIG{__DIE__}; (getpwuid($>))[6] } || $ENV{NAME} || "";
+    my $name = eval {local $SIG{__DIE__}; (getpwuid($>))[6]} || $ENV{NAME} ||"";
 
     while($name =~ s/\([^\(\)]*\)//) { 1; }
 
@@ -564,7 +565,7 @@ use Net::Domain qw(hostname);
 use Net::SMTP;
 use strict;
 
-sub smtpsend 
+ sub smtpsend 
 {
     my $src  = shift;
     my %opt = @_;

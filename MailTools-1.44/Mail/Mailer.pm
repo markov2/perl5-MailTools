@@ -132,7 +132,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.43";
+$VERSION = "1.44";
 
 sub Version { $VERSION }
 
@@ -161,7 +161,7 @@ if(my $cmd = is_exe('mailx;Mail;mail'))
     if($osname =~ /(?:dgux)|(?:solaris)/io) {
 	$cmd .= " -~";
     }
-    elsif($osname =~ /(?:linux)|(?:bsdos)|(?:freebsd)/io) {
+    elsif($osname =~ m/linux|bsdos|freebsd|netbsd|openbsd/io) {
 	$cmd .= " -I";
     }
     push @Mailers, 'mail', $cmd;
