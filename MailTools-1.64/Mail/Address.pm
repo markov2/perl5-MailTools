@@ -12,7 +12,7 @@ use Carp;
 use vars qw($VERSION);
 use locale;
 
-$VERSION = "1.63";
+$VERSION = "1.64";
 sub Version { $VERSION }
 
 #
@@ -41,13 +41,19 @@ sub _extract_name
     return "" if /^[\d ]+$/;
 
     # remove outermost parenthesis
-    s/^\((.*)\)$/$1/g;
+    s/^\((.*)\)$/$1/;
 
     # remove outer quotation marks
-    s/^"|"$//g;
+    s/^"(.*)"$/$1/;
 
-    # remove embedded comments
-    s/\(.*\)//g;
+    # remove minimal embedded comments
+    s/\(.*?\)//g;
+
+    # remove all escapes
+    s/\\//g;
+
+    # remove internal quotation marks
+    s/^"(.*)"$/$1/;
 
     # reverse "Last, First M." if applicable
     s/^([^\s]+) ?, ?(.*)$/$2 $1/;

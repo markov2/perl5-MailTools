@@ -51,7 +51,7 @@ Use qmail's qmail-inject program to deliver the mail.
 
 Used for debugging, this displays the data to the file named in
 C<$Mail::Mailer::testfile::config{outfile}> which defaults to a file
-named C<mailer.testgile>.  No mail is ever sent.
+named C<mailer.testfile>.  No mail is ever sent.
 
 =back
 
@@ -124,7 +124,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.63";
+$VERSION = "1.64";
 
 sub Version { $VERSION }
 

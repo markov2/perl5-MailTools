@@ -15,7 +15,7 @@ use Exporter ();
 BEGIN {
     require 5.000;
 
-    $VERSION = "1.63";
+    $VERSION = "1.64";
 
     *AUTOLOAD = \&AutoLoader::AUTOLOAD;
     @ISA = qw(Exporter);

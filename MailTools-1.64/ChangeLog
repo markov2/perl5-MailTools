@@ -1,4 +1,18 @@
 
+version 1.65: Wed Nov 24 15:43:17 CET 2004
+
+	- Remove "minimal" comments from Mail::Address
+
+        - [Dan Grillo] suggested some improvements to Mail::Address::name(),
+	  and some more were added.
+
+	- [Slavan Rezic] small typo.
+
+version 1.64: Tue Aug 17 22:24:22 CEST 2004
+
+	- CPAN failed to index 1.63 correctly, so hopefully it will
+	  work now.
+
 version 1.63: Mon Aug 16 17:28:15 CEST 2004
 
 	- [Craig Davison] Fixed date format in Mail::Field::Date to
