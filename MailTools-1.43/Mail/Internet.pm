@@ -16,7 +16,7 @@ use Mail::Header;
 use vars qw($VERSION);
 
 BEGIN {
-    $VERSION = "1.42";
+    $VERSION = "1.43";
     *AUTOLOAD = \&AutoLoader::AUTOLOAD;
 
     unless(defined &UNIVERSAL::isa) {
@@ -564,7 +564,7 @@ use Net::Domain qw(hostname);
 use Net::SMTP;
 use strict;
 
- sub smtpsend 
+sub smtpsend 
 {
     my $src  = shift;
     my %opt = @_;

@@ -14,7 +14,7 @@ use Exporter ();
 BEGIN {
     require 5.000;
 
-    $VERSION = "1.42";
+    $VERSION = "1.43";
 
     *AUTOLOAD = \&AutoLoader::AUTOLOAD;
     @ISA = qw(Exporter);
@@ -226,7 +226,7 @@ sub mailaddress {
 
     $mailaddress ||= $ENV{USER}    ||
                      $ENV{LOGNAME} ||
-                     getpwuid($>)  ||
+                     eval {getpwuid($>)} ||
                      "postmaster";
 
     ##

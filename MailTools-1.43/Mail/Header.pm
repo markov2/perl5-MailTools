@@ -19,7 +19,7 @@ use strict;
 use Carp;
 use vars qw($VERSION $FIELD_NAME);
 
-$VERSION = "1.42";
+$VERSION = "1.43";
 
 my $MAIL_FROM = 'KEEP';
 my %HDR_LENGTHS = ();
@@ -135,7 +135,7 @@ sub _fold_line
     }
    else
     {
-      $_[0] =~ s/(.{$min,$max})\s+|(.{$max})/$+\n    /g;
+      $_[0] =~ s/(.{$min,$max})\s+/$+\n    /g;
       $_[0] =~ s/\s*$/\n/s;
     }
   }

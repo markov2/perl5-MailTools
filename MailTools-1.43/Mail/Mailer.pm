@@ -48,7 +48,8 @@ to use can be specified in C<@args> with
     $mailer = new Mail::Mailer 'smtp', Server => $server;
 
 The smtp mailer does not handle C<Cc> and C<Bcc> lines, neither their
-C<Resent-*> fellows.
+C<Resent-*> fellows. The C<Debug> options enables debugging output
+from C<Net::SMTP>.
 
 =item C<qmail>
 
@@ -131,7 +132,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.42";
+$VERSION = "1.43";
 
 sub Version { $VERSION }
 

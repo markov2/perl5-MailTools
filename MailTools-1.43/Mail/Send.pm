@@ -8,7 +8,7 @@ use Carp;
 use vars qw($VERSION);
 require Mail::Mailer;
 
-$VERSION = "1.42";
+$VERSION = "1.43";
 
 sub Version { $VERSION }
 
@@ -79,6 +79,8 @@ Mail::Send - Simple electronic mail interface
 
     # Launch mailer and set headers. The filehandle returned
     # by open() is an instance of the Mail::Mailer class.
+    # Arguments to the open() method are passed to the Mail::Mailer
+    # constructor.
 
     $fh = $msg->open;
 

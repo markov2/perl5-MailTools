@@ -2,6 +2,24 @@
 Unsolved problems:
 
     http://bugs.debian.org/104572
+    
+
+version 1.43: Fri Feb  8 09:43:25 CET 2002
+
+	- [Jason Burnett] Added debug option for Net::SMTP for
+	  Mail::Mail::smtp.
+
+	- [Slavan Rezic] + [Jonathan Stowe] Added eval around getpwuid,
+          to avoid croak on Windows.
+
+	- [Slavan Rezic] minor doc update.  The documentation is
+	  still poor.
+
+	- A lot of people complaint (and that after so many years that the
+	  module is active) about folder lines within words or strings.
+	  The mistake in the original implementation was that it tried to
+	  fold too hard; folding is a service, but no requirement.
+ 	  So: that overly active folding is removed now.
 
 version 1.42: Mon Dec 10 19:22:01 CET 2001
 
