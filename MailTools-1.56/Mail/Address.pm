@@ -11,7 +11,7 @@ use Carp;
 use vars qw($VERSION);
 use locale;
 
-$VERSION = "1.55";
+$VERSION = "1.56";
 sub Version { $VERSION }
 
 #
@@ -23,7 +23,10 @@ sub _extract_name
     local $_ = shift || '';
     
     # Bug in unicode \U, perl 5.8.0 breaks when casing utf8 in regex
-    utf8::downgrade($_) if $] eq 5.008;
+    if($] eq 5.008)
+    {   require utf8;
+        utf8::downgrade($_);
+    }
 
     # trim whitespace
     s/^\s+//;

@@ -1,4 +1,9 @@
 
+version 1.56: Mon Jan  6 17:13:17 CET 2003
+
+	- And again, the patches of Autrijus had to be adapted to run on
+	  a perl 5.6.1 installation.  Thanks to [Philip Molter]
+
 version 1.55: Mon Jan  6 08:05:58 CET 2003
 
 	- One explicit utf8::downgrade for 5.8.0, this time for
