@@ -1,4 +1,15 @@
 
+version 1.66: Thu Jan 20 10:16:10 CET 2005
+
+	- Extended explanation that Mail::Address is limited.
+
+	- Added examples/mail-mailer.pl, contributed by [Bruno Negrão]
+
+	- use Mail::Mailer qw(mail) sets default mailer.  Doc update by
+	  [Slavan Rezic]
+
+	- Mail::Mailer::smtp now can authenticate SSL [Aaron J. Mackey]
+
 version 1.65: Wed Nov 24 15:43:17 CET 2004
 
 	- Remove "minimal" comments from Mail::Address

@@ -12,7 +12,7 @@ use Carp;
 use vars qw($VERSION);
 use locale;
 
-$VERSION = "1.65";
+$VERSION = "1.66";
 sub Version { $VERSION }
 
 #
@@ -358,11 +358,51 @@ Mail::Address - Parse mail addresses
 
 =head1 DESCRIPTION
 
-C<Mail::Address> extracts and manipulates RFC822 compilant email
-addresses. As well as being able to create C<Mail::Address> objects
-in the normal manner, C<Mail::Address> can extract addresses from
-the To and Cc lines found in an email message.
+C<Mail::Address> extracts and manipulates email addresses from a message
+header.  It cannot be used to extract addresses from some random text.
+You can use this module to create RFC822 compliant fields.
 
+Although C<Mail::Address> is a very popular subject for books, and is
+used in many applications, it does a very poor job on the more complex
+message fields.  It does only handle simple address formats (which
+covers about 95% of what can be found). Problems are with
+
+=over 4
+
+=item *
+
+no support for address groups, even not with the semi-colon as
+separator between addresses
+
+=item *
+
+Limitted support for escapes in phrases and comments.  There are
+cases where it can get wrong.
+
+=item *
+
+You have to take care of most escaping when you create an address yourself:
+C<Mail::Address> does not do that for you.
+
+=back
+
+Often requests are made to improve this situation, but this is not a
+good idea, where it will break zillions of existing applications.  If
+you wish for a fully RFC2822 compliant implementation you may take a look
+at L<Mail::Message::Field::Full>, part of MailBox.
+
+Example:
+
+  my $s = Mail::Message::Field::Full->parse($header);
+  # ref $s isa Mail::Message::Field::Addresses;
+                                                                                
+  my @g = $s->groups;          # all groups, at least one
+  # ref $g[0] isa Mail::Message::Field::AddrGroup;
+  my $ga = $g[0]->addresses;   # group addresses
+                                                                                
+  my @a = $s->addresses;       # all addresses
+  # ref $a[0] isa Mail::Message::Field::Address;
+ 
 =head1 CONSTRUCTORS
 
 =over 4

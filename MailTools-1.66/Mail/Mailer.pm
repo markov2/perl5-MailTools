@@ -9,7 +9,7 @@ Mail::Mailer - Simple interface to electronic mailing mechanisms
 =head1 SYNOPSIS
 
     use Mail::Mailer;
-    use Mail::Mailer qw(mail);
+    use Mail::Mailer qw(mail);    # specifies default mailer
 
     $mailer = new Mail::Mailer;
 
@@ -42,6 +42,9 @@ to use can be specified in C<@args> with
 The smtp mailer does not handle C<Cc> and C<Bcc> lines, neither their
 C<Resent-*> fellows. The C<Debug> options enables debugging output
 from C<Net::SMTP>.
+
+You may also use the C< Auth => [ $user, $password ] > option for SASL
+authentication (requires L<Authen::SASL> and L<MIME::Base64>).
 
 =item C<qmail>
 
@@ -124,7 +127,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.65";
+$VERSION = "1.66";
 
 sub Version { $VERSION }
 

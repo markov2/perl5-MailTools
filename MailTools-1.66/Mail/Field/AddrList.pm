@@ -53,7 +53,7 @@ use Carp;
 use Mail::Address;
 
 @ISA = qw(Mail::Field);
-$VERSION = '1.65';
+$VERSION = '1.66';
 
 # install header interpretation, see Mail::Field
 INIT: {
