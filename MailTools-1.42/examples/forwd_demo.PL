@@ -1,15 +1,16 @@
 # This -*- perl -*- script makes the forwd_demo script
 # $Id: forwd_demo.PL,v 1.2 1997/01/16 20:43:34 gbarr Exp $
 
-$script = "bin/forwd_demo";
-
 use Config;
 use Cwd;
+
+$script = "./forwd_demo";
 unlink($script);
+
 open MIR, ">$script" or die "open for writing $script: $!";
 print MIR $Config{'startperl'}," -w\n";
 $cwd = Cwd::getcwd();
-print MIR "use lib qw($cwd/blib);\n";
+#print MIR "use lib qw($cwd/blib);\n";
 print MIR <DATA>; 
 chmod(0755, $script);
 
@@ -50,7 +51,7 @@ $rply->print(\*FILE);
 
 close(FILE);
 
-$editor = $ENV{"EDITOR"} || "ned -S";
+$editor = $ENV{"EDITOR"} || "/usr/bin/nvi";
 
 warn "$editor :$!\n" if (system("$editor $file"));
 

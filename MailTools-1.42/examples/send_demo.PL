@@ -1,7 +1,7 @@
 # This -*- perl -*- script makes the send_demo script
 # $Id: send_demo.PL,v 1.2 1997/01/16 20:43:35 gbarr Exp $
 
-$script = "bin/send_demo";
+$script = "./send_demo";
 
 use Config;
 use Cwd;
@@ -9,7 +9,7 @@ unlink($script);
 $cwd = Cwd::getcwd();
 open MIR, ">$script" or die "open for writing $script: $!";
 print MIR $Config{'startperl'}," -w\n";
-print MIR "use lib qw($cwd/blib);\n";
+#print MIR "use lib qw($cwd/blib);\n";
 print MIR <DATA>; 
 chmod(0755, $script);
 

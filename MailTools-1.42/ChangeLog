@@ -1,4 +1,19 @@
 
+Unsolved problems:
+
+    http://bugs.debian.org/104572
+
+version 1.42: Mon Dec 10 19:22:01 CET 2001
+
+	- Moved examples from bin/ to examples/, so people may be
+	  able to find them.
+
+	- Mail::Util now also tries sendmail option S for domainname.
+	  Patched by [Todd R. Eigenschink]
+
+	Included Debian changes by [Steve Kowalik]:
+	- Added Mail::Mailer::qmail
+
 version 1.41: Wed Nov 14 10:35:57 CET 2001
 
 	- Mail::Util::maildomain did not expand variables.  Fixed the

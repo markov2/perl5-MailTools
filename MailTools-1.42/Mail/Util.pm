@@ -14,7 +14,7 @@ use Exporter ();
 BEGIN {
     require 5.000;
 
-    $VERSION = "1.41";
+    $VERSION = "1.42";
 
     *AUTOLOAD = \&AutoLoader::AUTOLOAD;
     @ISA = qw(Exporter);
@@ -145,6 +145,7 @@ sub maildomain {
 	close(CF);
 	$domain = $var{j} if defined $var{j};
 	$domain = $var{M} if defined $var{M};
+	$domain = $var{S} if defined $var{S};
 	return $domain
 	    if(defined $domain);
     }
