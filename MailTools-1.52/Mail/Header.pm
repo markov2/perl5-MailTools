@@ -19,7 +19,7 @@ use strict;
 use Carp;
 use vars qw($VERSION $FIELD_NAME);
 
-$VERSION = "1.51";
+$VERSION = "1.52";
 
 my $MAIL_FROM = 'KEEP';
 my %HDR_LENGTHS = ();
@@ -154,10 +154,10 @@ sub _tag_case
 
  $tag =~ s/:\Z//o;
 
- # Change the case of the tag
- # eq Message-Id
- $tag =~ s/\b([a-z]+)/\L\u$1/gio;
- $tag =~ s/\b([b-df-hj-np-tv-z]+|MIME)\b/\U$1/gio
+ # Change the casing of the tag, eg "Message-Id"
+ # Bug in unicode \U, perl 5.8.0 requires an extra \u
+ $tag =~ s/\b([a-z]+)/\L\u\u$1/gio;
+ $tag =~ s/\b([b-df-hj-np-tv-z]+|MIME)\b/\U\u$1/gio
 	if $tag =~ /-/;
 
  $tag;

@@ -1,4 +1,9 @@
 
+version 1.52: Fri Nov 29 13:52:00 CET 2002
+
+	- Work-around for bug in perl 5.8.0 unicode \U within s///
+	  Patched in Mail::Header by [Autrijus Tang]
+
 version 1.51: Tue Oct 29 14:25:28 CET 2002
 
 	- Mail::Util::maildomain() if no information about domains
