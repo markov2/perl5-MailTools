@@ -14,7 +14,7 @@ use Exporter ();
 BEGIN {
     require 5.000;
 
-    $VERSION = "1.49";
+    $VERSION = "1.50";
 
     *AUTOLOAD = \&AutoLoader::AUTOLOAD;
     @ISA = qw(Exporter);
@@ -50,15 +50,24 @@ Each reference is a reference to an array containg one message.
 Attempt to determine the current uers mail domain string via the following
 methods
 
- Look for a sendmail.cf file and extract DH parameter
- Look for a smail config file and usr the first host defined in hostname(s)
- Try an SMTP connect (if Net::SMTP exists) first to mailhost then localhost
- Use value from Net::Domain::domainname (if Net::Domain exists)
+=over 4
+
+=item *  Look for the MAILDOMAIN enviroment variable, which can be set from outside the program.
+
+=item *  Look for a sendmail.cf file and extract DH parameter
+
+=item *  Look for a smail config file and usr the first host defined in hostname(s)
+
+=item *  Try an SMTP connect (if Net::SMTP exists) first to mailhost then localhost
+
+=item *  Use value from Net::Domain::domainname (if Net::Domain exists)
+
+=back
 
 =head2 mailaddress()
 
 Return a guess at the current users mail address. The user can force
-the return value by setting C<$ENV{MAILADDRESS}>
+the return value by setting the MAILADDRESS environment variable.
 
 =head1 AUTHOR
 
@@ -120,6 +129,15 @@ sub maildomain {
 	if(defined $domain);
 
     ##
+    ## Get mail domain from environment
+    ##
+
+    $domain = $ENV{MAILDOMAIN};
+
+    return $domain
+       if(defined $domain);
+
+    ##
     ## Try sendmail config file if exists
     ##
 
@@ -145,7 +163,10 @@ sub maildomain {
 	close(CF);
 	$domain = $var{j} if defined $var{j};
 	$domain = $var{M} if defined $var{M};
-	$domain = $var{S} if defined $var{S};
+
+        $domain = $1
+           if( $domain =~ m/([A-Za-z0-9](?:[\.\-A-Za-z0-9]+))/ );
+
 	return $domain
 	    if(defined $domain);
     }

@@ -1,4 +1,16 @@
 
+version 1.50: Wed Sep  4 00:38:49 CEST 2002
+
+	- Mail::Util::domainname() Patch to remove use of S variable from
+	  sendmail.cf, because its inclusion is contra-productive.
+	  [Timur Bakeyev]
+
+	- Mail::Util::domainname() Clean domain from sendmail.cf from
+	  trailing trash (if present) [Timur Bakeyev]
+
+	- Mail::Util::domainname()  Added environment variable MAILDOMAIN
+	  to overrule smart domain discovery. [Timur Bakeyev]
+
 version 1.49: Wed Aug 28 08:36:58 CEST 2002
 
 	- t/internet.t defaults $ENV{LOGNAME} to avoid warnings in tests
