@@ -12,7 +12,7 @@ use Carp;
 use vars qw($VERSION);
 use locale;
 
-$VERSION = "1.62";
+$VERSION = "1.63";
 sub Version { $VERSION }
 
 #
@@ -133,7 +133,7 @@ sub _find_next {
  my $len = shift;
  while($idx < $len) {
    my $c = $tokens->[$idx];
-   return $c if($c eq "," || $c eq "<");
+   return $c if $c eq ',' || $c eq ';' || $c eq '<';
    $idx++;
  }
  return "";
@@ -195,7 +195,7 @@ sub parse {
   elsif($_ eq '>') {
    $depth-- if $depth;
   }
-  elsif($_ eq ',') {
+  elsif($_ eq ',' || $_ eq ';') {
    warn "Unmatched '<>' in $line" if($depth);
    my $o = _complete($pkg,\@phrase, \@address, \@comment);
    push(@objs, $o) if(defined $o);

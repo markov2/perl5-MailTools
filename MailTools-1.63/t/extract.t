@@ -202,3 +202,11 @@ kevin@goess.org (foo@bar.com (foobar), ned@foo.com (nedfoo) )
 eBay's Half <half@ebay.com>
 eBay's Half <half@ebay.com>
 eBay's Half
+
+outlook@example.com; semicolons@example.com
+outlook@example.com
+
+
+"Foo; Bar" <both@example.com>, Baz <baz@example.com>
+"Foo; Bar" <both@example.com>
+Foo; Bar

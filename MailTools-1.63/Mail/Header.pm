@@ -20,7 +20,7 @@ use strict;
 use Carp;
 use vars qw($VERSION $FIELD_NAME);
 
-$VERSION = "1.62";
+$VERSION = "1.63";
 
 my $MAIL_FROM = 'KEEP';
 my %HDR_LENGTHS = ();
@@ -155,9 +155,9 @@ sub _tag_case
  $tag =~ s/\:$//;
 
  join('-',
-     map { /^[b-df-hj-np-tv-z]+$|^(?:MIME|SWE|SOAP|LDAP)$/i
+     map { /^[b-df-hj-np-tv-z]+$|^(?:MIME|SWE|SOAP|LDAP|ID)$/i
          ? uc($_) : ucfirst(lc($_)) }
-              split('-', $tag));
+              split(m/\-/, $tag, -1));
 }
 
 # format a complete line
@@ -383,8 +383,8 @@ sub unfold
    $list = $me->{'mail_hdr_hash'}{$tag};
    foreach $ln (@$list)
     {
-     $$ln =~ s/\r?\n\s+/ /sog
-	if defined $ln && defined $$ln;
+       $$ln =~ s/\r?\n\s+/ /sog
+           if defined $ln && defined $$ln;
     }
   }
  else

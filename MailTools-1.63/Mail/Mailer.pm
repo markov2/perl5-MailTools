@@ -24,15 +24,13 @@ Mail::Mailer - Simple interface to electronic mailing mechanisms
 
 =head1 DESCRIPTION
 
-Sends mail using any of the built-in methods.  You can alter the
-behaviour of a method by passing C<$command> to the C<new> method.
+Sends mail using any of the built-in methods. As C<$type> you can specify
+any of:
 
 =over 4
 
 =item C<sendmail>
-
-Use the C<sendmail> program to deliver the mail.  C<$command> is the
-path to C<sendmail>.
+Use the C<sendmail> program to deliver the mail.
 
 =item C<smtp>
 
@@ -51,8 +49,9 @@ Use qmail's qmail-inject program to deliver the mail.
 
 =item C<testfile>
 
-Used for debugging, this displays the data on STDOUT.  No mail is ever
-sent.  C<$command> is ignored.
+Used for debugging, this displays the data to the file named in
+C<$Mail::Mailer::testfile::config{outfile}> which defaults to a file
+named C<mailer.testgile>.  No mail is ever sent.
 
 =back
 
@@ -61,9 +60,8 @@ default mailer will be the first one found.
 
 =head2 ARGUMENTS
 
-C<new> can optionally be given a C<$command> and C<$type>.  C<$type>
-is one C<sendmail>, C<mail>, ... given above.  The meaning of
-C<$command> depends on C<$type>.
+C<new> can optionally be given a C<$type>, which
+is one C<sendmail>, C<mail>, ... given above.
 
 C<open> is given a reference to a hash.  The hash consists of key and
 value pairs, the key being the name of the header field (eg, C<To>),
@@ -126,7 +124,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.62";
+$VERSION = "1.63";
 
 sub Version { $VERSION }
 

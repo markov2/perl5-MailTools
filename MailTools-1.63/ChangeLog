@@ -1,4 +1,23 @@
 
+version 1.63: Mon Aug 16 17:28:15 CEST 2004
+
+	- [Craig Davison] Fixed date format in Mail::Field::Date to
+	  comply to the RFC
+
+	- [Alex Vandiver] patched the email address parser to be able
+	  to understand a list of addresses separated by ';', as Outlook
+	  does. The ';' is the group separator, which was not understood
+	  by MailTools before, but valid according to the RFCs.
+
+	- [Torsten Luettgert] found that field labels like '-' where not
+	  beautified correctly.
+
+	- [Slavan Rezic] Updated doc in Mail::Mailer: referred to $command 
+	  which doesn't mean anything, and "testfile" is working differently.
+
+	- [chris] Mail::Message::Field::wellformedName() will upper-case
+	  *-ID as part in the fieldname.
+
 version 1.62: Wed Mar 24 13:29:27 CET 2004
 
 	- [Reuven M. Lerner], removed warning by Mail::Address::host()

@@ -8,7 +8,7 @@ use Carp;
 use vars qw($VERSION);
 require Mail::Mailer;
 
-$VERSION = "1.62";
+$VERSION = "1.63";
 
 sub Version { $VERSION }
 
