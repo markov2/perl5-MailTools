@@ -14,8 +14,6 @@ sub set_headers {
         {   $h =~ s/\n+\Z//;
             print $self "$_: ", $h, "\n";
         }
-
-	print $self "$_: ", join(",", $self->to_array($hdrs->{$_})), "\n";
     }
     print $self "\n";	# terminate headers
 }

@@ -4,6 +4,10 @@ Unsolved problems:
     - Mark Overmeer <mailtools@overmeer.net> (mailtools maintainer)
       is parsed into two separate objects.... wrong
     
+version 1.46: Wed May 29 15:08:44 CEST 2002
+
+	- [Philip Molter] discoverd my typo in Mail/Mailer/rfc822.pm
+	  which forced me to release a new version....
 
 version 1.45: Thu May 23 10:15:59 CEST 2002
 
