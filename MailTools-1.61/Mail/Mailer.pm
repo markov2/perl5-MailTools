@@ -126,7 +126,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.60";
+$VERSION = "1.61";
 
 sub Version { $VERSION }
 
@@ -228,8 +228,7 @@ sub new {
     my($class, $type, @args) = @_;
 
     $type = $MailerType unless $type;
-    croak "Mailer '$type' not known, please specify correct type"
-	unless $type;
+    croak "No MailerType specified" unless defined $type;
 
     my $exe = $Mailers{$type};
 

@@ -47,7 +47,6 @@ print "not "
 	unless $href->{Hhrtest1}->[0];
 printf "ok %d\n",++$t;
 
-
 $h->fold(30);
 
 print "not "
@@ -59,7 +58,7 @@ print "not "
 printf "ok %d\n",++$t;
 
 print "not "
-	unless $h->get(Date => 2) eq "an even longer test\n    header\n";
+	unless $h->get(Date => 2) eq "an even longer test\n header\n";
 printf "ok %d\n",++$t;
 
 $h->fold(20);
@@ -69,11 +68,11 @@ print "not "
 printf "ok %d\n",++$t;
 
 print "not "
-	unless $h->get(Date => 1) eq "a longer\n    test header\n";
+	unless $h->get(Date => 1) eq "a longer\n test header\n";
 printf "ok %d\n",++$t;
 
 print "not "
-	unless $h->get(Date => 2) eq "an even\n    longer test\n    header\n";
+	unless $h->get(Date => 2) eq "an even\n longer test\n header\n";
 printf "ok %d\n",++$t;
 
 $h->unfold;
@@ -133,25 +132,23 @@ test1: _abc _def _ghi _fdjhfd _fhdjkfh _dkhaaaaaaaaaaakjdfdjkfdshfdksfhdjfdkhfkd
 EOF
 $headout = <<EOF;
 Content-Type: multipart/mixed;
-    boundary="---- =_NextPart_000_01BDBF1F.DA8F77EE"
+ boundary="---- =_NextPart_000_01BDBF1F.DA8F77EE"
 Content-Type: multipart/mixed;
-    boundary="---- =_NextPart_000_01BDBF1F.DA8F77EE"hkjhgkfhgfhgf"hfkjdhf fhjf fghjghf fdshjfhdsj"
-    hgjhgfjk
+ boundary="---- =_NextPart_000_01BDBF1F.DA8F77EE"hkjhgkfhgfhgf"hfkjdhf fhjf fghjghf fdshjfhdsj" hgjhgfjk
 Content-Type: multipart/mixed;
-    boundary="---- =_NextPart_000_01BDBF1F.DA8F77EE"hkjhg
-    kfhgfhgf"hfkjdhf fhjf fghjghf fdshjfhdsj"
-    hgjhgfjk
+ boundary="---- =_NextPart_000_01BDBF1F.DA8F77EE"hkjhg
+ kfhgfhgf"hfkjdhf fhjf fghjghf fdshjfhdsj" hgjhgfjk
 Content-Type: multipart/mixed;
-    boundary="---- =_NextPart_000_01BDBF1F.DA8F77EE"hhhhhhhhhhhhhhhhhhhhhhhhh
-    fjsdhfkjsd fhdjsfhkj
+ boundary="---- =_NextPart_000_01BDBF1F.DA8F77EE"hhhhhhhhhhhhhhhhhhhhhhhhh
+ fjsdhfkjsd fhdjsfhkj
 Content-Type: multipart/mixed;
-    boundary="---- =_NextPart_000_01BDBF1F.DA8F77EE"
-    abc def ghfdgfdsgj fdshfgfsdgfdsg hfsdgjfsdg fgsfgjsg
+ boundary="---- =_NextPart_000_01BDBF1F.DA8F77EE" abc
+ def ghfdgfdsgj fdshfgfsdgfdsg hfsdgjfsdg fgsfgjsg
 MIME-Type: text/plain
 Test1: _abc _def _ghi _fdjhfd _fhdjkfh _dkhkjd _fdjkf _dshfdks _fhdjfdkhfk
-    _dshfds _fdsjk _fdkhfdks _fdsjf _dkf
+ _dshfds _fdsjk _fdkhfdks _fdsjf _dkf
 Test1: _abc _def _ghi _fdjhfd _fhdjkfh _dkhaaaaaaaaaaakjdfdjkfdshfdksfhdjfdkhfkdshfdsfdsjkfdkhfdksfdsjf
-    _dkf
+ _dkf
 EOF
 @mail = map { "$_\n" } split /\n/, $headin;
 

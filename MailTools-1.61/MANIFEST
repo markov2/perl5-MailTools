@@ -13,7 +13,7 @@ Mail/Mailer/rfc822.pm
 Mail/Mailer/sendmail.pm
 Mail/Mailer/smtp.pm
 Mail/Mailer/qmail.pm
-Mail/Mailer/test.pm
+Mail/Mailer/testfile.pm
 Mail/Send.pm			Simple interface for sending mail
 Mail/Util.pm			Mail related utilities
 MailTools.ppd
@@ -30,3 +30,4 @@ t/mailcap.t
 t/mailer.t
 t/require.t
 t/send.t
+META.yml                                 Module meta-data (added by MakeMaker)

@@ -20,7 +20,7 @@ use strict;
 use Carp;
 use vars qw($VERSION $FIELD_NAME);
 
-$VERSION = "1.60";
+$VERSION = "1.61";
 
 my $MAIL_FROM = 'KEEP';
 my %HDR_LENGTHS = ();
@@ -121,11 +121,11 @@ sub _fold_line
      # else we are looking at a single word and probably don't want to split
      my $x = "";
 
-     $x .= "$1\n    "
-	while($_[0] =~ s/^\s*(
-			   [^"]{$min,$max}?[\,\;]
+     $x .= "$1\n "
+	while($_[0] =~ s/^\s*
+                          ([^"]{$min,$max}?[\,\;]
 			  |[^"]{1,$max}\s
-			  |[^\s"]*(?:"[^"]*"[^\s"]*)+\s
+			  |[^\s"]*(?:"[^"]*"[ \t]?[^\s"]*)+\s
 			  |[^\s"]+\s
 			  )
 			//x);
@@ -136,7 +136,7 @@ sub _fold_line
     }
    else
     {
-      $_[0] =~ s/(.{$min,$max})\s+/$+\n    /g;
+      $_[0] =~ s/(.{$min,$max})\s+/$+\n /g;
       $_[0] =~ s/\s*$/\n/s;
     }
   }

@@ -12,7 +12,7 @@ use Carp;
 use vars qw($VERSION);
 use locale;
 
-$VERSION = "1.60";
+$VERSION = "1.61";
 sub Version { $VERSION }
 
 #
@@ -239,16 +239,21 @@ sub comment { set_or_get(shift,2,@_) }
 
 
 sub format {
- my @fmts = ();
+ my @fmts  = ();
  my $me;
+
+ my $atext = '[\-\w !#$%&\'*+/=?^`{|}~]';
 
  foreach $me (@_) {
    my($phrase,$addr,$comment) = @{$me};
    my @tmp = ();
 
    if(defined $phrase && length($phrase)) {
-    push(@tmp, $phrase);
-    push(@tmp, "<" . $addr . ">") if(defined $addr && length($addr));
+     push @tmp, $phrase =~ /^(?:\s*$atext\s*)+$/ ? $phrase
+              : $phrase =~ /(?<!\\)"/            ? $phrase
+              :                                    qq("$phrase");
+
+     push(@tmp, "<" . $addr . ">") if(defined $addr && length($addr));
    }
    else {
     push(@tmp, $addr) if(defined $addr && length($addr));

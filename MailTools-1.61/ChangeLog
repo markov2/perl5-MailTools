@@ -1,4 +1,24 @@
 
+version 1.61: Wed Mar 10 10:51:44 CET 2004
+
+	- [Erik Van Roode] Mail::Mailer::test.pm -> Mail::Mailer::testfile.pm
+
+	- [Jérôme Dion] corrected the folding of lines: folds start only
+	  with one blank according to rfc2822.
+
+	- Added a big warning against automatic sender email address
+	  detection as provided by Mail::Util::mailaddress().  Please
+	  explicitly set MAILADDRESS. This after a discussion with
+	  [Wolfgang Friebel].
+
+	- Mail::Address->format should quote phrases with weird character.
+	  Patched based on patch by [Marc 'HE' Brockschmidt]
+
+	- [Ruslan U. Zakirov] reported confusing error message when no
+	  MailerType was specified.
+
+	- [Steve Roberts] fixed folding to produce longer lines.
+
 version 1.60: Wed Sep 24 09:20:30 CEST 2003
 
 	- [Henrique Martins] found that enclosing parenthesis where not
