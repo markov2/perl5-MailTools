@@ -8,7 +8,7 @@ use Carp;
 use vars qw($VERSION);
 require Mail::Mailer;
 
-$VERSION = "1.48";
+$VERSION = "1.49";
 
 sub Version { $VERSION }
 
@@ -82,7 +82,8 @@ Mail::Send - Simple electronic mail interface
     # Arguments to the open() method are passed to the Mail::Mailer
     # constructor.
 
-    $fh = $msg->open;
+    $fh = $msg->open;               # some default mailer
+    # $fh = $msg->open('sendmail'); # explicit
 
     print $fh "Body of message";
 

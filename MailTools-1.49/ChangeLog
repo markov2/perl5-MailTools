@@ -1,8 +1,19 @@
 
+version 1.49: Wed Aug 28 08:36:58 CEST 2002
+
+	- t/internet.t defaults $ENV{LOGNAME} to avoid warnings in tests
+	  when that variable is not defined. [Chromatic]
+
+	- Mail::Mailer::_clean_up left an extra space behind each header
+	  line. Patched by [Robert Spier]
+
+	- Mail::Mailer::_clean_up now also trims folded headerlines on more
+	  than two lines.
+
 version 1.48: Wed Aug  7 22:54:56 CEST 2002
 
 	- Mail::Mailer::test only worked in UNIX, because it used the 'test',
-	  'sh' and 'cat' command. [Selsky] provided a patch to remove
+	  'sh' and 'cat' command. [Matt Selsky] provided a patch to remove
 	  these dependencies.  It may not work on ancient perl versions, but
 	  that is not really a problem for a testing facility.
 

@@ -132,7 +132,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.48";
+$VERSION = "1.49";
 
 sub Version { $VERSION }
 
@@ -304,7 +304,8 @@ sub _cleanup_hdrs {
   my $h;
   foreach $h (values %$hdrs) {
     foreach (ref($h) ? @{$h} : $h) {
-      s/\n\s*/ /;
+      s/\n\s*/ /g;
+      s/\s+$//;
     }
   }
 }

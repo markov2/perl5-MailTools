@@ -19,7 +19,7 @@ use strict;
 use Carp;
 use vars qw($VERSION $FIELD_NAME);
 
-$VERSION = "1.48";
+$VERSION = "1.49";
 
 my $MAIL_FROM = 'KEEP';
 my %HDR_LENGTHS = ();
