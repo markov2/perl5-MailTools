@@ -1,6 +1,7 @@
 # Mail::Field.pm
 #
 # Copyright (c) 1995-2001 Graham Barr. All rights reserved.
+# Copyright (c) 2002-2003 Mark Overmeer <mailtools@overmeer.net>
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 
@@ -12,7 +13,7 @@ use Carp;
 use strict;
 use vars qw($AUTOLOAD $VERSION);
 
-$VERSION = "1.56";
+$VERSION = "1.57";
 
 unless(defined &UNIVERSAL::can) {
     *UNIVERSAL::can = sub {
@@ -226,18 +227,13 @@ sub tag
  my $self = shift;
  my $tag = ref($self) || $self;
 
- # Bug in unicode \U, perl 5.8.0 breaks when casting utf8 in regex
- if($] eq 5.008)
- {   require utf8;
-     utf8::downgrade($tag);
- }
-
  $tag =~ s/.*:://o;
  $tag =~ s/_/-/og;
- $tag =~ s/\b([a-z]+)/\L\u$1/gio;
- $tag =~ s/\b([b-df-hj-np-tv-z]+)\b/\U$1/gio;
 
- $tag;
+ join('-',
+    map { /^[b-df-hj-np-tv-z]+$|^MIME$/i ? uc($_) : ucfirst(lc($_)) }
+       split('-', $tag)
+     );
 }
 
 ##
@@ -301,18 +297,12 @@ sub AUTOLOAD
   {
    my $tag = $method;
 
-   # Bug in unicode \U, perl 5.8.0 breaks when casting utf8 in regex
-   if($] eq 5.008)
-   {   require utf8;
-       utf8::downgrade($tag);
-   }
-
    $tag =~ s/_/-/og;
-   $tag =~ s/\b([a-z]+)/\L\u$1/gio;
-   $tag =~ s/\b([b-df-hj-np-tv-z]+)\b/\U$1/gio;
+   $tag = join('-',
+             map { /^[b-df-hj-np-tv-z]+$|^MIME$/i ? uc($_) : ucfirst(lc($_)) }
+                split('-', $tag));
 
    no strict;
-
    @{$pkg . "::ISA"} = qw(Mail::Field::Generic);
    *{$pkg . "::tag"} = sub { $tag };
   }
@@ -512,9 +502,9 @@ so that C<Mail::*> and C<MIME::*> can be integrated together.
 
 =head1 COPYRIGHT
 
-Copyright (c) 1995-2001 Graham Barr. All rights reserved. This program is free
-software; you can redistribute it and/or modify it under the same terms
-as Perl itself.
+Copyright (c) 2002-2003 Mark Overmeer, 1995-2001 Graham Barr. All rights
+reserved. This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
 
 =cut
 

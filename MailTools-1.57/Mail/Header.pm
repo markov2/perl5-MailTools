@@ -1,6 +1,7 @@
 # Mail::Header.pm
 #
 # Copyright (c) 1995-2001 Graham Barr <gbarr@pobox.com>. All rights reserved.
+# Copyright (c) 2002-2003 Mark Overmeer <mailtools@overmeer.net>
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 
@@ -19,7 +20,7 @@ use strict;
 use Carp;
 use vars qw($VERSION $FIELD_NAME);
 
-$VERSION = "1.56";
+$VERSION = "1.57";
 
 my $MAIL_FROM = 'KEEP';
 my %HDR_LENGTHS = ();
@@ -151,22 +152,11 @@ sub _fold_line
 sub _tag_case
 {
  my $tag = shift;
+ $tag =~ s/\:$//;
 
- # Bug in unicode \U, perl 5.8.0 breaks when casing utf8 in regex
- # dirty trics are needed to avoid compile-time conflicts.
- if($] eq 5.008)
- {   require utf8;
-     eval 'utf8::downgrade($tag)';
- }
-
- $tag =~ s/:\Z//o;
-
- # Change the casing of the tag, eg "Message-Id"
- $tag =~ s/\b([a-z]+)/\L\u$1/gio;
- $tag =~ s/\b([b-df-hj-np-tv-z]+|MIME)\b/\U$1/gio
-	if $tag =~ /-/;
-
- $tag;
+ join('-',
+     map { /^[b-df-hj-np-tv-z]+$|^MIME$/i ? uc($_) : ucfirst(lc($_)) }
+         split('-', $tag));
 }
 
 # format a complete line
@@ -1014,8 +1004,8 @@ Graham Barr.  Maintained by Mark Overmeer <mailtools@overmeer.net>
 
 =head1 COPYRIGHT
 
-Copyright (c) 1995-2001 Graham Barr. All rights reserved. This program is free
-software; you can redistribute it and/or modify it under the same terms
-as Perl itself.
+Copyright (c) 2002-2003 Mark Overmeer, 1995-2001 Graham Barr. All rights
+reserved. This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
 
 =cut

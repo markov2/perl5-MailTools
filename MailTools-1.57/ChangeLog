@@ -1,4 +1,14 @@
 
+version 1.57: Tue Jan 14 09:47:46 CET 2003
+
+	- Added myself to the copyright notices... dates needed an update
+	  as well.
+
+	- Typos in Mail::Internet [Florian Helmberger]
+
+	- More tries to program around perl5.8.0's uc/lc-utf8 bugs in
+	  regexps [Autrijus Tang and Philip Molter]
+
 version 1.56: Mon Jan  6 17:13:17 CET 2003
 
 	- And again, the patches of Autrijus had to be adapted to run on

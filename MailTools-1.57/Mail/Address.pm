@@ -1,6 +1,7 @@
 # Mail::Address.pm
 #
 # Copyright (c) 1995-2001 Graham Barr <gbarr@pobox.com>.  All rights reserved.
+# Copyright (c) 2002-2003 Mark Overmeer <mailtools@overmeer.net>
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 
@@ -11,7 +12,7 @@ use Carp;
 use vars qw($VERSION);
 use locale;
 
-$VERSION = "1.56";
+$VERSION = "1.57";
 sub Version { $VERSION }
 
 #
@@ -418,9 +419,9 @@ Graham Barr.  Maintained by Mark Overmeer <mailtools@overmeer.net>
 
 =head1 COPYRIGHT
 
-Copyright (c) 1995-2001 Graham Barr. All rights reserved. This program is free
-software; you can redistribute it and/or modify it under the same terms
-as Perl itself.
+Copyright (c) 2002-2003 Mark Overmeer, 1995-2001 Graham Barr. All rights
+reserved. This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
 
 =cut
 
