@@ -1,4 +1,14 @@
 
+version 1.60: Wed Sep 24 09:20:30 CEST 2003
+
+	- [Henrique Martins] found that enclosing parenthesis where not
+	  correctly stripped when processing a Mail::Address.
+
+	- [Tony Bowden] asked for a change in Mail::Address::name, where
+	  existing (probably correct) capitization is left intact.  The
+	  _extract_name() can be called as method, is needed, such that
+	  it can be extended.
+
 version 1.59: Wed Aug 13 08:13:00 CEST 2003
 
 	- Patch by [Shafiek Rasdien] which adds Mail::Internet::smtpsend

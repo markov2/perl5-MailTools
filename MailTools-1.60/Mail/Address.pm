@@ -12,7 +12,7 @@ use Carp;
 use vars qw($VERSION);
 use locale;
 
-$VERSION = "1.59";
+$VERSION = "1.60";
 sub Version { $VERSION }
 
 #
@@ -21,7 +21,10 @@ sub Version { $VERSION }
 
 sub _extract_name
 {
-    local $_ = shift || '';
+    # This function can be called as method as well
+    my $self = @_ && ref $_[0] ? shift : undef;
+
+    local $_ = shift or return '';
     
     # Bug in unicode \U, perl 5.8.0 breaks when casing utf8 in regex
     if($] eq 5.008)
@@ -38,7 +41,7 @@ sub _extract_name
     return "" if /^[\d ]+$/;
 
     # remove outermost parenthesis
-    s/^\(|\)$//g;
+    s/^\((.*)\)$/$1/g;
 
     # remove outer quotation marks
     s/^"|"$//g;
@@ -50,18 +53,22 @@ sub _extract_name
     s/^([^\s]+) ?, ?(.*)$/$2 $1/;
     s/,.*//;
 
-    # Set the case of the name to first char upper rest lower
-    # Upcase first letter on name
-    s/\b(\w+)/\L\u$1/igo;
+    # Change casing only when the name contains only upper or only
+    # lower cased characters.
+    unless( m/[A-Z]/ && m/[a-z]/ )
+    {   # Set the case of the name to first char upper rest lower
+        # Upcase first letter on name
+        s/\b(\w+)/\L\u$1/igo;
 
-    # Scottish names such as 'McLeod'
-    s/\bMc(\w)/Mc\u$1/igo;
+        # Scottish names such as 'McLeod'
+        s/\bMc(\w)/Mc\u$1/igo;
 
-    # Irish names such as 'O'Malley, O'Reilly'
-    s/\bo'(\w)/O'\u$1/igo;
+        # Irish names such as 'O'Malley, O'Reilly'
+        s/\bo'(\w)/O'\u$1/igo;
 
-    # Roman numerals, eg 'Level III Support'
-    s/\b(x*(ix)?v*(iv)?i*)\b/\U$1/igo; 
+        # Roman numerals, eg 'Level III Support'
+        s/\b(x*(ix)?v*(iv)?i*)\b/\U$1/igo; 
+    }
 
     # some cleanup
     s/\[[^\]]*\]//g;
@@ -264,9 +271,8 @@ sub name
     my $phrase = $me->phrase;
     my $addr = $me->address;
     
-    $phrase = $me->comment unless(defined($phrase) && length($phrase));
-    
-    my $name = _extract_name($phrase);
+    $phrase  = $me->comment unless(defined($phrase) && length($phrase));
+    my $name = $me->_extract_name($phrase);
     
     # first.last@domain address
     if($name eq '' && $addr =~ /([^\%\.\@_]+([\._][^\%\.\@_]+)+)[\@\%]/o)

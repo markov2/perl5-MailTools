@@ -15,7 +15,7 @@ use Date::Format qw(time2str);
 use Date::Parse qw(str2time);
 
 @ISA = qw(Mail::Field);
-$VERSION = '1.59';
+$VERSION = '1.60';
 
 bless([])->register('Date');
 
