@@ -127,7 +127,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.66";
+$VERSION = "1.67";
 
 sub Version { $VERSION }
 
@@ -257,7 +257,10 @@ sub open {
     my($self, $hdrs) = @_;
     my $exe = *$self->{Exe}; # || Carp::croak "$self->open: bad exe";
     my $args = *$self->{Args};
-    _cleanup_hdrs($hdrs);
+
+# removed MO 20050331: destroyed the folding
+#   _cleanup_hdrs($hdrs);
+
     my @to = $self->who_to($hdrs);
     
     $self->close;	# just in case;

@@ -1,4 +1,12 @@
 
+version 1.67: Thu Mar 31 12:05:31 CEST 2005
+
+	- Mail::Mailer unfolded the header before sending, which is
+	  incorrect. Reported by [Byron Jones]
+
+	- Mail::Header refolded already folded lines destroying
+	  blanks.  Signaled by [Byron Jones]
+
 version 1.66: Thu Jan 20 10:16:10 CET 2005
 
 	- Extended explanation that Mail::Address is limited.

@@ -20,7 +20,7 @@ use strict;
 use Carp;
 use vars qw($VERSION $FIELD_NAME);
 
-$VERSION = "1.66";
+$VERSION = "1.67";
 
 my $MAIL_FROM = 'KEEP';
 my %HDR_LENGTHS = ();
@@ -106,7 +106,7 @@ sub _fold_line
  my $min = int($maxlen * 4 / 5) - 4;
  my $ml = $maxlen;
 
- $_[0] =~ s/\s*[\r\n]+\s*/ /og; # Compress any white space around a newline
+ $_[0] =~ s/[\r\n]+/ /og;       # Remove new-lines
  $_[0] =~ s/\s*\Z/\n/so;        # End line with a EOLN
 
  return if $_[0] =~ /^From\s/io;
