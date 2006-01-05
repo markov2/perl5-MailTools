@@ -10,9 +10,9 @@ use strict;
 
 use Carp;
 use vars qw($VERSION);
-# use locale;   removed in version 1.68, because it causes taint problems
+# use locale;   removed in version 1.69, because it causes taint problems
 
-$VERSION = "1.68";
+$VERSION = "1.69";
 sub Version { $VERSION }
 
 #
@@ -124,10 +124,10 @@ sub _tokenise {
      next;
     }
 
-    if( s/^(?:"(?:[^"\\]+|\\.)*")\s*//       # "..."
-     || s/^(?:\[(?:[^\]\\]+|\\.)*\])\s*//    # [...]
-     || s/^(?:[^\s()<>\@,;:\\".[\]]+)\s*//
-     || s/^(?:[()<>\@,;:\\".[\]])\s*//
+    if( s/^("(?:[^"\\]+|\\.)*")\s*//       # "..."
+     || s/^(\[(?:[^\]\\]+|\\.)*\])\s*//    # [...]
+     || s/^([^\s()<>\@,;:\\".[\]]+)\s*//
+     || s/^([()<>\@,;:\\".[\]])\s*//
     )
     {   push(@words, $1);
         next;

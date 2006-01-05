@@ -15,7 +15,9 @@ sub exec {
     my($self, $exe, $args, $to) = @_;
     open F,'>>', $Mail::Mailer::testfile::config{outfile};
     print F "\n===\ntest ", ++$num, " ",
-            (scalar localtime), "\nto: " . join(' ',@{$to}) . "\n\n";
+            (scalar localtime),
+            "\nfrom: " . mailaddress(),
+            "\nto: " . join(' ',@{$to}), "\n\n";
     close F;
     untie(*$self) if tied *$self;
     tie *$self, 'Mail::Mailer::testfile::pipe', $self;

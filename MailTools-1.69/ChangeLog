@@ -1,4 +1,11 @@
 
+version 1.69: Thu Jan  5 11:17:05 CET 2006
+
+	- Mail::Mailer::testfile.pm adds "from" display to trace output.
+	  [wurblzap]
+
+	- fixed regex in Mail::Address [J Meyers]
+
 version 1.68: Thu Jan  5 10:29:25 CET 2006
 
 	- Updated copyright year.
