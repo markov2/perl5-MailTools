@@ -10,9 +10,9 @@ use strict;
 
 use Carp;
 use vars qw($VERSION);
-# use locale;   removed in version 1.70, because it causes taint problems
+# use locale;   removed in version 1.71, because it causes taint problems
 
-$VERSION = "1.70";
+$VERSION = "1.71";
 sub Version { $VERSION }
 
 #

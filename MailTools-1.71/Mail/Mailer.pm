@@ -129,7 +129,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.70";
+$VERSION = "1.71";
 
 sub Version { $VERSION }
 
@@ -270,7 +270,7 @@ sub open {
     # Fork and start a mailer
 
     my $child = open $self, '|-';
-    defined $child or die "Failed to send: $!"
+    defined $child or die "Failed to send: $!";
 
     if($child==0)
     {   # Child process will handle sending

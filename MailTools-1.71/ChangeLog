@@ -1,5 +1,9 @@
 
-version 1.69: Thu Jan  5 11:17:05 CET 2006
+version 1.71: Thu Jan  5 11:20:52 CET 2006
+
+	- grrrr tests failed
+
+version 1.70: Thu Jan  5 11:17:05 CET 2006
 
 	- Mail::Mailer::testfile.pm adds "from" display to trace output.
 	  [wurblzap]
