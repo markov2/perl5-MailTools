@@ -1,7 +1,7 @@
 # Mail::Util.pm
 #
 # Copyright (c) 1995-2001 Graham Barr <gbarr@pobox.com>. All rights reserved.
-# Copyright (c) 2002-2003 Mark Overmeer <mailtools@overmeer.net>
+# Copyright (c) 2002-2005 Mark Overmeer <mailtools@overmeer.net>
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 
@@ -15,7 +15,7 @@ use Exporter ();
 BEGIN {
     require 5.000;
 
-    $VERSION = "1.67";
+    $VERSION = "1.68";
 
     *AUTOLOAD = \&AutoLoader::AUTOLOAD;
     @ISA = qw(Exporter);
@@ -177,7 +177,7 @@ sub maildomain {
             if($domain && $domain =~ m/([A-Za-z0-9](?:[\.\-A-Za-z0-9]+))/ );
 
 	return $domain
-	    if(defined $domain);
+	    if(defined $domain && $domain !~ /\$/);
     }
 
     ##

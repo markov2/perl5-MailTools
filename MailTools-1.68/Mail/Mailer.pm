@@ -2,6 +2,8 @@
 
 package Mail::Mailer;
 
+use POSIX qw/_exit/;
+
 =head1 NAME
 
 Mail::Mailer - Simple interface to electronic mailing mechanisms 
@@ -127,7 +129,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.67";
+$VERSION = "1.68";
 
 sub Version { $VERSION }
 
@@ -255,7 +257,7 @@ sub new {
 
 sub open {
     my($self, $hdrs) = @_;
-    my $exe = *$self->{Exe}; # || Carp::croak "$self->open: bad exe";
+    my $exe  = *$self->{Exe} or return ();
     my $args = *$self->{Args};
 
 # removed MO 20050331: destroyed the folding
@@ -266,9 +268,16 @@ sub open {
     $self->close;	# just in case;
 
     # Fork and start a mailer
-    (defined($exe) && open($self,"|-"))
-	|| $self->exec($exe, $args, \@to)
-	|| die $!;
+
+    my $child = open $self, '|-';
+    defined $child or die "Failed to send: $!"
+
+    if($child==0)
+    {   # Child process will handle sending
+        eval { $self->exec($exe, $args, \@to) };   # should leave program
+        warn $@ || $!;    # exec failed
+	_exit(1);         # no DESTROY(), keep it for parent
+    }
 
     # Set the headers
     $self->set_headers($hdrs);
