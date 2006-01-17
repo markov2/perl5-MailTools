@@ -17,7 +17,7 @@ use Mail::Header;
 use vars qw($VERSION);
 
 BEGIN {
-    $VERSION = "1.71";
+    $VERSION = "1.72";
     *AUTOLOAD = \&AutoLoader::AUTOLOAD;
 
     unless(defined &UNIVERSAL::isa) {

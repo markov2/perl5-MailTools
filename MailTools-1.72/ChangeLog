@@ -1,4 +1,8 @@
 
+version 1.72: Tue Jan 17 09:04:37 CET 2006
+
+	- release 1.70 broke SMTP sending.  Detected by [J Meyers]
+
 version 1.71: Thu Jan  5 11:20:52 CET 2006
 
 	- grrrr tests failed

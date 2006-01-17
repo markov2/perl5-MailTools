@@ -129,7 +129,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.71";
+$VERSION = "1.72";
 
 sub Version { $VERSION }
 
@@ -257,7 +257,7 @@ sub new {
 
 sub open {
     my($self, $hdrs) = @_;
-    my $exe  = *$self->{Exe} or return ();
+    my $exe  = *$self->{Exe};   # no exe, then direct smtp
     my $args = *$self->{Args};
 
 # removed MO 20050331: destroyed the folding
