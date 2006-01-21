@@ -1,11 +1,14 @@
 
 package Mail::Mailer::testfile;
 use vars qw(@ISA $VERSION %config);
+
 require Mail::Mailer::rfc822;
 @ISA = qw(Mail::Mailer::rfc822);
 $VERSION = '0.02';
 
-%config = ( outfile=>'mailer.testfile', );
+use Mail::Util qw/mailaddress/;
+
+%config = (outfile => 'mailer.testfile');
 
 sub can_cc { 0 }
 

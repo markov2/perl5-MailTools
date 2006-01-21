@@ -129,7 +129,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.72";
+$VERSION = "1.73";
 
 sub Version { $VERSION }
 
@@ -268,15 +268,16 @@ sub open {
     $self->close;	# just in case;
 
     # Fork and start a mailer
-
     my $child = open $self, '|-';
     defined $child or die "Failed to send: $!";
 
     if($child==0)
-    {   # Child process will handle sending
-        eval { $self->exec($exe, $args, \@to) };   # should leave program
-        warn $@ || $!;    # exec failed
-	_exit(1);         # no DESTROY(), keep it for parent
+    {   # Child process will handle sending, but this is not real exec()
+        # this is a setup!!!
+        unless($self->exec($exe, $args, \@to))
+        {   warn $!;     # setup failed
+            _exit(1);    # no DESTROY(), keep it for parent
+        }
     }
 
     # Set the headers

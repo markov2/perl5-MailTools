@@ -1,4 +1,12 @@
 
+version 1.73: Sat Jan 21 09:54:13 CET 2006
+
+	- Added 'use Mail::Util' to Mail::Mailer::testfile to produce
+	  mailaddress();
+
+	- Improved exec() call from version 1.67 a little more.  Let's hope
+	  that SMTP works again.
+
 version 1.72: Tue Jan 17 09:04:37 CET 2006
 
 	- release 1.70 broke SMTP sending.  Detected by [J Meyers]

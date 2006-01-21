@@ -5,7 +5,7 @@
 
 $NAME     = 'Mail';
 $DISTNAME = "MailTools";
-$VERSION  = "1.72";
+$VERSION  = "1.73";
 
 BEGIN { require 5.001 }
 
