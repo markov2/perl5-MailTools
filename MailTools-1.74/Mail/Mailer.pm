@@ -45,7 +45,7 @@ The smtp mailer does not handle C<Cc> and C<Bcc> lines, neither their
 C<Resent-*> fellows. The C<Debug> options enables debugging output
 from C<Net::SMTP>.
 
-You may also use the C< Auth => [ $user, $password ] > option for SASL
+You may also use the C<< Auth => [ $user, $password ] >> option for SASL
 authentication (requires L<Authen::SASL> and L<MIME::Base64>).
 
 =item C<qmail>
@@ -129,7 +129,7 @@ use vars qw(@ISA $VERSION $MailerBinary $MailerType %Mailers @Mailers);
 use Config;
 use strict;
 
-$VERSION = "1.73";
+$VERSION = "1.74";
 
 sub Version { $VERSION }
 
@@ -267,17 +267,23 @@ sub open {
     
     $self->close;	# just in case;
 
-    # Fork and start a mailer
-    my $child = open $self, '|-';
-    defined $child or die "Failed to send: $!";
+    if(defined $exe)
+    {   # Fork and start a mailer
+        my $child = open $self, '|-';
+        defined $child or die "Failed to send: $!";
 
-    if($child==0)
-    {   # Child process will handle sending, but this is not real exec()
-        # this is a setup!!!
-        unless($self->exec($exe, $args, \@to))
-        {   warn $!;     # setup failed
-            _exit(1);    # no DESTROY(), keep it for parent
+        if($child==0)
+        {   # Child process will handle sending, but this is not real exec()
+            # this is a setup!!!
+            unless($self->exec($exe, $args, \@to))
+            {   warn $!;     # setup failed
+                _exit(1);    # no DESTROY(), keep it for parent
+            }
         }
+    }
+    else
+    {   $self->exec($exe, $args, \@to)
+            or die $!;
     }
 
     # Set the headers

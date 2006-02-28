@@ -1,4 +1,8 @@
 
+version 1.74: Tue Feb 28 08:39:14 CET 2006
+
+	- Help from [Jun Kuriyama]
+
 version 1.73: Sat Jan 21 09:54:13 CET 2006
 
 	- Added 'use Mail::Util' to Mail::Mailer::testfile to produce
