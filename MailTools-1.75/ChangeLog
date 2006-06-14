@@ -1,7 +1,14 @@
 
+version 1.75: Wed Jun 14 15:30:25 CEST 2006
+
+	- [Mike Lerley] reported that environment variables are not
+	  tread-safe in mod_perl.  Therefore, he required to pass the
+	  sender of the message explictly on qmail's command-line.
+	  His addapted patch included.
+
 version 1.74: Tue Feb 28 08:39:14 CET 2006
 
-	- Help from [Jun Kuriyama]
+	- Finally fixed exec with SMTP, with help from [Jun Kuriyama]
 
 version 1.73: Sat Jan 21 09:54:13 CET 2006
 
