@@ -1,6 +1,6 @@
 require Mail::Header;
 
-print "1..22\n";
+print "1..25\n";
 
 $h = new Mail::Header;
 
@@ -73,6 +73,20 @@ printf "ok %d\n",++$t;
 
 print "not "
 	unless $h->get(Date => 2) eq "an even\n longer test\n header\n";
+printf "ok %d\n",++$t;
+
+$h->fold(30);
+
+print "not "
+       unless $h->get(Date => 0) eq "a test header\n";
+printf "ok %d\n",++$t;
+
+print "not "
+       unless $h->get(Date => 1) eq "a longer test header\n";
+printf "ok %d\n",++$t;
+
+print "not "
+       unless $h->get(Date => 2) eq "an even longer test\n header\n";
 printf "ok %d\n",++$t;
 
 $h->unfold;
