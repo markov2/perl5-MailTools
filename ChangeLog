@@ -1,6 +1,20 @@
 
 ==== version history for MailTools
 
+version 2.00:
+
+	- reorganized installation of MailTools, in a modern way.  This
+	  may break installation on very old releases of Perl.
+
+	- added t/pod.t
+
+	- restructured most code, no functional changes.
+
+	- added and cleaned a lot of documentation, using OODoc to
+	  generate nice manuals in POD and HTML.
+
+	- extracted Mail::Field::Generic from Mail::Field
+
 version 1.77: Fri May 11 14:16:01 CEST 2007
 
 	- fixed syntax error in qmail.pm, patch by [Alexey Tourbin]

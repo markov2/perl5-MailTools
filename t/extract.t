@@ -14,8 +14,7 @@ $i = 1;
 foreach $ln (@line) {
  next unless($ln =~ /\S/);
 
- ($test,$format,$name) = (split(/\n+/,$ln));
-
+ ($test,$format,$name) = split /\n+/, $ln;
  $q = (Mail::Address->parse($test))[0];
 
  $ename   = $q->name || "";
