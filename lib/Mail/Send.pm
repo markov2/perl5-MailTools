@@ -16,7 +16,7 @@ Mail::Send - Simple electronic mail interface
   require Mail::Send;
 
   $msg = Mail::Send->new;
-  $msg = Mail::Send->new(Subject =>'example subject', To=>'timbo');
+  $msg = Mail::Send->new(Subject => 'example', To => 'timbo');
 
   $msg->to('user@host');
   $msg->to('user@host', 'user2@example.com');
@@ -39,8 +39,15 @@ Mail::Send - Simple electronic mail interface
   $fh->close;         # complete the message and send it
 
 =chapter DESCRIPTION
+M<Mail::Send> creates e-mail messages without using the M<Mail::Header>
+knowledge, which means that all escaping and folding must be done by
+you!  Simplicity has its price.
+
+When you have time, take a look at M<Mail::Transport>
 
 =chapter METHODS
+
+=section Constructors
 
 =c_method new PAIRS
 A list of header fields (provided as key-value PAIRS) can be
@@ -58,6 +65,8 @@ sub new(@)
 
     $self;
 }
+
+=section Header fields
 
 =method set FIELDNAME, VALUES
 VALUES will replace the old values for the FIELDNAME.  Returned is
@@ -97,6 +106,8 @@ sub to		{ my $self=shift; $self->set('To', @_); }
 sub cc		{ my $self=shift; $self->set('Cc', @_); }
 sub bcc		{ my $self=shift; $self->set('Bcc', @_); }
 sub subject	{ my $self=shift; $self->set('Subject', join (' ', @_)); }
+
+=section Sending
 
 =method open OPTIONS
 The OPTIONS are used to initiate a mailer object via

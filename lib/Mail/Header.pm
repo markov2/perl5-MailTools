@@ -32,8 +32,20 @@ Mail::Header - manipulate MIME headers
  my $head = Mail::Header->new( [<>], Modify => 0);
 
 =chapter DESCRIPTION
-This package provides a class object which can be used for reading, creating,
-manipulating and writing MIME headers.
+Read, write, create, and manipulate MIME headers, the leading part
+of each modern e-mail message, but also used in other protocols
+like HTTP.  The fields are kept in M<Mail::Field> objects.
+
+Be aware that the header fields each have a name part, which shall
+be treated case-insensitive, and a content part, which may be folded
+over multiple lines.  
+
+Mail::Header does not always follow the RFCs strict enough, does not
+help you with character encodings.  It does not use weak references
+where it could (because those did not exist when the module was written)
+which costs some performance and make the implementation a little more
+complicated.  The M<Mail::Message::Head> implementation is much newer
+and therefore better.
 
 =cut
 
@@ -294,7 +306,160 @@ sub new
     $self;
 }
 
-=method modify ( [ VALUE ] )
+=method dup
+Create a duplicate of the current object.
+=cut
+
+sub dup
+{   my $self = shift;
+    my $dup  = ref($self)->new;
+
+    %$dup    = %$self;
+    $dup->empty;      # rebuild tables
+
+    $dup->{mail_hdr_list} = [ @{$self->{mail_hdr_list}} ];
+
+    foreach my $ln ( @{$dup->{mail_hdr_list}} )
+    {    my $tag = _tag_case +($ln =~ /^($FIELD_NAME|From )/oi)[0];
+         push @{$dup->{mail_hdr_hash}{$tag}}, \$ln;
+    }
+
+    $dup;
+}
+
+=section "Fake" constructors
+Be warned that the next constructors all require an already created
+header object, of which the original content will be destroyed.
+
+=method extract ARRAY
+Extract a header from the given array into an existing Mail::Header
+object. C<extract> B<will modify> this array.
+Returns the object that the method was called on.
+=cut
+
+sub extract
+{   my ($self, $lines) = @_;
+    $self->empty;
+
+    while(@$lines && $lines->[0] =~ /^($FIELD_NAME|From )/o)
+    {    my $tag  = $1;
+         my $line = shift @$lines;
+         $line   .= shift @$lines
+             while @$lines && $lines->[0] =~ /^[ \t]+/o;
+
+         ($tag, $line) = _fmt_line $self, $tag, $line;
+
+         _insert $self, $tag, $line, -1
+             if defined $line;
+    }
+
+    shift @$lines
+        if @$lines && $lines->[0] =~ /^\s*$/o;
+
+    $self;
+}
+
+=method read FILEHANDLE
+Read a header from the given file descriptor into an existing Mail::Header
+object.
+=cut
+
+sub read
+{   my ($self, $fd) = @_;
+
+    $self->empty;
+
+    my ($tag, $line);
+    my $ln = '';
+    while(1)
+    {   $ln = <$fd>;
+
+        if(defined $ln && defined $line && $ln =~ /\A[ \t]+/o)
+        {   $line .= $ln;
+            next;
+        }
+
+        if(defined $line)
+        {   ($tag, $line) = _fmt_line $self, $tag, $line;
+            _insert $self, $tag, $line, -1
+	        if defined $line;
+        }
+
+        defined $ln && $ln =~ /^($FIELD_NAME|From )/o
+            or last;
+
+        ($tag, $line) = ($1, $ln);
+    }
+
+    $self;
+}
+
+=method empty
+Empty an existing C<Mail::Header> object of all lines.
+=cut
+
+sub empty
+{   my $self = shift;
+    $self->{mail_hdr_list} = [];
+    $self->{mail_hdr_hash} = {};
+    $self;
+}
+
+=method header [ARRAY]
+C<header> does multiple operations. First it will extract a header from
+the ARRAY, if given. It will then reformat the header (if reformatting
+is permitted), and finally return a reference to an array which
+contains the header in a printable form.
+=cut
+
+sub header
+{   my $self = shift;
+
+    $self->extract(@_)
+	if @_;
+
+    $self->fold
+        if $self->{mail_hdr_modify};
+
+    [ @{$self->{mail_hdr_list}} ];
+}
+
+=method header_hashref [HASH]
+As M<header()>, but it will eventually set headers from a hash
+reference, and it will return the headers as a hash reference.
+
+=example
+ $fields->{From} = 'Tobias Brox <tobix@cpan.org>';
+ $fields->{To}   = ['you@somewhere', 'me@localhost'];
+ $head->header_hashref($fields);
+=cut
+
+### text kept, for educational purpose... originates from 2000/03
+# This can probably be optimized. I didn't want to mess much around with
+# the internal implementation as for now...
+# -- Tobias Brox <tobix@cpan.org>
+
+sub header_hashref
+{   my ($self, $hashref) = @_;
+
+    while(my ($key, $value) = each %$hashref)
+    {   $self->add($key, $_) for ref $value ? @$value : $value;
+    }
+
+    $self->fold
+        if $self->{mail_hdr_modify};
+
+    defined wantarray  # MO, added minimal optimization
+        or return;
+
+    +{ map { ($_ => [$self->get($_)] ) }   # MO: Eh?
+           keys %{$self->{mail_hdr_hash}}
+     }; 
+}
+
+=section Accessors
+
+=method modify [VALUE]
 If C<VALUE> is I<false> then C<Mail::Header> will not do any automatic
 reformatting of the headers, other than to ensure that the line
 starts with the tags given.
@@ -329,6 +494,46 @@ sub mail_from
 
     $thing;
 }
+
+=method fold_length [TAG], [LENGTH]
+Set the default fold length for all tags or just one. With no arguments
+the default fold length is returned. With two arguments it sets the fold
+length for the given tag and returns the previous value. If only C<LENGTH>
+is given it sets the default fold length for the current object.
+
+In the two argument form C<fold_length> may be called as a static method,
+setting default fold lengths for tags that will be used by B<all>
+C<Mail::Header> objects. See the C<fold> method for
+a description on how C<Mail::Header> uses these values.
+=cut
+
+sub fold_length
+{   my $thing = shift;
+    my $old;
+
+    if(@_ == 2)
+    {   my $tag = _tag_case shift;
+        my $len = shift;
+
+        my $hash = ref $thing ? $thing->{mail_hdr_lengths} : \%HDR_LENGTHS;
+        $old     = $hash->{$tag};
+        $hash->{$tag} = $len > 20 ? $len : 20;
+    }
+    else
+    {   my $self = $thing;
+        my $len  = shift;
+        $old = $self->{mail_hdr_foldlen};
+
+        if(defined $len)
+        {    $self->{mail_hdr_foldlen} = $len > 20 ? $len : 20;
+             $self->fold if $self->{mail_hdr_modify};
+        }
+    }
+
+    $old;
+}
+
+=section Processing
 
 =method fold [LENGTH]
 Fold the header. If LENGTH is not given, then C<Mail::Header> uses the
@@ -388,130 +593,6 @@ sub unfold
     $self;
 }
 
-=method extract ARRAY
-Extract a header from the given array. C<extract> B<will modify> this array.
-Returns the object that the method was called on.
-=cut
-
-sub extract
-{   my ($self, $lines) = @_;
-    $self->empty;
-
-    while(@$lines && $lines->[0] =~ /^($FIELD_NAME|From )/o)
-    {    my $tag  = $1;
-         my $line = shift @$lines;
-         $line   .= shift @$lines
-             while @$lines && $lines->[0] =~ /^[ \t]+/o;
-
-         ($tag, $line) = _fmt_line $self, $tag, $line;
-
-         _insert $self, $tag, $line, -1
-             if defined $line;
-    }
-
-    shift @$lines
-        if @$lines && $lines->[0] =~ /^\s*$/o;
-
-    $self;
-}
-
-=method read FILEHANDLE
-Read a header from the given file descriptor.
-=cut
-
-sub read
-{   my ($self, $fd) = @_;
-
-    $self->empty;
-
-    my ($tag, $line);
-    my $ln = '';
-    while(1)
-    {   $ln = <$fd>;
-
-        if(defined $ln && defined $line && $ln =~ /\A[ \t]+/o)
-        {   $line .= $ln;
-            next;
-        }
-
-        if(defined $line)
-        {   ($tag, $line) = _fmt_line $self, $tag, $line;
-            _insert $self, $tag, $line, -1
-	        if defined $line;
-        }
-
-        defined $ln && $ln =~ /^($FIELD_NAME|From )/o
-            or last;
-
-        ($tag, $line) = ($1, $ln);
-    }
-
-    $self;
-}
-
-
-=method empty ()
-Empty the C<Mail::Header> object of all lines.
-=cut
-
-sub empty
-{   my $self = shift;
-    $self->{mail_hdr_list} = [];
-    $self->{mail_hdr_hash} = {};
-    $self;
-}
-
-
-=method header [ARRAY]
-C<header> does multiple operations. First it will extract a header from
-the ARRAY, if given. It will the reformat the header, if reformatting
-is permitted, and finally return a reference to an array which
-contains the header in a printable form.
-=cut
-
-sub header
-{   my $self = shift;
-
-    $self->extract(@_)
-	if @_;
-
-    $self->fold
-        if $self->{mail_hdr_modify};
-
-    [ @{$self->{mail_hdr_list}} ];
-}
-
-=method header_hashref [HASH]
-As M<header()>, but it will eventually set headers from a hash
-reference, and it will return the headers as a hash reference.
-
-=example
- $fields->{From} = 'Tobias Brox <tobix@cpan.org>';
- $fields->{To}   = ['you@somewhere', 'me@localhost'];
- $head->header_hashref($fields);
-=cut
-
-# This can probably be optimized. I didn't want to mess much around with
-# the internal implementation as for now...
-# -- Tobias Brox <tobix@cpan.org>
-
-sub header_hashref
-{   my ($self, $hashref) = @_;
-
-    while(my ($key, $value) = each %$hashref)
-    {   $self->add($key, $_) for ref $value ? @$value : $value;
-    }
-
-    $self->fold
-       if $self->{mail_hdr_modify};
-
-    # Yaiks!  MO 2007
-    +{ map { ($_ => [$self->get($_)] ) }
-           keys %{$self->{mail_hdr_hash}}
-     }; 
-}
-
-
 =method add TAG, LINE [, INDEX]
 
 Add a new line to the header. If TAG is C<undef> the the tag will be
@@ -536,8 +617,7 @@ sub add
     $1;
 }
 
-
-=method replace ( TAG, LINE [, INDEX ] )
+=method replace TAG, LINE [, INDEX ]
 Replace a line in the header.  If TAG is C<undef> the the tag will be
 extracted from the beginning of the given line. If INDEX is given
 the new line will replace the Nth instance of that tag, otherwise the
@@ -701,71 +781,12 @@ Returns the header as a single string.
 
 sub as_string { join '', grep {defined} @{shift->{mail_hdr_list}} }
 
-=method fold_length [TAG], [LENGTH]
-Set the default fold length for all tags or just one. With no arguments
-the default fold length is returned. With two arguments it sets the fold
-length for the given tag and returns the previous value. If only C<LENGTH>
-is given it sets the default fold length for the current object.
-
-In the two argument form C<fold_length> may be called as a static method,
-setting default fold lengths for tags that will be used by B<all>
-C<Mail::Header> objects. See the C<fold> method for
-a description on how C<Mail::Header> uses these values.
-=cut
-
-sub fold_length
-{   my $thing = shift;
-    my $old;
-
-    if(@_ == 2)
-    {   my $tag = _tag_case shift;
-        my $len = shift;
-
-        my $hash = ref $thing ? $thing->{mail_hdr_lengths} : \%HDR_LENGTHS;
-        $old     = $hash->{$tag};
-        $hash->{$tag} = $len > 20 ? $len : 20;
-    }
-    else
-    {   my $self = $thing;
-        my $len  = shift;
-        $old = $self->{mail_hdr_foldlen};
-
-        if(defined $len)
-        {    $self->{mail_hdr_foldlen} = $len > 20 ? $len : 20;
-             $self->fold if $self->{mail_hdr_modify};
-        }
-    }
-
-    $old;
-}
-
 =method tags
-Retruns an array of all the tags that exist in the header. Each tag will
+Returns an array of all the tags that exist in the header. Each tag will
 only appear in the list once. The order of the tags is not specified.
 =cut
 
 sub tags { keys %{shift->{mail_hdr_hash}} }
-
-=method dup
-Create a duplicate of the current object.
-=cut
-
-sub dup
-{   my $self = shift;
-    my $dup  = ref($self)->new;
-
-    %$dup    = %$self;
-    $dup->empty;      # rebuild tables
-
-    $dup->{mail_hdr_list} = [ @{$self->{mail_hdr_list}} ];
-
-    foreach my $ln ( @{$dup->{mail_hdr_list}} )
-    {    my $tag = _tag_case +($ln =~ /^($FIELD_NAME|From )/oi)[0];
-         push @{$dup->{mail_hdr_hash}{$tag}}, \$ln;
-    }
-
-    $dup;
-}
 
 =method cleanup
 Remove any header line that, other than the tag, only contains whitespace

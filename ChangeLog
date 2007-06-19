@@ -15,6 +15,8 @@ version 2.00:
 
 	- extracted Mail::Field::Generic from Mail::Field
 
+	- added misteriously missing Mail::Field::AddrList::addr_list()
+
 version 1.77: Fri May 11 14:16:01 CEST 2007
 
 	- fixed syntax error in qmail.pm, patch by [Alexey Tourbin]

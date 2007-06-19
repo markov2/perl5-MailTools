@@ -12,9 +12,9 @@ Mail::Filter - Filter mail through multiple subroutines
     
  my $filter = Mail::Filter->new( \&filter1, \&filter2 );
     
- my $mail = Mail::Internet->new( [<>] );
- my $mail = $filter->filter($mail);
-    
+ my $mail   = Mail::Internet->new( [<>] );
+ my $mail   = $filter->filter($mail);
+
  my $folder = Mail::Folder->new( .... );
  my $filter->filter($folder);
 
@@ -60,6 +60,8 @@ sub add(@)
     push @{$self->{filters}}, @_;
 }
 
+=section Processing
+
 =method filter MAIL-OBJECT | MAIL-FOLDER
 If the first argument is a C<Mail::Internet> object, then this object will
 be passed through the filter list. If the first argument is a C<Mail::Folder>
@@ -80,7 +82,6 @@ sub _filter($)
 
     $mail;
 }
-
 
 sub filter
 {   my ($self, $obj) = @_;
@@ -104,8 +105,8 @@ sub filter
 }
 
 =method folder
-If the C<filter> method is called with a C<Mail::Folder> object, then the
-filter subroutines may call this method to obtain the folder object that is
+While the C<filter> method is called with a C<Mail::Folder> object, these
+filter subroutines can call this method to obtain the folder object that is
 being processed.
 =cut
 

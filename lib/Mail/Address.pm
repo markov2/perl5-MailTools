@@ -33,22 +33,23 @@ covers about 95% of what can be found). Problems are with
 
 =item *
 no support for address groups, even not with the semi-colon as
-separator between addresses
+separator between addresses;
 
 =item *
-Limitted support for escapes in phrases and comments.  There are
-cases where it can get wrong.
+limitted support for escapes in phrases and comments.  There are
+cases where it can get wrong; and
 
 =item *
-You have to take care of most escaping when you create an address yourself:
+you have to take care of most escaping when you create an address yourself:
 C<Mail::Address> does not do that for you.
 
 =back
 
-Often requests are made to improve this situation, but this is not a
-good idea, where it will break zillions of existing applications.  If
-you wish for a fully RFC2822 compliant implementation you may take a look
-at L<Mail::Message::Field::Full>, part of MailBox.
+Often requests are made to the maintainers of this code improve this
+situation, but this is not a good idea, where it will break zillions
+of existing applications.  If you wish for a fully RFC2822 compliant
+implementation you may take a look at L<Mail::Message::Field::Full>,
+part of MailBox.
 
 =examples
   my $s = Mail::Message::Field::Full->parse($header);
@@ -281,7 +282,9 @@ sub set_or_get($)
 
 =method format [ADDRESSes]
 Return a string representing the address in a suitable form to be placed
-on a To, Cc or Bcc line of a message.
+on a C<To>, C<Cc>, or C<Bcc> line of a message.  This method is called on
+the first ADDRESS to be used; other specified ADDRESSes will be appended,
+separated with commas.
 =cut
 
 my $atext = '[\-\w !#$%&\'*+/=?^`{|}~]';
@@ -320,7 +323,7 @@ sub format
     join ", ", @addrs;
 }
 
-=section Additional helpers
+=section Smart accessors
 
 =method name
 Using the information contained within the object attempt to identify what

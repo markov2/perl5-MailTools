@@ -12,6 +12,11 @@ use Date::Parse  qw(str2time);
 Mail::Field::Date - a date header field
 
 =chapter SYNOPSIS
+  use HTTP::Date 'time2iso';
+  my $field = Mail::Field->new(Date => time2iso());
+
+=chapter DESCRIPTION
+Represents one "Date" header field.
 
 =chapter METHODS
 
@@ -45,8 +50,10 @@ sub parse($)
     $self;
 }
 
+=section Smart accessors
+
 =method time [TIME]
-Query (or change) the time in seconds.
+Query (or change) the TIME (as stored in the field) in seconds.
 =cut
 
 sub time(;$)

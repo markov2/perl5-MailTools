@@ -8,15 +8,15 @@ F<http://perl.overmeer.net/mailtools/>.
 The MailTools bundle was developed by Graham Barr.  Later, Mark
 Overmeer took over maintenance without development.
 
+Mail::Cap by Gisle Aas E<lt>aas@oslonett.noE<gt>.
+Mail::Field::AddrList by Peter Orbaek E<lt>poe@cit.dkE<gt>.
+Mail::Mailer and Mail::Send by Tim Bunce E<lt>Tim.Bunce@ig.co.ukE<gt>.
+For other contributors see ChangeLog.
+
 =head1 LICENSE
 
 Copyrights 1995-2000 Graham Barr E<lt>gbarr@pobox.comE<gt> and
 2001-2007 Mark Overmeer E<lt>perl@overmeer.netE<gt>.
-
-Mail::Cap by Gisle Aas E<lt>aas@oslonett.noE<gt>.
-Mail::Field::AddrList by Peter Orbaek E<lt>poe@cit.dkE<gt>.
-Mail::Mailer and Mail::Send by Tim Bunce E<lt>F<Tim.Bunce@ig.co.uk>E<gt>.
-For other contributors see ChangeLog.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

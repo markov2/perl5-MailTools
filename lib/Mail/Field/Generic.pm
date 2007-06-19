@@ -6,10 +6,16 @@ use base 'Mail::Field';
 =chapter NAME
 Mail::Field::Generic - implementation for inspecific fields
 
+=chapter SYNOPSIS
+ use Mail::Field;
+ my $field = Mail::Field->new('Subject', 'some subject text');
+ my $field = Mail::Field->new(subject => 'some subject text');
+
 =chapter DESCRIPTION
-A generic package for those not defined in their own package. This is
-fine for fields like Subject, X-Mailer etc. where the field holds only
-a string of no particular importance/format.
+A generic implementation for header fields without own
+implementation. This is fine for fields like C<Subject>, C<X-Mailer>,
+etc., where the field holds only a string of no particular
+importance/format.
 
 =chapter METHODS
 
@@ -37,10 +43,6 @@ sub parse
     $self->{Text} = shift || "";
     $self;
 }
-
-=method stringify
-Returns the field as string.
-=cut
 
 sub stringify { shift->{Text} }
 

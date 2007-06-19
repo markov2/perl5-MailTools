@@ -31,6 +31,11 @@ the calling package.
 =function read_mbox FILE
 Read FILE, a binmail mailbox file, and return a list of  references.
 Each reference is a reference to an array containg one message.
+
+WARNING:
+This method does not quote lines which accidentally also start with the
+message separator C<From>, so this implementation can be considered
+broken.  See M<Mail::Box::Mbox>
 =cut
 
 sub read_mbox($)
@@ -80,6 +85,18 @@ methods
 =item * Use value from Net::Domain::domainname (if Net::Domain exists)
 
 =back
+
+WARNING:
+On modern machines, there is only one good way to provide information to
+this method: the first; always explicitly configure the MAILDOMAIN.
+
+=example
+ # in your main script
+ $ENV{MAILDOMAIN} = 'example.com';
+
+ # everywhere else
+ use Mail::Util 'maildomain';
+ print maildomain;
 =cut
 
 sub maildomain()
@@ -161,6 +178,14 @@ seems to be smart behavior, this is not predictable enough (IMHO) to
 be used.  Please set the MAILADDRESS explicitly, and do not trust on
 the "automatic detection", even when that produces a correct address
 (on the moment)
+
+=example
+ # in your main script
+ $ENV{MAILADDRESS} = 'me@example.com';
+
+ # everywhere else
+ use Mail::Util 'mailaddress';
+ print mailaddress;
 =cut
 
 sub mailaddress()

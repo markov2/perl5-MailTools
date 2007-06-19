@@ -24,19 +24,22 @@ Mail::Field::AddrList - object representation of e-mail address lists
   print $from->stringify(),"\n";
 
   # extract e-mail addresses and names
-  @addresses = $from->addresses();
-  @names = $from->names();
+  @addresses = $from->addresses(); # strings
+  @names     = $from->names();     # strings
+  @addr      = $from->addr_list(); # Mail::Address objects (v2.00)
 
   # adjoin a new address to the list
   $from->set_address('foo@bar.com', 'Mr. Foo');
 
 =chapter DESCRIPTION
 
-Defines parsing and formatting according to RFC822, of the following
-fields: To, From, Cc, Reply-To and Sender.
+Defines parsing and formatting of address field, for the following
+fields: C<To>, C<From>, C<Cc>, C<Reply-To>, and C<Sender>.
 
-I<Don't use this class directly!> Instead ask Mail::Field for new
-instances based on the field name!
+All the normally used features of the address field specification of
+RFC2822 are implemented, but some complex (and therefore hardly ever used)
+constructs will not be inderstood.  Use M<Mail::Message::Field::Full>
+in MailBox if you need full RFC compliance.
 
 =chapter METHODS
 =cut
@@ -73,9 +76,33 @@ sub stringify()
     join(", ", map { $_->format } values %{$self->{AddrList}});
 }
 
+=section Smart accessors
+
+=method addresses
+Returns a list if email addresses, found in the field content.
+=cut
+
 sub addresses { keys %{shift->{AddrList}} }
 
+=method addr_list
+Returns the collected M<Mail::Address> objects.
+=cut
+
+# someone forgot to implement a method to return the Mail::Address
+# objects.  Added in 2.00; a pitty that the name addresses() is already
+# given :(  That one should have been named emails()
+sub addr_list { values %{shift->{AddrList}} }
+
+=method names
+Returns a list of nicely formatted named, for each of the addresses
+found in the content.
+=cut
+
 sub names { map { $_->name } values %{shift->{AddrList}} }
+
+=method set_address EMAIL, NAME
+Add/replace an EMAIL address to the field.
+=cut
 
 sub set_address($$)
 {   my ($self, $email, $name) = @_;

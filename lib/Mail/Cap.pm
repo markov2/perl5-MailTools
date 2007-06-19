@@ -9,36 +9,38 @@ Mail::Cap - Parse mailcap files
 
 =chapter SYNOPSIS
 
-    my $mc = new Mail::Cap;
+ my $mc = new Mail::Cap;
+ $desc = $mc->description('image/gif');
 
-    $desc = $mc->description('image/gif');
-
-    print "GIF desc: $desc\n";
-
-    $cmd = $mc->viewCmd('text/plain; charset=iso-8859-1', 'file.txt');
+ print "GIF desc: $desc\n";
+ $cmd = $mc->viewCmd('text/plain; charset=iso-8859-1', 'file.txt');
 
 =chapter DESCRIPTION
 
-Parse mailcap files as specified in RFC 1524 - I<A User Agent
+Parse mailcap files as specified in "RFC 1524 --A User Agent
 Configuration Mechanism For Multimedia Mail Format Information>.  In
 the description below C<$type> refers to the MIME type as specified in
-the I<Content-Type> header of mail or HTTP messages.  Examples of
+the C<Content-Type> header of mail or HTTP messages.  Examples of
 types are:
 
   image/gif
   text/html
   text/plain; charset=iso-8859-1
 
+You could also take a look at the M<File::MimeInfo> distribution, which
+are accessing tables which are used by many applications on a system,
+and therefore have succeeded the mail-cap specifications on modern
+(UNIX) systems.
 =cut
 
 our $useCache = 1;  # don't evaluate tests every time
 
 my @path;
 if($^O eq "MacOS")
-{   @path = split /,/, $ENV{MAILCAPS} || "$ENV{HOME}mailcap";
+{   @path = split /\,/, $ENV{MAILCAPS} || "$ENV{HOME}mailcap";
 }
 else
-{   @path = split /:/
+{   @path = split /\:/
       , ( $ENV{MAILCAPS} || (defined $ENV{HOME} ? "$ENV{HOME}/.mailcap:" : '')
         . '/etc/mailcap:/usr/etc/mailcap:/usr/local/etc/mailcap'
         );   # this path is specified under RFC1524 appendix A 
@@ -221,7 +223,7 @@ sub makeName($$)
     $template;
 }
 
-=section Lookup fields
+=section Look-up definitions
 Methods return the corresponding mailcap field for the type.
 
 =method field TYPE, FIELD

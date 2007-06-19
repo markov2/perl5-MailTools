@@ -22,10 +22,11 @@ This package implements reading, creating, manipulating, and writing email
 messages.  Sometimes, the implementation tries to be too smart, but in
 the general case it works as expected.
 
-If you start writing a B<new application>, you may want to use the
-L<Mail::Box> set of packages (requires perl 5.6.1), which has more
-features and handles messages much better according to the RFCs.
-See L<http://perl.overmeer.net/mailbox/>.
+If you start writing a B<new application>, you should use the L<Mail::Box>
+distribution, which has more features and handles messages much better
+according to the RFCs.  See L<http://perl.overmeer.net/mailbox/>.
+You may also chose L<MIME::Entity>, to get at least some multipart
+support in your application.
 
 =chapter METHODS
 
@@ -112,7 +113,8 @@ sub read_header(@)
 }
 
 =method extract ARRAY-of-LINES
-Extract header and body from an ARRAY of message lines.
+Extract header and body from an ARRAY of message lines.  Requires an
+object already created with M<new()>, which contents will get overwritten.
 =cut
 
 sub extract($)
@@ -121,7 +123,7 @@ sub extract($)
     $self->body($lines);
 }
 
-=ci_method dup
+=method dup
 Duplicate the message as a whole.  Both header and body will be
 deep-copied: a new M<Mail::Internet> object is returned.
 =cut
