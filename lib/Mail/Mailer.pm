@@ -269,15 +269,9 @@ sub close(@)
 
 sub DESTROY { shift->close }
 
-=chapter TO DO
+=chapter DETAILS
 
-Assist formatting of fields in ...::rfc822:send_headers to ensure
-valid in the face of newlines and longlines etc.
-
-Secure all forms of send_headers() against hacker attack and invalid
-contents. Especially "\n~..." in ...::mail::send_headers.
-
-=chapter ENVIRONMENT VARIABLES
+=section ENVIRONMENT VARIABLES
 
 =over 4
 
@@ -301,6 +295,12 @@ between type-groups.
     "mail:c:/does/not/exists|sendmail:$HOME/test/bin/sendmail"
 
 =back
+
+=section BUGS
+
+Mail::Mailer does not help with folding, and does not protect
+against various web-script hacker attacks, for instance where
+a new-line is inserted in the content of the field.
 
 =cut
 

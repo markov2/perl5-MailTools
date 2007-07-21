@@ -297,7 +297,9 @@ sub text
     @_ ? $self->parse(@_) : $self->stringify;
 }
 
-=chapter SUB-CLASS PACKAGE NAMES
+=chapter DETAILS
+
+=section SUB-CLASS PACKAGE NAMES
 
 All sub-classes should be called Mail::Field::I<name> where I<name> is
 derived from the tag using these rules.

@@ -4,7 +4,7 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile
  ( DISTNAME  => 'MailTools'
- , VERSION   => '2.00_01'
+ , VERSION   => '2.00_02'
  , NAME      => 'Mail'
  , AUTHOR    => 'Mark Overmeer <perl@overmeer.net>'
  , ABSTRACT  => 'Various Mail related modules'

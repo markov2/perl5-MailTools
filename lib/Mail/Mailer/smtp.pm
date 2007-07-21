@@ -68,10 +68,11 @@ sub close(@)
     # Epilogue should destroy the SMTP filehandle,
     # but just to be on the safe side.
     $sock && fileno $sock
-        return 1;
+        or return 1;
 
     close $sock
         or croak 'Cannot destroy socket filehandle';
+
     1;
 }
 
