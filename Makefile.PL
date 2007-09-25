@@ -4,10 +4,11 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile
  ( DISTNAME  => 'MailTools'
- , VERSION   => '2.00_02'
+ , VERSION   => '2.00_03'
  , NAME      => 'Mail'
  , AUTHOR    => 'Mark Overmeer <perl@overmeer.net>'
  , ABSTRACT  => 'Various Mail related modules'
+ , LICENSE   => 'perl'
 
  , PREREQ_PM =>
    { Net::SMTP   => 1.03
@@ -15,6 +16,8 @@ WriteMakefile
    , IO::Handle  => 0.00
    , Test::More  => 0.00
    , Test::Pod   => 1.00
+   , Date::Format => 0
+   , Date::Parse  => 0
    }
 );
 

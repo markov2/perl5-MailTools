@@ -230,8 +230,8 @@ sub _cleanup_hdrs($)
     }
 }
 
-sub exec($$$)
-{   my($self, $exe, $args, $to) = @_;
+sub exec($$$$)
+{   my($self, $exe, $args, $to, $sender) = @_;
 
     # Fork and exec the mailer (no shell involved to avoid risks)
     my @exe = split /\s+/, $exe;

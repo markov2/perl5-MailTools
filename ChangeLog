@@ -1,6 +1,16 @@
 
 ==== version history for MailTools
 
+version 2.00_03: Tue Sep 25 12:27:28 CEST 2007
+
+	- folding of header fields sometimes ended prematurely.
+	  Reported by [Anthony W. Kay]
+
+	- add $sender as 4th argument to Mail::Mailer::*::exec() where
+	  missing.  Discovered by [David Hand]
+
+	- add Date::Format and Date::Parse to Makefile.PL.
+
 version 2.00_02: Sat Jul 21 12:29:20 CEST 2007
 
 	- parts of the documentation were lost, discovered by [Ricardo Signes]

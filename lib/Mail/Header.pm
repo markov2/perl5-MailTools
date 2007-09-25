@@ -105,27 +105,24 @@ sub _fold_line
 
     my $max = int($maxlen - 5);         # 4 for leading spcs + 1 for [\,\;]
     my $min = int($maxlen * 4 / 5) - 4;
-    my $ml = $maxlen;
 
     $_[0] =~ s/[\r\n]+//og;        # Remove new-lines
     $_[0] =~ s/\s*\Z/\n/so;        # End line with a EOLN
 
     return if $_[0] =~ /^From\s/io;
 
-    if(length($_[0]) > $ml)
+    if(length($_[0]) > $maxlen)
     {   if($_[0] =~ /^([-\w]+)/ && exists $STRUCTURE{ lc $1 } )
         {   #Split the line up
             # first bias towards splitting at a , or a ; >4/5 along the line
             # next split a whitespace
             # else we are looking at a single word and probably don't want to split
             my $x = "";
-
             $x .= "$1\n " while $_[0] =~
                 s/^\s*
-                   (  [^"]{$min,$max}?[\,\;]
-                   | [^"]{1,$max}\s
+                   ( [^"]{$min,$max} [,;]
+                   | [^"]{1,$max}    [,;\s]
                    | [^\s"]*(?:"[^"]*"[ \t]?[^\s"]*)+\s
-                   | [^\s"]+\s
                    ) //x;
 
             $x .= $_[0];
