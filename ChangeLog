@@ -1,6 +1,22 @@
 
 ==== version history for MailTools
 
+version 2.00_04:
+
+	Changes:
+
+	- Remove work-around for Perl 5.8.0. unicode bug from
+	  Mail::Address::_extract_name().
+	  Result of rt.cpan.org#30661 [Josh Clark]
+
+	- Requires on Perl 5.8.1 minimum
+
+	Fixes:
+
+	- Mail::Mailer::testfile now also shows Cc destinations, the
+	  setting of 'outfile' now works, and it will produce an error
+	  when the data cannot be written.  All thanks to [Slaven Rezic]
+
 version 2.00_03: Tue Sep 25 12:27:28 CEST 2007
 
 	- folding of header fields sometimes ended prematurely.

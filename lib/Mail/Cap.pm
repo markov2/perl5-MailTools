@@ -86,7 +86,6 @@ sub new
 
     my $self  = bless {_count => 0}, $class;
 
-
     $self->_process_file($args{filename})
         if defined $args{filename} && -r $args{filename};
 

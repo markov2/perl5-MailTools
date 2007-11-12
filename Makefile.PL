@@ -1,10 +1,10 @@
-require 5.005;
+require 5.008001;
 
 use ExtUtils::MakeMaker;
 
 WriteMakefile
  ( DISTNAME  => 'MailTools'
- , VERSION   => '2.00_03'
+ , VERSION   => '2.00_04'
  , NAME      => 'Mail'
  , AUTHOR    => 'Mark Overmeer <perl@overmeer.net>'
  , ABSTRACT  => 'Various Mail related modules'

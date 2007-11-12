@@ -78,12 +78,6 @@ sub _extract_name
     # Using encodings, too hard. See Mail::Message::Field::Full.
     return '' if m/\=\?.*?\?\=/;
 
-    # Bug in unicode \U, perl 5.8.0 breaks when casing utf8 in regex
-    if($] eq 5.008)
-    {   require utf8;
-        eval 'utf8::downgrade($_)';
-    }
-
     # trim whitespace
     s/^\s+//;
     s/\s+$//;

@@ -5,17 +5,17 @@ use base 'Mail::Mailer::rfc822';
 
 use Mail::Util qw/mailaddress/;
 
-our %config = (outfile => 'mailer.testfile');
 my $num = 0;
-
-sub can_cc { 0 }
+sub can_cc() { 0 }
 
 sub exec($$$)
 {   my ($self, $exe, $args, $to) = @_;
 
-    open F, '>>', $Mail::Mailer::testfile::config{outfile};
-    print F "\n===\ntest ", ++$num, " ",
-            (scalar localtime),
+    my $outfn = $Mail::Mailer::testfile::config{outfile} || 'mailer.testfile';
+    open F, '>>', $outfn
+        or die "Cannot append message to testfile $outfn: $!";
+
+    print F "\n===\ntest ", ++$num, " ", (scalar localtime),
             "\nfrom: " . mailaddress(),
             "\nto: " . join(' ',@{$to}), "\n\n";
     close F;
