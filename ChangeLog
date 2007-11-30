@@ -1,6 +1,20 @@
 
 ==== version history for MailTools
 
+version 2.02: Fri Nov 30 09:57:48 CET 2007
+
+	Fixes:
+
+	- Mail::Internet uses Mail::Util::mailaddress, which is
+	  not exported by default.
+	  rt.cpan.org#31082 [Dave], rt.cpan.org#31070 [Friedrich Haubensak]
+	  and [Slaven Rezic]
+
+	Improvements:
+
+	- use 3-arg open() in Mail::Util.
+	  rt.cpan.org#20726 [Steve@sliug] and [Paul@city-fan]
+
 version 2.01: Wed Nov 28 10:48:24 CET 2007
 
 	Changes:
@@ -425,7 +439,6 @@ version 1.40: Fri Aug 24 20:15:30 CEST 2001
 
 	  All packages in this bundle with have the same version!!!
 	  The highest number used was 1.33.
-
 
 version 1.16: Wed Aug  8 11:28:26 CEST 2001
 	by Mark Overmeer <mailtools@overmeer.net>

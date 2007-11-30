@@ -4,7 +4,7 @@ use strict;
 
 use Carp;
 use Mail::Header;
-use Mail::Util;
+use Mail::Util    qw/mailaddress/;
 use Mail::Address;
 
 =head1 NAME

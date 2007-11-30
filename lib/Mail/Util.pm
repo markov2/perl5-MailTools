@@ -42,7 +42,7 @@ sub read_mbox($)
 {   my $file  = shift;
 
     local *FH;
-    open FH,"< $file"
+    open FH,'<', $file
 	or croak "cannot open '$file': $!\n";
 
     local $_;
@@ -112,7 +112,7 @@ sub maildomain()
 
     local *CF;
     local $_;
-    if(defined $config && open CF, $config)
+    if(defined $config && open CF, '<', $config)
     {   my %var;
 	while(<CF>)
         {   if(my ($v, $arg) = /^D([a-zA-Z])([\w.\$\-]+)/)
@@ -133,7 +133,7 @@ sub maildomain()
 
     # Try smail config file if exists
 
-    if(open CF, "/usr/lib/smail/config")
+    if(open CF, '<', "/usr/lib/smail/config")
     {   while(<CF>)
         {   if( /\A\s*hostnames?\s*=\s*(\S+)/ )
             {   $domain = (split /\:/,$1)[0];
