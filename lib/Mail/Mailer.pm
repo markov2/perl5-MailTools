@@ -91,9 +91,9 @@ our $MailerBinary;
 # does this really need to be done? or should a default mailer be specfied?
 
 $Mailers{sendmail} = 'sendmail'
-   if $^O eq 'os2' && ! is_exe $Mailers{sendmail};
+    if $^O eq 'os2' && ! is_exe $Mailers{sendmail};
 
-if($^O eq 'MacOS' || $^O eq 'VMS' || $^O eq 'MSWin32' || $^O eq 'os2')
+if($^O =~ m/^ (?: MacOS|VMS|MSWin|os2|NetWare ) $/x )
 {   $MailerType   = 'smtp';
     $MailerBinary = $Mailers{$MailerType};
 }

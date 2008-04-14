@@ -198,7 +198,7 @@ C<Mail::Field> objects will be returned.
 
 # Of course, the functionality should have been in the Mail::Header class
 sub extract
-{   my ($class, $tag, $head) = @_;
+{   my ($class, $tag, $head) = (shift, shift, shift);
 
     my $method = lc $tag;
     $method    =~ tr/-/_/;

@@ -1,6 +1,14 @@
 
 ==== version history for MailTools
 
+version 2.03: Mon Apr 14 11:13:31 CEST 2008
+
+	Fixes:
+
+	- Netware needs to use smtp as well [Günter Knauf]
+
+	- Mail::Field::extract() fixed.  Reported by [Andrea Venturol]
+
 version 2.02: Fri Nov 30 09:57:48 CET 2007
 
 	Fixes:
