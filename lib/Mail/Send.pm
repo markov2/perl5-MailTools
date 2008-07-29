@@ -36,7 +36,8 @@ Mail::Send - Simple electronic mail interface
   $fh = $msg->open;   # some default mailer
   $fh = $msg->open('sendmail'); # explicit
   print $fh "Body of message";
-  $fh->close;         # complete the message and send it
+  $fh->close          # complete the message and send it
+      or die "couldn't send whole message: $!\n";
 
 =chapter DESCRIPTION
 M<Mail::Send> creates e-mail messages without using the M<Mail::Header>

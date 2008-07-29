@@ -649,8 +649,6 @@ sub smtpsend($@)
 
     my $head = $self->cleaned_header_dup;
 
-    $head->delete('Bcc');
-
     # Who is it to
 
     my @rcpt = map { ref $_ ? @$_ : $_ } grep { defined } @opt{'To','Cc','Bcc'};
@@ -659,6 +657,8 @@ sub smtpsend($@)
 
     my @addr = map {$_->address} Mail::Address->parse(@rcpt);
     @addr or return ();
+
+    $head->delete('Bcc');
 
     # Send it
 

@@ -1,6 +1,20 @@
 
 ==== version history for MailTools
 
+version 2.04: Tue Jul 29 11:44:26 CEST 2008
+
+	Fixes:
+
+	- Mail::Field::_require_dir complained on 5.10 about a closed
+	  dirhandle.  rt.cpan.org#37114 [Manuel Hecht]
+
+	- Bcc line removed before collecting addresses. [Jørgen Thomsen]
+
+	Improvements:
+
+	- add "die" to "close()" in synopsis of Mail::Send and
+	  Mail::Mailer.  rt.cpan.org#36103 [Ed Avis]
+
 version 2.03: Mon Apr 14 11:13:31 CEST 2008
 
 	Fixes:

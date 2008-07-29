@@ -22,7 +22,9 @@ Mail::Mailer - Simple interface to electronic mailing mechanisms
 
   $mailer->open(\%headers);
   print $mailer $body;
-  $mailer->close;
+  $mailer->close
+      or die "couldn't send whole message: $!\n";
+
 
 =chapter DESCRIPTION
 
