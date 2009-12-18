@@ -1,6 +1,25 @@
 
 ==== version history for MailTools
 
+version 2.05: Fri Dec 18 22:39:21 CET 2009
+
+	Fixes:
+
+	- no de-ref error when index out of range in Mail::Header::get()
+	  [Bob Rogers]
+
+	- repaired fixed selection of smtp for non-unix systems.
+
+	Improvements:
+
+	- do not run pod.t in devel environment.
+
+	- set default output filename for Mail::Mailer::testfile::PRINT
+	  [Kaare Rasmussen[
+
+	- warn when no mailers were found.
+	  rt.cpan.org#52901 [Christoph Zimmermann]
+
 version 2.04: Tue Jul 29 11:44:26 CEST 2008
 
 	Fixes:

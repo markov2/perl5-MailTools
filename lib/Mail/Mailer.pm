@@ -95,7 +95,7 @@ our $MailerBinary;
 $Mailers{sendmail} = 'sendmail'
     if $^O eq 'os2' && ! is_exe $Mailers{sendmail};
 
-if($^O =~ m/^ (?: MacOS|VMS|MSWin|os2|NetWare ) $/x )
+if($^O =~ m/MacOS|VMS|MSWin|os2|NetWare/i )
 {   $MailerType   = 'smtp';
     $MailerBinary = $Mailers{$MailerType};
 }
@@ -160,8 +160,14 @@ that back-end.
 sub new($@)
 {   my ($class, $type, @args) = @_;
 
-    $type ||= $MailerType
-          ||  croak "No MailerType specified";
+    unless($type)
+    {   $MailerType or croak "No MailerType specified";
+
+        warn "No real MTA found, using '$MailerType'"
+             if $MailerType eq 'testfile';
+
+        $type = $MailerType;
+    }
 
     my $exe = $Mailers{$type};
 
@@ -170,7 +176,7 @@ sub new($@)
             if defined $type;
 
         $exe ||= $MailerBinary
-             ||  croak "No mailer type specified (and no default available), thus can not find executable program.";
+            or croak "No mailer type specified (and no default available), thus can not find executable program.";
     }
 
     $class = "Mail::Mailer::$type";

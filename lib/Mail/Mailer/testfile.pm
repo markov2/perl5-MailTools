@@ -36,7 +36,7 @@ sub TIEHANDLE
 
 sub PRINT
 {   my $self = shift;
-    open F, '>>', $Mail::Mailer::testfile::config{outfile};
+    open F, '>>', $Mail::Mailer::testfile::config{outfile} || 'mailer.testfile';
     print F @_;
     close F;
 }

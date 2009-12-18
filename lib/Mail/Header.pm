@@ -698,6 +698,7 @@ sub get
 
     if(defined $idx || !wantarray)
     {    $idx ||= 0;
+         defined $def->[$idx] or return undef;
          my $val = ${$def->[$idx]};
          defined $val or return undef;
 
