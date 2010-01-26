@@ -38,17 +38,25 @@ Use the C<sendmail> program to deliver the mail.
 
 =item C<smtp>
 
-Use the C<smtp> protocol via Net::SMTP to deliver the mail. The server
+Use the C<smtp> protocol via M<Net::SMTP> to deliver the mail. The server
 to use can be specified in C<@args> with
 
-    $mailer = Mail::Mailer->new('smtp', Server => $server);
+ $mailer = Mail::Mailer->new('smtp', Server => $server);
 
 The smtp mailer does not handle C<Cc> and C<Bcc> lines, neither their
 C<Resent-*> fellows. The C<Debug> options enables debugging output
 from C<Net::SMTP>.
 
 You may also use the C<< Auth => [ $user, $password ] >> option for SASL
-authentication (requires L<Authen::SASL> and L<MIME::Base64>).
+authentication. To make this work, you have to install the L<Authen::SASL>
+distribution yourself: it is not automatically installed.
+
+=item C<smtps>
+
+Use the smtp over ssl protocol via L<Net::SMTP::SSL> to deliver the mail.
+Usage is identical to C<smtp>.
+
+ $mailer = Mail::Mailer->new('smtps', Server => $server);
 
 =item C<qmail>
 
@@ -78,6 +86,7 @@ sub Version { our $VERSION }
 our @Mailers =
   ( sendmail => '/usr/lib/sendmail;/usr/sbin/sendmail;/usr/ucblib/sendmail'
   , smtp     => undef
+  , smtps    => undef
   , qmail    => '/usr/sbin/qmail-inject;/var/qmail/bin/qmail-inject'
   , testfile => undef
   );

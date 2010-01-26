@@ -4,10 +4,10 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile
  ( DISTNAME  => 'MailTools'
- , VERSION   => '2.05'
+ , VERSION   => '2.06'
  , NAME      => 'Mail'
  , AUTHOR    => 'Mark Overmeer <perl@overmeer.net>'
- , ABSTRACT  => 'Various Mail related modules'
+ , ABSTRACT  => 'Various e-mail related modules'
  , LICENSE   => 'perl'
 
  , PREREQ_PM =>
@@ -18,6 +18,11 @@ WriteMakefile
    , Test::Pod   => 1.00
    , Date::Format => 0
    , Date::Parse  => 0
+
+   # next deps missing on purpose, to avoid installing a lot which
+   # is rarely used.
+   # Authen::SASL
+   # Net::SMTP::SSL
    }
 );
 

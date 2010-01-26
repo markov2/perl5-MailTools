@@ -1,6 +1,6 @@
-<SOFTPKG NAME="MailTools" VERSION="2,05,0,0">
+<SOFTPKG NAME="MailTools" VERSION="2,06,0,0">
     <TITLE>MailTools</TITLE>
-    <ABSTRACT>Various Mail related modules</ABSTRACT>
+    <ABSTRACT>Various e-mail related modules</ABSTRACT>
     <AUTHOR>Mark Overmeer &lt;perl@overmeer.net&gt;</AUTHOR>
     <IMPLEMENTATION>
         <DEPENDENCY NAME="Date-Format" VERSION="0,0,0,0" />

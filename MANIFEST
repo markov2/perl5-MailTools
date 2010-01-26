@@ -22,6 +22,7 @@ lib/Mail/Mailer/qmail.pm
 lib/Mail/Mailer/rfc822.pm
 lib/Mail/Mailer/sendmail.pm
 lib/Mail/Mailer/smtp.pm
+lib/Mail/Mailer/smtps.pm
 lib/Mail/Mailer/testfile.pm
 lib/Mail/Send.pm
 lib/Mail/Util.pm

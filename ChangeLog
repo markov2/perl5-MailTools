@@ -1,6 +1,15 @@
 
 ==== version history for MailTools
 
+version 2.06: Tue Jan 26 10:01:22 CET 2010
+
+	Improvements:
+
+	- express more clearly that Authen::SASL needs to be installed
+	  manually if you need the functionality
+
+	- support for smtps via Net::SMTP::SSL, by [Maciej ≈ªenczykowski]
+
 version 2.05: Fri Dec 18 22:39:21 CET 2009
 
 	Fixes:
@@ -27,7 +36,7 @@ version 2.04: Tue Jul 29 11:44:26 CEST 2008
 	- Mail::Field::_require_dir complained on 5.10 about a closed
 	  dirhandle.  rt.cpan.org#37114 [Manuel Hecht]
 
-	- Bcc line removed before collecting addresses. [J¯rgen Thomsen]
+	- Bcc line removed before collecting addresses. [J√∏rgen Thomsen]
 
 	Improvements:
 
@@ -38,7 +47,7 @@ version 2.03: Mon Apr 14 11:13:31 CEST 2008
 
 	Fixes:
 
-	- Netware needs to use smtp as well [G¸nter Knauf]
+	- Netware needs to use smtp as well [G√ºnter Knauf]
 
 	- Mail::Field::extract() fixed.  Reported by [Andrea Venturol]
 
@@ -203,7 +212,7 @@ version 1.66: Thu Jan 20 10:16:10 CET 2005
 
 	- Extended explanation that Mail::Address is limited.
 
-	- Added examples/mail-mailer.pl, contributed by [Bruno Negr„o]
+	- Added examples/mail-mailer.pl, contributed by [Bruno Negr√£o]
 
 	- use Mail::Mailer qw(mail) sets default mailer.  Doc update by
 	  [Slavan Rezic]
@@ -254,7 +263,7 @@ version 1.61: Wed Mar 10 10:51:44 CET 2004
 
 	- [Erik Van Roode] Mail::Mailer::test.pm -> Mail::Mailer::testfile.pm
 
-	- [JÈrÙme Dion] corrected the folding of lines: folds start only
+	- [J√©r√¥me Dion] corrected the folding of lines: folds start only
 	  with one blank according to rfc2822.
 
 	- Added a big warning against automatic sender email address
@@ -380,7 +389,7 @@ version 1.48: Wed Aug  7 22:54:56 CEST 2002
 	  time ago, broke the parser.  As example
 	   "Mark Overmeer <mailtools@overmeer.net> (mailtools maintainer)"
 	  was parsed into two separate objects.... wrong.
-          [Nicholas Oxh¯j] reversed the patch.
+          [Nicholas Oxh√∏j] reversed the patch.
 
 version 1.47: Fri Jul  5 12:02:55 CEST 2002
 
@@ -674,7 +683,7 @@ Change 291 on 1999/03/31 by <gbarr@pobox.com> (Graham Barr)
 	- check in $ENV{HOME} is defined
 	
 	Mail::Address
-	- Fix capitalization problems with names like "Lieﬂegang"
+	- Fix capitalization problems with names like "Lie√üegang"
 
 Change 290 on 1999/03/31 by <gbarr@pobox.com> (Graham Barr)
 
