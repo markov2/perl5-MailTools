@@ -26,6 +26,8 @@ sub exec {
     ${*$self}{sock} = $smtp;
 
     $smtp->mail(mailaddress);
+    $smtp->mail($opt{From}) if $opt{From};
+
     $smtp->to($_) for @$to;
     $smtp->data;
 

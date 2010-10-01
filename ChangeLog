@@ -1,6 +1,16 @@
 
 ==== version history for MailTools
 
+version 2.07: Fri Oct  1 12:39:43 CEST 2010
+
+	Improvements:
+
+	- update README: MailTools 2.* require 5.8.1
+	  rt.cpan.org#61753 [Alexandre Bouillot]
+
+	- add "MAIL FROM" to Mail::Mailer::smtp, to be able to
+	  communicate with Comcast [David Myers]
+
 version 2.06: Tue Jan 26 10:01:22 CET 2010
 
 	Improvements:
