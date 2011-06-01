@@ -1,6 +1,21 @@
 
 ==== version history for MailTools
 
+version 2.08: Wed Jun  1 13:55:34 CEST 2011
+
+	Fixes:
+
+	- respect errors on closing an Mail::Mailer::smtp/::smtps connection.
+	  [Tristam Fenton-May]
+
+	- Mail::Internet should accept Net::SMTP::SSL as well.
+	  rt.cpan.org#68590 [Jonathan Kamens]
+
+	Improvements:
+
+	- document that Mail::Mailer::smtps needs Authen::SASL
+	  [Marcin WMP Janowski]
+
 version 2.07: Fri Oct  1 12:39:43 CEST 2010
 
 	Improvements:

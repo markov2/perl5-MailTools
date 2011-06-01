@@ -54,7 +54,8 @@ distribution yourself: it is not automatically installed.
 =item C<smtps>
 
 Use the smtp over ssl protocol via L<Net::SMTP::SSL> to deliver the mail.
-Usage is identical to C<smtp>.
+Usage is identical to C<smtp>. You have to install M<Authen::SASL> as
+well.
 
  $mailer = Mail::Mailer->new('smtps', Server => $server);
 

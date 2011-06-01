@@ -636,7 +636,8 @@ sub smtpsend($@)
 	    last if defined $smtp;
 	}
     }
-    elsif(ref($host) && UNIVERSAL::isa($host,'Net::SMTP'))
+    elsif(UNIVERSAL::isa($host,'Net::SMTP')
+       || UNIVERSAL::isa($host,'Net::SMTP::SSL'))
     {   $smtp = $host;
 	$quit = 0;
     }

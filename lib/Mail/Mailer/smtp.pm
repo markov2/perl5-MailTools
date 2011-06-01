@@ -50,11 +50,12 @@ sub epilogue()
 {   my $self = shift;
     my $sock = ${*$self}{sock};
 
-    $sock->dataend;
+    my $ok = $sock->dataend;
     $sock->quit;
 
     delete ${*$self}{sock};
     untie *$self;
+    $ok;
 }
 
 sub close(@)
@@ -64,17 +65,17 @@ sub close(@)
     $sock && fileno $sock
         or return 1;
 
-    $self->epilogue;
+    my $ok = $self->epilogue;
 
     # Epilogue should destroy the SMTP filehandle,
     # but just to be on the safe side.
     $sock && fileno $sock
-        or return 1;
+        or return $ok;
 
     close $sock
         or croak 'Cannot destroy socket filehandle';
 
-    1;
+    $ok;
 }
 
 package Mail::Mailer::smtp::pipe;
