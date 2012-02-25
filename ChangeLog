@@ -1,6 +1,13 @@
 
 ==== version history for MailTools
 
+version 2.09: Sat Feb 25 14:47:39 CET 2012
+
+	Improvements:
+
+	- remove dependency to Test::Pod by moving 99pod.t from t/
+	  to xt/ as result of rt.cpan.org#69918 [Martin Mokrejs]
+
 version 2.08: Wed Jun  1 13:55:34 CEST 2011
 
 	Fixes:
