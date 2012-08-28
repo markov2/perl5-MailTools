@@ -469,8 +469,8 @@ sub reply(@)
     my $name = $sender->name;
     unless(defined $name)
     {    my $fr = $self->get('From');
-         defined $fr and $fr   = (Mail::Address->parse($fr))[0];
-         defined $fr and $name = $fr->name;
+         $fr    = (Mail::Address->parse($fr))[0] if defined $fr;
+         $name  = $fr->name if defined $fr;
     }
 
     my $indent = $arg{Indent} || ">";

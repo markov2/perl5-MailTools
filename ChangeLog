@@ -1,6 +1,22 @@
 
 ==== version history for MailTools
 
+version 2.10: Tue Aug 28 09:41:52 CEST 2012
+
+	Fixes:
+
+	- Mail::Mailer::smtp set from address twice.
+	  rt.cpan.org#77161 [Vladimir Goshev]
+
+	- Mail::Mailer::smtps did not support the From option.
+	  rt.cpan.org#77161 [Vladimir Goshev]
+
+	Improvements:
+
+	- Mail::Util::mailaddress has now an optional parameter to
+	  set the returned value explicitly.
+	  rt.cpan.org#75975 [Rolf G]
+
 version 2.09: Sat Feb 25 14:47:39 CET 2012
 
 	Improvements:

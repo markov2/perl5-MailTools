@@ -167,10 +167,10 @@ sub maildomain()
     $domain ||= "localhost";
 }
 
-=function mailaddress
-
+=function mailaddress [ADDRESS]
 Return a guess at the current users mail address. The user can force
 the return value by setting the MAILADDRESS environment variable.
+[2.10] You may set the ADDRESS via the parameter.
 
 WARNING:
 When not supplied via the environment variable, <mailaddress> looks at
@@ -187,11 +187,16 @@ the "automatic detection", even when that produces a correct address
  # everywhere else
  use Mail::Util 'mailaddress';
  print mailaddress;
+
+ # since v2.10
+ mailaddress "me@example.com";
 =cut
 
-sub mailaddress()
-{  return $mailaddress
-       if defined $mailaddress;
+sub mailaddress(;$)
+{   $mailaddress = shift if @_;
+
+    return $mailaddress
+        if defined $mailaddress;
 
     # Get user name from environment
     $mailaddress = $ENV{MAILADDRESS};
