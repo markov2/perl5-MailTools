@@ -1,6 +1,13 @@
 
 ==== version history for MailTools
 
+version 2.11: Wed Aug 29 09:09:47 CEST 2012
+
+	Fixes:
+
+	- typo in Mail::Mailer::smtp, which only shows up in >5.14
+	  [cpantesters]
+
 version 2.10: Tue Aug 28 09:41:52 CEST 2012
 
 	Fixes:
