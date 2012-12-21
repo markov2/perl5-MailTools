@@ -202,8 +202,15 @@ sub _fmt_line
               || $HDR_LENGTHS{$tag}
               || $self->fold_length;
 
-    _fold_line $line, $maxlen
-        if $modify && defined $maxlen;
+    if ($modify && defined $maxlen)
+    {   # folding will fix bad header continuations for us
+        _fold_line $line, $maxlen;
+    }
+    elsif($line =~ /\r?\n\S/)
+    {   return _error "Bad header continuation, skipping '$tag': ",
+                      "no space after newline in '$line'\n";
+    }
+
 
     $line =~ s/\n*$/\n/so;
     ($tag, $line);
@@ -259,8 +266,7 @@ OPTIONS is a list of options given in the form of key-value
 pairs, just like a hash table. Valid options are
 
 =option  Modify BOOLEAN
-=default Modify C<true>
-
+=default Modify C<false>
 If this value is I<true> then the headers will be re-formatted,
 otherwise the format of the header lines will remain unchanged.
 

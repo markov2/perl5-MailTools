@@ -1,10 +1,9 @@
 require Mail::Header;
 
-print "1..25\n";
+print "1..34\n";
 
-$h = new Mail::Header;
-
-$t = 0;
+my $h = Mail::Header->new;
+my $t = 0;
 
 $h->header_hashref({hhrtest1 => 1, 
 	hhrtest2 => [1, "this test line was written by TobiX\n"]});
@@ -173,3 +172,50 @@ printf "ok %d\n",++$t;
 print $h->as_string,"\n----\n",$headout,"\nnot "
 	unless $h->as_string eq $headout;
 printf "ok %d\n",++$t;
+
+{   # Contributed by Thomas Sibley, introduced in v2.12
+    my $bad_continuation = "foo\@example.com\nBcc: evil\@example.com\n";
+    my $bad_header       = "To: $bad_continuation";
+
+    my @warnings;
+    local $SIG{__WARN__} = sub { push @warnings, "@_" };
+
+    print "not "
+        unless $h = new Mail::Header [$bad_header];
+    printf "ok %d\n",++$t;
+
+    print "not "
+        unless @warnings == 1 and shift(@warnings) =~ /bad header continuation/i;
+    printf "ok %d\n",++$t;
+
+    print "not "
+        if $h->get("To") or $h->get("Bcc");
+    printf "ok %d\n",++$t;
+
+    print "not "
+        unless $h = new Mail::Header [$bad_header], Modify => 1;
+    printf "ok %d\n",++$t;
+
+    print "not "
+        if @warnings;
+    printf "ok %d\n",++$t;
+
+    (my $to = $bad_continuation) =~ s/\n//; # replace the first newline only
+    print "not "
+        unless $h->get("To") eq $to;
+    printf "ok %d\n",++$t;
+     
+    print "not "
+        if $h->get("Bcc");
+    printf "ok %d\n",++$t;
+
+    my $continued = "foo\@example.com,\n bar\@example.com\n";
+    print "not "
+        unless $h = new Mail::Header ["To: $continued"];
+    printf "ok %d\n",++$t;
+
+    print "not "
+        unless $h->get("To") eq $continued;
+    printf "ok %d\n",++$t;
+}
+

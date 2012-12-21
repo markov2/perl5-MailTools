@@ -1,6 +1,26 @@
 
 ==== version history for MailTools
 
+version 2.12: Fri Dec 21 12:18:51 CET 2012
+
+	Fixes:
+
+	- default for Mail::Header::new(Modify) is 'false', not 'true'
+	  rt.cpan.org#79985 [Thomas Sibley]
+
+	- Mail::Address take username with rindex(), a bit better than
+	  index() but still poor.
+	  rt.cpan.org#82056 [Filipe Gonçalves]
+
+	Improvements:
+
+	- check for bad folding of header lines
+	  rt.cpan.org#79993 [Thomas Sibley]
+
+	- add a note about better to avoid Mail::Address->name(),
+	  in response to a question by
+	  rt.cpan.org#81459 [Moritz Lenz]
+
 version 2.11: Wed Aug 29 09:09:47 CEST 2012
 
 	Fixes:

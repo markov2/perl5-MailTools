@@ -235,7 +235,7 @@ sub parse(@)
             $next = _find_next $idx+1, $tokens, $len;
         }
         elsif($depth)       { push @address, $_ }
-        elsif($next eq "<") { push @phrase,  $_ }
+        elsif($next eq '<') { push @phrase,  $_ }
         elsif( /^[.\@:;]$/ || !@address || $address[-1] =~ /^[.\@:;]$/ )
         {   push @address, $_ }
         else
@@ -322,6 +322,11 @@ sub format
 =method name
 Using the information contained within the object attempt to identify what
 the person or groups name is.
+
+B<Note:> This function tries to be smart with the "phrase" of the
+email address, which is probably a very bad idea.  Consider to use
+M<phrase()> itself.
+
 =cut
 
 sub name
@@ -365,7 +370,7 @@ Return the address excluding the '@' and the mail domain
 
 sub user
 {   my $addr = shift->address || '';
-    my $i    = index $addr, '@';
+    my $i    = rindex $addr, '@';
     $i >= 0 ? substr($addr,0,$i) : $addr;
 }
 
