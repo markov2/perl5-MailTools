@@ -36,7 +36,7 @@ no support for address groups, even not with the semi-colon as
 separator between addresses;
 
 =item *
-limitted support for escapes in phrases and comments.  There are
+limited support for escapes in phrases and comments.  There are
 cases where it can get wrong; and
 
 =item *
@@ -228,7 +228,7 @@ sub parse(@)
         elsif($_ eq '<')    { $depth++ }
         elsif($_ eq '>')    { $depth-- if $depth }
         elsif($_ eq ',' || $_ eq ';')
-        {   warn "Unmatched '<>' in $line" if($depth);
+        {   warn "Unmatched '<>' in $line" if $depth;
             my $o = $class->_complete(\@phrase, \@address, \@comment);
             push @objs, $o if defined $o;
             $depth = 0;

@@ -122,23 +122,28 @@ sub _process_file
     while(<MAILCAP>)
     {   next if /^\s*#/; # comment
         next if /^\s*$/; # blank line
-        $_ .= <MAILCAP> while s/\\\s*$//; # continuation line
+        $_ .= <MAILCAP>  # continuation line
+           while s/(^|[^\\])((?:\\\\)*)\\\s*$/$1$2/;
         chomp;
-        s/\0//g;            # ensure no NULs in the line
-        s/([^\\]);/$1\0/g;  # make field separator NUL
+        s/\0//g;              # ensure no NULs in the line
+        s/(^|[^\\]);/$1\0/g;  # make field separator NUL
+        my ($type, $view, @parts) = split /\s*\0\s*/;
 
-        my @parts = split /\s*\0\s*/, $_;
-        my $type  = shift @parts;
         $type    .= "/*" if $type !~ m[/];
-
-        my $view  = shift @parts;
         $view     =~ s/\\;/;/g;
+        $view     =~ s/\\\\/\\/g;
         my %field = (view => $view);
 
         foreach (@parts)
         {   my($key, $val) = split /\s*\=\s*/, $_, 2;
-            $val =~ s/\\;/;/g if defined $val;
-            $field{$key} = defined $val ? $val : 1;
+            if(defined $val)
+            {   $val =~ s/\\;/;/g;
+                $val =~ s/\\\\/\\/g;
+                $field{$key} = $val;
+            }
+            else
+            {   $field{$key} = 1;
+            }
         }
 
         if(my $test = $field{test})
@@ -161,7 +166,7 @@ sub _process_file
 }
 
 =section Run commands
-These methods invoke a suitable progam presenting or manipulating the
+These methods invoke a suitable program presenting or manipulating the
 media object in the specified file.  They all return C<1> if a command
 was found, and C<0> otherwise.  You might test C<$?> for the outcome
 of the command.
@@ -188,7 +193,7 @@ sub _run($)
 =section Command creator
 
 These methods return a string that is suitable for feeding to system()
-in order to invoke a suitable progam presenting or manipulating the
+in order to invoke a suitable program presenting or manipulating the
 media object in the specified file.  It will return C<undef> if no
 suitable specification exists.
 
@@ -227,7 +232,7 @@ Methods return the corresponding mailcap field for the type.
 
 =method field TYPE, FIELD
 Returns the specified field for the type.  Returns undef if no
-specification exsists.
+specification exists.
 =cut
 
 sub field($$)

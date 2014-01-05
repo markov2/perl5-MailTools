@@ -1,6 +1,19 @@
 
 ==== version history for MailTools
 
+version 2.13: Sun Jan  5 18:52:25 CET 2014
+
+	Fixes:
+
+	- optional 'from' and 'on' component in in-reply-to are comments
+	  rt.cpan.org#89371 [Ward Vandewege]
+	- mailcap \\\\ -> \\
+	  rt.cpan.org#89802 [Kevin Ryde]
+
+	Improvements:
+
+	- fix typos  rt.cpan.org#87188 [D Steinbrunner]
+
 version 2.12: Fri Dec 21 12:18:51 CET 2012
 
 	Fixes:

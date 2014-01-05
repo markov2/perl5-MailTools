@@ -139,11 +139,11 @@ sub _fold_line
     $_[0] =~ s/\A(\S+)\n\s*(?=\S)/$1 /so; 
 }
 
-# Tags are case-insensitive, but there is a (slightly) prefered construction
+# Tags are case-insensitive, but there is a (slightly) preferred construction
 # being all characters are lowercase except the first of each word. Also
 # if the word is an `acronym' then all characters are uppercase. We decide
 # a word is an acronym if it does not contain a vowel.
-# In general, this change of capitization is a bad idea, but it is in
+# In general, this change of capitalization is a bad idea, but it is in
 # the code for ages, and therefore probably crucial for existing
 # applications.
 
@@ -598,7 +598,7 @@ sub unfold
 
 =method add TAG, LINE [, INDEX]
 
-Add a new line to the header. If TAG is C<undef> the the tag will be
+Add a new line to the header. If TAG is C<undef> the tag will be
 extracted from the beginning of the given line. If INDEX is given,
 the new line will be inserted into the header at the given point, otherwise
 the new line will be appended to the end of the header.
@@ -621,7 +621,7 @@ sub add
 }
 
 =method replace TAG, LINE [, INDEX ]
-Replace a line in the header.  If TAG is C<undef> the the tag will be
+Replace a line in the header.  If TAG is C<undef> the tag will be
 extracted from the beginning of the given line. If INDEX is given
 the new line will replace the Nth instance of that tag, otherwise the
 first instance of the tag is replaced. If the tag does not appear in the

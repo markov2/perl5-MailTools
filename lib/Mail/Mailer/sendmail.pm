@@ -11,7 +11,7 @@ sub exec($$$$)
     #  Rumor: some sendmails may ignore or break with -t (AIX?)
     # Chopped out the @$to arguments, because -t means
     # they are sent in the body, and postfix complains if they
-    # are also given on comand line.
+    # are also given on command line.
 
     exec( $exe, '-t', @$args );
 }

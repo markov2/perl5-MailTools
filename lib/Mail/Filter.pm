@@ -52,7 +52,7 @@ sub new(@)
 
 =section Accessors
 =method add FILTER [, FILTER ...]
-Add the given filters to the end of the fliter list.
+Add the given filters to the end of the filter list.
 =cut
 
 sub add(@)

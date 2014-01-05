@@ -133,7 +133,7 @@ the TAG argument.
 
 =error Undefined subroutine <method> called
 Mail::Field objects use autoloading to compile new functionality.
-Apparently, the mehod called is not implemented for the specific
+Apparently, the method called is not implemented for the specific
 class of the field object.
 =cut
 
@@ -189,7 +189,7 @@ If the index argument is given then C<extract> will retrieve the given tag
 from the C<Mail::Head> object and create a new C<Mail::Field> based object.
 I<undef> will be returned in the field does not exist.
 
-If the index argument is not given the the result depends on the context
+If the index argument is not given the result depends on the context
 in which C<extract> is called. If called in a scalar context the result
 will be as if C<extract> was called with an index value of zero. If called
 in an array context then all tags will be retrieved and a list of
@@ -258,7 +258,7 @@ sub stringify { confess "stringify() not implemented" }
 
 =ci_method tag
 Return the tag (in the correct case) for this item.  Well, actually any
-casing is OK, because the field tags are treated case-insentitive; however
+casing is OK, because the field tags are treated case-insensitive; however
 people have some preferences.
 =cut
 

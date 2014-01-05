@@ -38,7 +38,7 @@ fields: C<To>, C<From>, C<Cc>, C<Reply-To>, and C<Sender>.
 
 All the normally used features of the address field specification of
 RFC2822 are implemented, but some complex (and therefore hardly ever used)
-constructs will not be inderstood.  Use M<Mail::Message::Field::Full>
+constructs will not be understood.  Use M<Mail::Message::Field::Full>
 in MailBox if you need full RFC compliance.
 
 =chapter METHODS
@@ -89,7 +89,7 @@ Returns the collected M<Mail::Address> objects.
 =cut
 
 # someone forgot to implement a method to return the Mail::Address
-# objects.  Added in 2.00; a pitty that the name addresses() is already
+# objects.  Added in 2.00; a pity that the name addresses() is already
 # given :(  That one should have been named emails()
 sub addr_list { values %{shift->{AddrList}} }
 

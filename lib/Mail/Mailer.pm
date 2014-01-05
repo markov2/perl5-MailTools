@@ -100,7 +100,7 @@ our %Mailers = @Mailers;
 our $MailerType;
 our $MailerBinary;
 
-# does this really need to be done? or should a default mailer be specfied?
+# does this really need to be done? or should a default mailer be specified?
 
 $Mailers{sendmail} = 'sendmail'
     if $^O eq 'os2' && ! is_exe $Mailers{sendmail};

@@ -524,8 +524,11 @@ sub reply(@)
 
     if(defined $mid)
     {    $inreply  = $mid;
-         $inreply .= ' from ' . $name if defined $name;
-         $inreply .= ' on '   . $date if defined $date;
+         my @comment;
+         push @comment, "from $name" if defined $name;
+         push @comment, "on $date"   if defined $date;
+         local $"  = ' ';
+         $inreply .= " (@comment)"   if @comment;
     }
     elsif(defined $name)
     {    $inreply  = $name    . "'s message";
@@ -751,7 +754,7 @@ sub nntppost
 =method escape_from
 It can cause problems with some applications if a message contains a line
 starting with C<`From '>, in particular when attempting to split a folder.
-This method inserts a leading C<`>'> on anyline that matches the regular
+This method inserts a leading C<`>'> on any line that matches the regular
 expression C</^>*From/>
 =cut
 

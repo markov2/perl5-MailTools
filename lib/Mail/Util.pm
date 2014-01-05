@@ -30,7 +30,7 @@ the calling package.
 
 =function read_mbox FILE
 Read FILE, a binmail mailbox file, and return a list of  references.
-Each reference is a reference to an array containg one message.
+Each reference is a reference to an array containing one message.
 
 WARNING:
 This method does not quote lines which accidentally also start with the
@@ -69,12 +69,12 @@ sub read_mbox($)
 }
 
 =function maildomain
-Attempt to determine the current uers mail domain string via the following
+Attempt to determine the current user mail domain string via the following
 methods
 
 =over 4
 
-=item * Look for the MAILDOMAIN enviroment variable, which can be set from outside the program.  This is by far the best way to configure the domain.
+=item * Look for the MAILDOMAIN environment variable, which can be set from outside the program.  This is by far the best way to configure the domain.
 
 =item * Look for a sendmail.cf file and extract DH parameter
 
