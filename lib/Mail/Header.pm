@@ -370,7 +370,6 @@ object.
 
 sub read
 {   my ($self, $fd) = @_;
-
     $self->empty;
 
     my ($ln, $tag, $line);
@@ -389,7 +388,7 @@ sub read
             ($tag, $line) = ();
         }
 
-        last if $ln =~ m/^\s+$/;
+        last if !defined $ln || $ln =~ m/^\s+$/;
 
         $ln =~ /^($FIELD_NAME|From )/o or next;
         ($tag, $line) = ($1, $ln);

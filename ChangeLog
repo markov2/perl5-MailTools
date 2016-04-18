@@ -1,6 +1,12 @@
 
 ==== version history for MailTools
 
+version 2.16: Mon 18 Apr 17:58:23 CEST 2016
+
+	Fixes:
+	- Mail::header regression in parsing files.
+	  rt.cpan.org#113874 [John L Berger]
+
 version 2.15: Mon 18 Apr 13:55:30 CEST 2016
 
 	Fixes:
