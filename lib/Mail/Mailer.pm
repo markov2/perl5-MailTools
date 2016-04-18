@@ -231,8 +231,9 @@ sub open($)
         }
     }
     else
-    {   $self->exec($exe, $args, \@to, $sender)
-            or die $!;
+    {   # Sending is handled by a subclass
+        $self->exec(undef, $args, \@to)
+            or die $!;    
     }
 
     $self->set_headers($hdrs);

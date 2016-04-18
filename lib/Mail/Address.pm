@@ -52,7 +52,7 @@ implementation you may take a look at L<Mail::Message::Field::Full>,
 part of MailBox.
 
 =examples
-  my $s = Mail::Message::Field::Full->parse($header);
+  my $s = Mail::Message::Field::Full->new($from_header);
   # ref $s isa Mail::Message::Field::Addresses;
 
   my @g = $s->groups;          # all groups, at least one
@@ -182,6 +182,7 @@ sub _complete
     $o;
 }
 
+#------------
 =section Constructors
 
 =c_method new PHRASE, ADDRESS, [ COMMENT ]
@@ -249,6 +250,7 @@ sub parse(@)
     @objs;
 }
 
+#------------
 =section Accessors
 
 =method phrase
@@ -317,6 +319,7 @@ sub format
     join ", ", @addrs;
 }
 
+#------------
 =section Smart accessors
 
 =method name

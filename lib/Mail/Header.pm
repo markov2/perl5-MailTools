@@ -344,20 +344,21 @@ sub extract
 {   my ($self, $lines) = @_;
     $self->empty;
 
-    while(@$lines && $lines->[0] =~ /^($FIELD_NAME|From )/o)
-    {    my $tag  = $1;
-         my $line = shift @$lines;
-         $line   .= shift @$lines
-             while @$lines && $lines->[0] =~ /^[ \t]+/o;
+    while(@$lines)
+    {   my $line = shift @$lines;
+        last if $line =~ /^\s*$/;
 
-         ($tag, $line) = _fmt_line $self, $tag, $line;
+        $line    =~ /^($FIELD_NAME|From )/o or next;
+        my $tag  = $1;
 
-         _insert $self, $tag, $line, -1
-             if defined $line;
+        $line   .= shift @$lines
+            while @$lines && $lines->[0] =~ /^[ \t]+/;
+
+        ($tag, $line) = _fmt_line $self, $tag, $line;
+
+        _insert $self, $tag, $line, -1
+            if defined $line;
     }
-
-    shift @$lines
-        if @$lines && $lines->[0] =~ /^\s*$/o;
 
     $self;
 }
@@ -372,13 +373,12 @@ sub read
 
     $self->empty;
 
-    my ($tag, $line);
-    my $ln = '';
+    my ($ln, $tag, $line);
     while(1)
     {   $ln = <$fd>;
 
-        if(defined $ln && defined $line && $ln =~ /\A[ \t]+/o)
-        {   $line .= $ln;
+        if(defined $ln && defined $line && $ln =~ /^[ \t]+/)
+        {   $line .= $ln;  # folded line
             next;
         }
 
@@ -386,11 +386,12 @@ sub read
         {   ($tag, $line) = _fmt_line $self, $tag, $line;
             _insert $self, $tag, $line, -1
 	        if defined $line;
+            ($tag, $line) = ();
         }
 
-        defined $ln && $ln =~ /^($FIELD_NAME|From )/o
-            or last;
+        last if $ln =~ m/^\s+$/;
 
+        $ln =~ /^($FIELD_NAME|From )/o or next;
         ($tag, $line) = ($1, $ln);
     }
 
