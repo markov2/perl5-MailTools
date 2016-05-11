@@ -1,10 +1,17 @@
 
 ==== version history for MailTools
 
+version 2.17: Wed 11 May 17:20:21 CEST 2016
+
+	Fixes:
+	- Mail::Header should only accept totally empty lines as header
+	  terminator, not to break MIME::Tools regression tests.
+	  rt.cpan.org#113918 [David Cantrell]
+
 version 2.16: Mon 18 Apr 17:58:23 CEST 2016
 
 	Fixes:
-	- Mail::header regression in parsing files.
+	- Mail::Header regression in parsing files.
 	  rt.cpan.org#113874 [John L Berger]
 
 version 2.15: Mon 18 Apr 13:55:30 CEST 2016

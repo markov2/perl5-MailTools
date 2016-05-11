@@ -346,7 +346,7 @@ sub extract
 
     while(@$lines)
     {   my $line = shift @$lines;
-        last if $line =~ /^\s*$/;
+        last if $line =~ /^$/;
 
         $line    =~ /^($FIELD_NAME|From )/o or next;
         my $tag  = $1;
@@ -388,7 +388,7 @@ sub read
             ($tag, $line) = ();
         }
 
-        last if !defined $ln || $ln =~ m/^\s+$/;
+        last if !defined $ln || $ln =~ m/^$/;
 
         $ln =~ /^($FIELD_NAME|From )/o or next;
         ($tag, $line) = ($1, $ln);
