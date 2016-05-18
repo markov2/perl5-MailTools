@@ -346,7 +346,7 @@ sub extract
 
     while(@$lines)
     {   my $line = shift @$lines;
-        last if $line =~ /^$/;
+        last if $line =~ /^\r?$/;
 
         $line    =~ /^($FIELD_NAME|From )/o or next;
         my $tag  = $1;
@@ -388,7 +388,7 @@ sub read
             ($tag, $line) = ();
         }
 
-        last if !defined $ln || $ln =~ m/^$/;
+        last if !defined $ln || $ln =~ m/^\r?$/;
 
         $ln =~ /^($FIELD_NAME|From )/o or next;
         ($tag, $line) = ($1, $ln);
@@ -436,11 +436,6 @@ reference, and it will return the headers as a hash reference.
  $fields->{To}   = ['you@somewhere', 'me@localhost'];
  $head->header_hashref($fields);
 =cut
-
-### text kept, for educational purpose... originates from 2000/03
-# This can probably be optimized. I didn't want to mess much around with
-# the internal implementation as for now...
-# -- Tobias Brox <tobix@cpan.org>
 
 sub header_hashref
 {   my ($self, $hashref) = @_;

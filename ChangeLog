@@ -1,6 +1,12 @@
 
 ==== version history for MailTools
 
+version 2.18: Wed 18 May 23:52:30 CEST 2016
+
+	Fixes:
+	- Mail::Header should accept \r in empty line which ends the
+	  header.  rt.cpan.org#114382 [Ricardo Signes]
+
 version 2.17: Wed 11 May 17:20:21 CEST 2016
 
 	Fixes:
