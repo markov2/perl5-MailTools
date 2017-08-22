@@ -4,16 +4,16 @@ use strict;
 sub Version { our $VERSION }
 
 =chapter NAME
-
-Mail::Cap - Parse mailcap files
+Mail::Cap - understand mailcap files
 
 =chapter SYNOPSIS
 
- my $mc = new Mail::Cap;
- $desc = $mc->description('image/gif');
+ my $mc   = Mail::Cap->new;
 
+ my $desc = $mc->description('image/gif');
  print "GIF desc: $desc\n";
- $cmd = $mc->viewCmd('text/plain; charset=iso-8859-1', 'file.txt');
+
+ my $cmd  = $mc->viewCmd('text/plain; charset=iso-8859-1', 'file.txt');
 
 =chapter DESCRIPTION
 
@@ -46,6 +46,7 @@ else
         );   # this path is specified under RFC1524 appendix A 
 }
 
+#--------
 =chapter METHODS
 
 =section Constructors
@@ -165,6 +166,7 @@ sub _process_file
     close MAILCAP;
 }
 
+#------------------
 =section Run commands
 These methods invoke a suitable program presenting or manipulating the
 media object in the specified file.  They all return C<1> if a command
@@ -190,6 +192,7 @@ sub _run($)
     1;
 }
 
+#------------------
 =section Command creator
 
 These methods return a string that is suitable for feeding to system()
@@ -227,6 +230,7 @@ sub makeName($$)
     $template;
 }
 
+#------------------
 =section Look-up definitions
 Methods return the corresponding mailcap field for the type.
 

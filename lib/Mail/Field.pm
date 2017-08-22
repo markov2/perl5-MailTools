@@ -1,12 +1,13 @@
 package Mail::Field;
 
-use Carp;
 use strict;
+
+use Carp;
 use Mail::Field::Generic;
 
 =chapter NAME
 
-Mail::Field - Base class for manipulation of mail header fields
+Mail::Field - base-class for manipulation of mail header fields
 
 =chapter SYNOPSIS
 
@@ -127,6 +128,7 @@ sub _build
     @_==1 ? $self->parse(@_) : $self->create(@_);
 }
 
+#-------------
 =section Constructors
 Mail::Field (and it's sub-classes) define several methods which return
 new objects. These can all be categorized as constructor.
@@ -225,6 +227,7 @@ sub extract
     $class->$method($text);
 }
 
+#-------------
 =section "Fake" constructors
 
 =method create OPTIONS
@@ -252,6 +255,7 @@ sub parse
     confess "parse() not implemented";
 }
 
+#-------------
 =section Accessors
 
 =method stringify
@@ -286,6 +290,7 @@ sub set(@) { confess "set() not implemented" }
 # prevent the calling of AUTOLOAD for DESTROY :-)
 sub DESTROY {}
 
+#-------------
 =section Smart accessors
 
 =method text [STRING]
@@ -301,6 +306,7 @@ sub text
     @_ ? $self->parse(@_) : $self->stringify;
 }
 
+#-------------
 =chapter DETAILS
 
 =section SUB-CLASS PACKAGE NAMES

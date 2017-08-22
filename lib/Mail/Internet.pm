@@ -7,7 +7,7 @@ use Mail::Header;
 use Mail::Util    qw/mailaddress/;
 use Mail::Address;
 
-=head1 NAME
+=chapter NAME
 
 Mail::Internet - manipulate email messages
 
@@ -140,6 +140,7 @@ sub dup()
     $dup;
 }
 
+#---------------
 =section Accessors
 
 =method body [BODY]
@@ -169,6 +170,7 @@ message
 
 sub head         { shift->{mail_inet_head} ||= Mail::Header->new }
 
+#---------------
 =section Processing the message as a whole
 
 =method print [FILEHANDLE]
@@ -233,6 +235,7 @@ sub as_mbox_string($)
     $self->as_string . "\n";
 }
 
+#---------------
 =section Processing the header
 
 Most of these methods are simply wrappers around methods provided
@@ -331,6 +334,7 @@ sub empty()
     1;
 }
 
+#---------------
 =section Processing the body
 
 =method remove_sig [NLINES]
@@ -407,6 +411,7 @@ sub tidy_body()
     $body;
 }
 
+#---------------
 =section High-level functionality
 
 =method reply OPTIONS

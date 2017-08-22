@@ -1,12 +1,12 @@
-
-use strict;
 package Mail::Send;
 
-use Carp;
-require Mail::Mailer;
+use strict;
+
+use Mail::Mailer ();
 
 sub Version { our $VERSION }
 
+#------------------
 =chapter NAME
 
 Mail::Send - Simple electronic mail interface
@@ -67,6 +67,7 @@ sub new(@)
     $self;
 }
 
+#---------------
 =section Header fields
 
 =method set FIELDNAME, VALUES
@@ -108,6 +109,7 @@ sub cc		{ my $self=shift; $self->set('Cc', @_); }
 sub bcc		{ my $self=shift; $self->set('Bcc', @_); }
 sub subject	{ my $self=shift; $self->set('Subject', join (' ', @_)); }
 
+#---------------
 =section Sending
 
 =method open OPTIONS

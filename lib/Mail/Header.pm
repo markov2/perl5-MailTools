@@ -6,24 +6,13 @@ use Carp;
 my $MAIL_FROM = 'KEEP';
 my %HDR_LENGTHS = ();
 
-# Pattern to match a RFC822 Field name ( Extract from RFC #822)
-#
-#     field       =  field-name ":" [ field-body ] CRLF
-#
-#     field-name  =  1*<any CHAR, excluding CTLs, SPACE, and ":">
-#
-#     CHAR        =  <any ASCII character>        ; (  0-177,  0.-127.)
-#     CTL         =  <any ASCII control           ; (  0- 37,  0.- 31.)
-#		      character and DEL>          ; (    177,     127.)
-# I have included the trailing ':' in the field-name
-#
 our $FIELD_NAME = '[^\x00-\x1f\x7f-\xff :]+:';
 
-=head1 NAME
+=chapter NAME
 
 Mail::Header - manipulate MIME headers
 
-=head1 SYNOPSIS
+=chapter SYNOPSIS
 
  use Mail::Header;
     
@@ -251,6 +240,7 @@ sub _insert
     }
 }
 
+#------------
 =chapter METHODS
 
 =section Constructors
@@ -330,6 +320,7 @@ sub dup
     $dup;
 }
 
+#------------
 =section "Fake" constructors
 Be warned that the next constructors all require an already created
 header object, of which the original content will be destroyed.
@@ -455,6 +446,7 @@ sub header_hashref
      }; 
 }
 
+#------------
 =section Accessors
 
 =method modify [VALUE]
@@ -531,6 +523,7 @@ sub fold_length
     $old;
 }
 
+#------------
 =section Processing
 
 =method fold [LENGTH]

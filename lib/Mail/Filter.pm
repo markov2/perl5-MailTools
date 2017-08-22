@@ -1,10 +1,10 @@
-use strict;
 package Mail::Filter;
 
+use strict;
 use Carp;
-=head1 NAME
 
-Mail::Filter - Filter mail through multiple subroutines
+=head1 NAME
+Mail::Filter - filter mail through multiple subroutines
 
 =head1 SYNOPSIS
 
@@ -50,6 +50,7 @@ sub new(@)
     bless { filters => [ @_ ] }, $class;
 }
 
+#------------
 =section Accessors
 =method add FILTER [, FILTER ...]
 Add the given filters to the end of the filter list.
@@ -60,6 +61,7 @@ sub add(@)
     push @{$self->{filters}}, @_;
 }
 
+#------------
 =section Processing
 
 =method filter MAIL-OBJECT | MAIL-FOLDER

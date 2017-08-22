@@ -1,11 +1,11 @@
-use strict;
-
 package Mail::Util;
 use base 'Exporter';
 
+use strict;
+use Carp;
+
 our @EXPORT_OK = qw(read_mbox maildomain mailaddress);
 
-use Carp;
 sub Version { our $VERSION }
 
 my ($domain, $mailaddress);
@@ -53,13 +53,13 @@ sub read_mbox($)
     while(<FH>)
     {   if($blank && /^From .*\d{4}/)
         {   push @mbox, $mail if @$mail;
-	    $mail  = [ $_ ];
-	    $blank = 0;
-	}
-	else
+            $mail  = [ $_ ];
+            $blank = 0;
+        }
+        else
         {   $blank = m/^$/ ? 1 : 0;
-	    push @$mail, $_;
-	}
+            push @$mail, $_;
+        }
     }
 
     push @mbox, $mail if @$mail;

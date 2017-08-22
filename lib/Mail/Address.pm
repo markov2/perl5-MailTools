@@ -8,7 +8,7 @@ use Carp;
 sub Version { our $VERSION }
 
 =chapter NAME
-Mail::Address - Parse mail addresses
+Mail::Address - parse mail addresses
 
 =chapter SYNOPSIS
  use Mail::Address;

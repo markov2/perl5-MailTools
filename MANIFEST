@@ -26,6 +26,7 @@ lib/Mail/Mailer/smtps.pm
 lib/Mail/Mailer/testfile.pm
 lib/Mail/Send.pm
 lib/Mail/Util.pm
+lib/MailTools.pm
 t/extract.t
 t/header.t
 t/internet.t

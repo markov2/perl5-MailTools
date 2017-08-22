@@ -1,16 +1,16 @@
-use strict;
-
 package Mail::Mailer;
 use base 'IO::Handle';
 
+use strict;
 use POSIX qw/_exit/;
 
 use Carp;
 use Config;
 
+#--------------
 =chapter NAME
 
-Mail::Mailer - Simple interface to electronic mailing mechanisms 
+Mail::Mailer - send simple emails
 
 =chapter SYNOPSIS
 
@@ -24,7 +24,6 @@ Mail::Mailer - Simple interface to electronic mailing mechanisms
   print $mailer $body;
   $mailer->close
       or die "couldn't send whole message: $!\n";
-
 
 =chapter DESCRIPTION
 
@@ -77,6 +76,7 @@ default mailer will be the first one found.
 =chapter METHODS
 
 =section Constructors
+
 =cut
 
 
@@ -288,6 +288,7 @@ sub close(@)
 
 sub DESTROY { shift->close }
 
+#--------------
 =chapter DETAILS
 
 =section ENVIRONMENT VARIABLES
