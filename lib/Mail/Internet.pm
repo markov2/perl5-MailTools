@@ -32,21 +32,21 @@ support in your application.
 
 =section Constructors
 
-=ci_method new [ARG], [OPTIONS]
+=ci_method new [$arg], [%options]
 
-ARG is optional and may be either a file descriptor (reference to a GLOB)
+$arg is optional and may be either a file descriptor (reference to a GLOB)
 or a reference to an array. If given the new object will be
 initialized with headers and body either from the array of read from 
 the file descriptor.
 
-The M<Mail::Header::new()> OPTIONS C<Modify>, C<MailFrom> and C<FoldLength>
+The M<Mail::Header::new()> %options C<Modify>, C<MailFrom> and C<FoldLength>
 may also be given.
 
 =option  Header Mail::Header
 =default Header C<undef>
 
 The value of this option should be a M<Mail::Header> object. If given then
-C<Mail::Internet> will not attempt to read a mail header from C<ARG>, if
+C<Mail::Internet> will not attempt to read a mail header from C<$arg>, if
 it was specified.
 
 =option  Body ARRAY-of-LINES
@@ -54,7 +54,7 @@ it was specified.
 The value of this option should be a reference to an array which contains
 the lines for the body of the message. Each line should be terminated with
 C<\n> (LF). If Body is given then C<Mail::Internet> will not attempt to
-read the body from C<ARG> (even if it is specified).
+read the body from C<$arg> (even if it is specified).
 
 =cut
 
@@ -90,9 +90,9 @@ sub new(@)
     $self;
 }
 
-=method read FILEHANDLE
-Read a message from the FILEHANDLE into an already existing message
-object.  Better use M<new()> with the FILEHANDLE as first argument.
+=method read $fh
+Read a message from the $fh into an already existing message
+object.  Better use M<new()> with the $fh as first argument.
 =cut
 
 sub read(@)
@@ -112,7 +112,7 @@ sub read_header(@)
     $head->header;
 }
 
-=method extract ARRAY-of-LINES
+=method extract \@lines
 Extract header and body from an ARRAY of message lines.  Requires an
 object already created with M<new()>, which contents will get overwritten.
 =cut
@@ -123,7 +123,7 @@ sub extract($)
     $self->body($lines);
 }
 
-=method dup
+=method dup 
 Duplicate the message as a whole.  Both header and body will be
 deep-copied: a new M<Mail::Internet> object is returned.
 =cut
@@ -143,12 +143,12 @@ sub dup()
 #---------------
 =section Accessors
 
-=method body [BODY]
+=method body [$body]
 
 Returns the body of the message. This is a reference to an array.
 Each entry in the array represents a single line in the message.
 
-If I<BODY> is given, it can be a reference to an array or an array, then
+If I<$body> is given, it can be a reference to an array or an array, then
 the body will be replaced. If a reference is passed, it is used directly
 and not copied, so any subsequent changes to the array will change the
 contents of the body.
@@ -163,7 +163,7 @@ sub body(;$@)
     $self->{mail_inet_body} = ref $_[0] eq 'ARRAY' ? $_[0] : [ @_ ];
 }
 
-=method head
+=method head 
 Returns the C<Mail::Header> object which holds the headers for the current
 message
 =cut
@@ -173,9 +173,9 @@ sub head         { shift->{mail_inet_head} ||= Mail::Header->new }
 #---------------
 =section Processing the message as a whole
 
-=method print [FILEHANDLE]
-Print the header, body or whole message to file descriptor I<FILEHANDLE>.
-I<$fd> should be a reference to a GLOB. If I<FILEHANDLE> is not given the
+=method print [$fh]
+Print the header, body or whole message to file descriptor I<$fh>.
+I<$fd> should be a reference to a GLOB. If I<$fh> is not given the
 output will be sent to STDOUT.
 
 =example
@@ -191,11 +191,11 @@ sub print($)
        and $self->print_body($fd);
 }
 
-=method print_header [FILEHANDLE]
-Print only the header to the FILEHANDLE (default STDOUT).
+=method print_header [$fh]
+Print only the header to the $fh (default STDOUT).
 
-=method print_body [FILEHANDLE]
-Print only the body to the FILEHANDLE (default STDOUT).
+=method print_body [$fh]
+Print only the body to the $fh (default STDOUT).
 =cut
 
 sub print_header($) { shift->head->print(@_) }
@@ -211,7 +211,7 @@ sub print_body($)
     1;
 }
 
-=method as_string
+=method as_string 
 Returns the message as a single string.
 =cut
 
@@ -220,8 +220,8 @@ sub as_string()
     $self->head->as_string . "\n" . join '', @{$self->body};
 }
 
-=method as_mbox_string [ALREADY_ESCAPED]
-Returns the message as a string in mbox format.  C<ALREADY_ESCAPED>, if
+=method as_mbox_string [$already_escaped]
+Returns the message as a string in mbox format.  C<$already_escaped>, if
 given and true, indicates that M<escape_from()> has already been called on
 this object.
 =cut
@@ -241,16 +241,16 @@ sub as_mbox_string($)
 Most of these methods are simply wrappers around methods provided
 by M<Mail::Header>.
 
-=method header [ARRAY-of-LINES]
+=method header \@lines
 See M<Mail::Header::header()>.
 
-=method fold [LENGTH]
+=method fold [$length]
 See M<Mail::Header::fold()>.
 
-=method fold_length [TAG], [LENGTH]
+=method fold_length [$tag], [$length]
 See M<Mail::Header::fold_length()>.
 
-=method combine TAG, [WITH]
+=method combine $tag, [$with]
 See M<Mail::Header::combine()>.
 =cut
 
@@ -259,7 +259,7 @@ sub fold         { shift->head->fold(@_) }
 sub fold_length  { shift->head->fold_length(@_) }
 sub combine      { shift->head->combine(@_) }
 
-=method add PAIRS-of-FIELD
+=method add PAIRS
 The PAIRS are field-name and field-content.  For each PAIR,
 M<Mail::Header::add()> is called.  All fields are added after
 existing fields.  The last addition is returned.
@@ -277,9 +277,9 @@ sub add(@)
     $ret;
 }
 
-=method replace PAIRS-of-FIELD
+=method replace PAIRS
 The PAIRS are field-name and field-content.  For each PAIR,
-M<Mail::Header::replace()> is called with INDEX 0. If a FIELD is already
+M<Mail::Header::replace()> is called with index 0. If a $field is already
 in the header, it will be removed first.  Do not specified the same
 field-name twice.
 =cut
@@ -297,9 +297,9 @@ sub replace(@)
     $ret;
 }
 
-=method get TAG, [TAGs]
-In LIST context, all fields with the name TAG are returned.  In SCALAR
-context, only the first field which matches the earliest TAG is returned.
+=method get $tag, [$tags]
+In LIST context, all fields with the name $tag are returned.  In SCALAR
+context, only the first field which matches the earliest $tag is returned.
 M<Mail::Header::get()> is called to collect the data.
 =cut
 
@@ -317,8 +317,8 @@ sub get(@)
     undef;
 }
 
-=method delete TAG, [TAGs]
-Delete all fields with the name TAG.  M<Mail::Header::delete()> is doing the
+=method delete $tag, [$tags]
+Delete all fields with the name $tag.  M<Mail::Header::delete()> is doing the
 work.
 =cut
 
@@ -337,11 +337,11 @@ sub empty()
 #---------------
 =section Processing the body
 
-=method remove_sig [NLINES]
-Attempts to remove a users signature from the body of a message. It does this 
-by looking for a line equal to C<'-- '> within the last C<NLINES> of the
+=method remove_sig [$nlines]
+Attempts to remove a user's signature from the body of a message. It does this 
+by looking for a line equal to C<'-- '> within the last C<$nlines> of the
 message. If found then that line and all lines after it will be removed. If
-C<NLINES> is not given a default value of 10 will be used. This would be of
+C<$nlines> is not given a default value of 10 will be used. This would be of
 most use in auto-reply scripts.
 =cut
 
@@ -359,7 +359,7 @@ sub remove_sig($)
     }
 }
 
-=method sign OPTIONS
+=method sign %options
 Add your signature to the body.  M<remove_sig()> will strip existing
 signatures first.
 
@@ -398,7 +398,7 @@ sub sign(@)
     $self;
 }
 
-=method tidy_body
+=method tidy_body 
 Removes all leading and trailing lines from the body that only contain
 white spaces.
 =cut
@@ -414,7 +414,7 @@ sub tidy_body()
 #---------------
 =section High-level functionality
 
-=method reply OPTIONS
+=method reply %options
 Create a new object with header initialised for a reply to the current 
 object. And the body will be a copy of the current message indented.
 
@@ -566,9 +566,9 @@ sub reply(@)
     $reply;
 }
 
-=method smtpsend [OPTIONS]
+=method smtpsend [%options]
 
-Send a Mail::Internet message using direct SMTP.  to the given
+Send a Mail::Internet message using direct SMTP to the given
 ADDRESSES, each can be either a string or a reference to a list of email
 addresses. If none of C<To>, <Cc> or C<Bcc> are given then the addresses
 are extracted from the message being sent.
@@ -609,7 +609,7 @@ Port number to connect to on remote host
 
 =option  Debug BOOLEAN
 =default Debug <false>
-Debug value to pass to Net::SMPT, see <Net::SMTP>
+Debug value to pass to Net::SMTP, see <Net::SMTP>
 =cut
 
 sub smtpsend($@)
@@ -679,8 +679,8 @@ sub smtpsend($@)
     $ok ? @addr : ();
 }
 
-=method send [TYPE, [ARGS...]]
-Send a Mail::Internet message using M<Mail::Mailer>.  TYPE and ARGS are
+=method send [$type, [$args...]]
+Send a Mail::Internet message using M<Mail::Mailer>.  $type and $args are
 passed on to M<Mail::Mailer::new()>.
 =cut
 
@@ -697,7 +697,7 @@ sub send($@)
     $mailer->close;
 }
 
-=method nntppost [OPTIONS]
+=method nntppost [%options]
 Post an article via NNTP.  Requires M<Net::NNTP> to be installed.
 
 =requires Host HOSTNAME|Net::NNTP object
@@ -756,7 +756,7 @@ sub nntppost
     $rc == 240 ? @groups : ();
 }
 
-=method escape_from
+=method escape_from 
 It can cause problems with some applications if a message contains a line
 starting with C<`From '>, in particular when attempting to split a folder.
 This method inserts a leading C<`>'> on any line that matches the regular

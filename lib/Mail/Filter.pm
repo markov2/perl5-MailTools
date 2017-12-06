@@ -38,7 +38,7 @@ mail object.
 
 =section Constructors
 
-=c_method new [FILTER [, ... ]]
+=c_method new @filters
 Create a new C<Mail::Filter> object with the given filter subroutines. Each
 filter may be either a code reference or the name of a method to call
 on the <Mail::Filter> object.
@@ -52,8 +52,8 @@ sub new(@)
 
 #------------
 =section Accessors
-=method add FILTER [, FILTER ...]
-Add the given filters to the end of the filter list.
+=method add @filters
+Add the given @filters to the end of the filter list.
 =cut
 
 sub add(@)
@@ -64,9 +64,9 @@ sub add(@)
 #------------
 =section Processing
 
-=method filter MAIL-OBJECT | MAIL-FOLDER
-If the first argument is a C<Mail::Internet> object, then this object will
-be passed through the filter list. If the first argument is a C<Mail::Folder>
+=method filter $mail|$folder
+If the first argument is a M<Mail::Internet> object, then this object will
+be passed through the filter list. If the first argument is a M<Mail::Folder>
 object, then each message in turn will be passed through the filter list.
 =cut
 
@@ -106,16 +106,16 @@ sub filter
     }
 }
 
-=method folder
-While the C<filter> method is called with a C<Mail::Folder> object, these
+=method folder 
+While the M<filter()> method is called with a M<Mail::Folder> object, these
 filter subroutines can call this method to obtain the folder object that is
 being processed.
 =cut
 
 sub folder() {shift->{folder}}
 
-=method msgnum
-If the C<filter> method is called with a C<Mail::Folder> object, then the
+=method msgnum 
+If the M<filter()> method is called with a M<Mail::Folder> object, then the
 filter subroutines may call this method to obtain the message number
 of the message that is being processed.
 =cut

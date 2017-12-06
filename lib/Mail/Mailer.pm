@@ -161,9 +161,9 @@ sub is_exe($)
     0;
 }
 
-=c_method new TYPE, ARGS
-The TYPE is one of the back-end sender implementations, as described in
-the DESCRIPTION chapter of this manual page.  The ARGS are passed to
+=c_method new $type, %options
+The $type is one of the back-end sender implementations, as described in
+the DESCRIPTION chapter of this manual page.  The %options are passed to
 that back-end.
 =cut
 

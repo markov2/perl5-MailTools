@@ -19,7 +19,7 @@ importance/format.
 
 =chapter METHODS
 
-=method create OPTIONS
+=method create %options
 =option  Text STRING
 =default Text ''
 =cut

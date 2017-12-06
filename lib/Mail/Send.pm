@@ -70,8 +70,8 @@ sub new(@)
 #---------------
 =section Header fields
 
-=method set FIELDNAME, VALUES
-VALUES will replace the old values for the FIELDNAME.  Returned is
+=method set $fieldname, @values
+The @values will replace the old values for the $fieldname.  Returned is
 the LIST of values after modification.
 =cut
 
@@ -81,8 +81,8 @@ sub set($@)
     @{$self->{$hdr} || []};	# return new (or original) values
 }
 
-=method add FIELDNAME, VALUES
-Add values to the list of defined values for the FIELDNAME.
+=method add $fieldname, @values
+Add values to the list of defined values for the $fieldname.
 =cut
 
 sub add($@)
@@ -90,7 +90,7 @@ sub add($@)
     push @{$self->{$hdr}}, @values;
 }
 
-=method delete FIELDNAME
+=method delete $fieldname
 =cut
 
 sub delete($)
@@ -98,10 +98,10 @@ sub delete($)
     delete $self->{$hdr};
 }
 
-=method to VALUES
-=method cc VALUES
-=method bcc VALUES
-=method subject VALUES
+=method to @values
+=method cc @values
+=method bcc @values
+=method subject @values
 =cut
 
 sub to		{ my $self=shift; $self->set('To', @_); }
@@ -112,8 +112,8 @@ sub subject	{ my $self=shift; $self->set('Subject', join (' ', @_)); }
 #---------------
 =section Sending
 
-=method open OPTIONS
-The OPTIONS are used to initiate a mailer object via
+=method open %options
+The %options are used to initiate a mailer object via
 M<Mail::Mailer::new()>.  Then M<Mail::Mailer::open()> is called
 with the knowledge collected in this Mail::Send object.
 =cut

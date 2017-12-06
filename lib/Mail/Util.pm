@@ -28,8 +28,8 @@ the calling package.
 
 =chapter FUNCTIONS
 
-=function read_mbox FILE
-Read FILE, a binmail mailbox file, and return a list of  references.
+=function read_mbox $file
+Read $file, a binmail mailbox file, and return a list of  references.
 Each reference is a reference to an array containing one message.
 
 WARNING:
@@ -68,7 +68,7 @@ sub read_mbox($)
     wantarray ? @mbox : \@mbox;
 }
 
-=function maildomain
+=function maildomain 
 Attempt to determine the current user mail domain string via the following
 methods
 
@@ -167,10 +167,10 @@ sub maildomain()
     $domain ||= "localhost";
 }
 
-=function mailaddress [ADDRESS]
+=function mailaddress [$address]
 Return a guess at the current users mail address. The user can force
 the return value by setting the MAILADDRESS environment variable.
-[2.10] You may set the ADDRESS via the parameter.
+[2.10] You may set the $address via the parameter.
 
 WARNING:
 When not supplied via the environment variable, <mailaddress> looks at

@@ -20,7 +20,7 @@ Represents one "Date" header field.
 
 =chapter METHODS
 
-=method set OPTIONS
+=method set %options
 =option  Time SECONDS
 =default Time C<undef>
 
@@ -52,8 +52,8 @@ sub parse($)
 
 =section Smart accessors
 
-=method time [TIME]
-Query (or change) the TIME (as stored in the field) in seconds.
+=method time [$time]
+Query (or change) the $time (as stored in the field) in seconds.
 =cut
 
 sub time(;$)

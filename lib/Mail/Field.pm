@@ -133,9 +133,9 @@ sub _build
 Mail::Field (and it's sub-classes) define several methods which return
 new objects. These can all be categorized as constructor.
 
-=c_method new TAG [, STRING | OPTIONS]
+=c_method new $tag [, STRING | %options]
 Create an object in the class which defines the field specified by
-the TAG argument.
+the $tag argument.
 
 =error Undefined subroutine <method> called
 Mail::Field objects use autoloading to compile new functionality.
@@ -150,7 +150,7 @@ sub new
     $class->$field(@_);
 }
 
-=c_method combine FIELDS
+=c_method combine $fields
 
 Take a LIST of C<Mail::Field> objects (which should all be of the same
 sub-class) and create a new object in that same class.
@@ -187,7 +187,7 @@ sub AUTOLOAD
     goto &$AUTOLOAD;
 }
 
-=c_method extract TAG, HEAD [, INDEX ]
+=c_method extract $tag, $head [, $index ]
 Takes as arguments the tag name, a C<Mail::Head> object
 and optionally an index.
 
@@ -230,7 +230,7 @@ sub extract
 #-------------
 =section "Fake" constructors
 
-=method create OPTIONS
+=method create %options
 This constructor is used internally with preprocessed field information.
 When called on an existing object, its original content will get
 replaced.
@@ -244,7 +244,7 @@ sub create
     $self->set(\%arg);
 }
 
-=method parse
+=method parse 
 Parse a field line.
 =cut
 
@@ -258,13 +258,13 @@ sub parse
 #-------------
 =section Accessors
 
-=method stringify
+=method stringify 
 Returns the field as a string.
 =cut
 
 sub stringify { confess "stringify() not implemented" } 
 
-=ci_method tag
+=ci_method tag 
 Return the tag (in the correct case) for this item.  Well, actually any
 casing is OK, because the field tags are treated case-insensitive; however
 people have some preferences.
@@ -281,7 +281,7 @@ sub tag
             split /\-/, $tag;
 }
 
-=method set OPTIONS
+=method set %options
 Change the settings (the content, but then smart) of this field.
 =cut
 

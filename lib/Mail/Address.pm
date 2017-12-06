@@ -185,7 +185,7 @@ sub _complete
 #------------
 =section Constructors
 
-=c_method new PHRASE, ADDRESS, [ COMMENT ]
+=c_method new $phrase, $address, [ $comment ]
 Create a new C<Mail::Address> object which represents an address with the
 elements given. In a message these 3 elements would be seen like:
 
@@ -201,7 +201,7 @@ sub new(@)
     bless [@_], $class;
 }
 
-=method parse LINE
+=method parse $line
 Parse the given line a return a list of extracted C<Mail::Address> objects.
 The line would normally be one taken from a To,Cc or Bcc line in a message
 
@@ -253,13 +253,13 @@ sub parse(@)
 #------------
 =section Accessors
 
-=method phrase
+=method phrase 
 Return the phrase part of the object.
 
-=method address
+=method address 
 Return the address part of the object.
 
-=method comment
+=method comment 
 Return the comment part of the object
 =cut
 
@@ -276,11 +276,11 @@ sub set_or_get($)
     $val;
 }
 
-=method format [ADDRESSes]
+=method format @addresses
 Return a string representing the address in a suitable form to be placed
 on a C<To>, C<Cc>, or C<Bcc> line of a message.  This method is called on
-the first ADDRESS to be used; other specified ADDRESSes will be appended,
-separated with commas.
+the first address to be used; other specified addresses will be appended,
+separated by commas.
 =cut
 
 my $atext = '[\-\w !#$%&\'*+/=?^`{|}~]';
@@ -322,7 +322,7 @@ sub format
 #------------
 =section Smart accessors
 
-=method name
+=method name 
 Using the information contained within the object attempt to identify what
 the person or groups name is.
 
@@ -357,7 +357,7 @@ sub name
     length $name ? $name : undef;
 }
 
-=method host
+=method host 
 Return the address excluding the user id and '@'
 =cut
 
@@ -367,7 +367,7 @@ sub host
     $i >= 0 ? substr($addr, $i+1) : undef;
 }
 
-=method user
+=method user 
 Return the address excluding the '@' and the mail domain
 =cut
 

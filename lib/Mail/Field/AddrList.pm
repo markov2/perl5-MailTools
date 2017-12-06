@@ -78,13 +78,13 @@ sub stringify()
 
 =section Smart accessors
 
-=method addresses
+=method addresses 
 Returns a list if email addresses, found in the field content.
 =cut
 
 sub addresses { keys %{shift->{AddrList}} }
 
-=method addr_list
+=method addr_list 
 Returns the collected M<Mail::Address> objects.
 =cut
 
@@ -93,15 +93,15 @@ Returns the collected M<Mail::Address> objects.
 # given :(  That one should have been named emails()
 sub addr_list { values %{shift->{AddrList}} }
 
-=method names
+=method names 
 Returns a list of nicely formatted named, for each of the addresses
 found in the content.
 =cut
 
 sub names { map { $_->name } values %{shift->{AddrList}} }
 
-=method set_address EMAIL, NAME
-Add/replace an EMAIL address to the field.
+=method set_address $email, $name
+Add/replace an $email address to the field.
 =cut
 
 sub set_address($$)

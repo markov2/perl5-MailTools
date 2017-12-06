@@ -51,7 +51,7 @@ else
 
 =section Constructors
 
-=c_method new OPTIONS
+=c_method new %options
 Create and initialize a new Mail::Cap object.  If you give it an
 argument it will try to parse the specified file.  Without any
 arguments it will search for the mailcap file using the standard
@@ -173,10 +173,10 @@ media object in the specified file.  They all return C<1> if a command
 was found, and C<0> otherwise.  You might test C<$?> for the outcome
 of the command.
 
-=method view TYPE, FILE
-=method compose TYPE, FILE
-=method edit TYPE, FILE
-=method print TYPE, FILE
+=method view $type, $file
+=method compose $type, $file
+=method edit $type, $file
+=method print $type, $file
 =cut
 
 sub view    { my $self = shift; $self->_run($self->viewCmd(@_))    }
@@ -200,10 +200,10 @@ in order to invoke a suitable program presenting or manipulating the
 media object in the specified file.  It will return C<undef> if no
 suitable specification exists.
 
-=method viewCmd TYPE, FILE
-=method composeCmd TYPE, FILE
-=method editCmd TYPE, FILE
-=method printCmd TYPE, FILE
+=method viewCmd $type, $file
+=method composeCmd $type, $file
+=method editCmd $type, $file
+=method printCmd $type, $file
 =cut
 
 sub viewCmd    { shift->_createCommand(view    => @_) }
@@ -234,7 +234,7 @@ sub makeName($$)
 =section Look-up definitions
 Methods return the corresponding mailcap field for the type.
 
-=method field TYPE, FIELD
+=method field $type, $field
 Returns the specified field for the type.  Returns undef if no
 specification exists.
 =cut
@@ -245,10 +245,10 @@ sub field($$)
     $entry->{$field};
 }
 
-=method description TYPE
-=method textualnewlines TYPE
-=method x11_bitmap TYPE
-=method nametemplate TYPE
+=method description $type
+=method textualnewlines $type
+=method x11_bitmap $type
+=method nametemplate $type
 =cut
 
 sub description     { shift->field(shift, 'description');     }

@@ -96,7 +96,7 @@ sub _fold_line
     my $min = int($maxlen * 4 / 5) - 4;
 
     $_[0] =~ s/[\r\n]+//og;        # Remove new-lines
-    $_[0] =~ s/\s*\Z/\n/so;        # End line with a EOLN
+    $_[0] =~ s/\s*\Z/\n/so;        # End line with an EOLN
 
     return if $_[0] =~ /^From\s/io;
 
@@ -245,14 +245,14 @@ sub _insert
 
 =section Constructors
 
-=ci_method new [ARG], [OPTIONS]
+=ci_method new [$source], [%options]
 
-ARG may be either a file descriptor (reference to a GLOB)
+The $source may be either a file descriptor (reference to a GLOB)
 or a reference to an array. If given the new object will be
 initialized with headers either from the array of read from 
 the file descriptor.
 
-OPTIONS is a list of options given in the form of key-value
+%options is a list of options given in the form of key-value
 pairs, just like a hash table. Valid options are
 
 =option  Modify BOOLEAN
@@ -299,7 +299,7 @@ sub new
     $self;
 }
 
-=method dup
+=method dup 
 Create a duplicate of the current object.
 =cut
 
@@ -354,7 +354,7 @@ sub extract
     $self;
 }
 
-=method read FILEHANDLE
+=method read $fh
 Read a header from the given file descriptor into an existing Mail::Header
 object.
 =cut
@@ -388,7 +388,7 @@ sub read
     $self;
 }
 
-=method empty
+=method empty 
 Empty an existing C<Mail::Header> object of all lines.
 =cut
 
@@ -449,8 +449,8 @@ sub header_hashref
 #------------
 =section Accessors
 
-=method modify [VALUE]
-If C<VALUE> is I<false> then C<Mail::Header> will not do any automatic
+=method modify [$value]
+If C<$value> is I<false> then C<Mail::Header> will not do any automatic
 reformatting of the headers, other than to ensure that the line
 starts with the tags given.
 =cut
@@ -485,10 +485,10 @@ sub mail_from
     $thing;
 }
 
-=method fold_length [TAG], [LENGTH]
+=method fold_length [$tag], [$length]
 Set the default fold length for all tags or just one. With no arguments
 the default fold length is returned. With two arguments it sets the fold
-length for the given tag and returns the previous value. If only C<LENGTH>
+length for the given tag and returns the previous value. If only C<$length>
 is given it sets the default fold length for the current object.
 
 In the two argument form C<fold_length> may be called as a static method,
@@ -526,8 +526,8 @@ sub fold_length
 #------------
 =section Processing
 
-=method fold [LENGTH]
-Fold the header. If LENGTH is not given, then C<Mail::Header> uses the
+=method fold [$length]
+Fold the header. If $length is not given, then C<Mail::Header> uses the
 following rules to determine what length to fold a line.
 =cut
 
@@ -549,9 +549,9 @@ sub fold
     $self;
 }
 
-=method unfold [TAG]
+=method unfold [$tag]
 Unfold all instances of the given tag so that they do not spread across
-multiple lines. If C<TAG> is not given then all lines are unfolded.
+multiple lines. If C<$tag> is not given then all lines are unfolded.
 
 The unfolding process is wrong but (for compatibility reasons) will
 not be repaired: only one blank at the start of the line should be
@@ -584,10 +584,10 @@ sub unfold
     $self;
 }
 
-=method add TAG, LINE [, INDEX]
+=method add $tag, $line [, $index]
 
-Add a new line to the header. If TAG is C<undef> the tag will be
-extracted from the beginning of the given line. If INDEX is given,
+Add a new line to the header. If $tag is C<undef> the tag will be
+extracted from the beginning of the given line. If $index is given,
 the new line will be inserted into the header at the given point, otherwise
 the new line will be appended to the end of the header.
 =cut
@@ -608,9 +608,9 @@ sub add
     $1;
 }
 
-=method replace TAG, LINE [, INDEX ]
-Replace a line in the header.  If TAG is C<undef> the tag will be
-extracted from the beginning of the given line. If INDEX is given
+=method replace $tag, $line [, $index ]
+Replace a line in the header.  If $tag is C<undef> the tag will be
+extracted from the beginning of the given line. If $index is given
 the new line will replace the Nth instance of that tag, otherwise the
 first instance of the tag is replaced. If the tag does not appear in the
 header then a new line will be appended to the header.
@@ -638,11 +638,11 @@ sub replace
     $1;
 }
 
-=method combine TAG [, WITH]
-Combine all instances of TAG into one. The lines will be
-joined together WITH, or a single space if not given. The new
+=method combine $tag [, $with]
+Combine all instances of $tag into one. The lines will be
+joined together $with, or a single space if not given. The new
 item will be positioned in the header where the first instance was, all
-other instances of TAG will be removed.
+other instances of $tag will be removed.
 =cut
 
 sub combine
@@ -668,12 +668,12 @@ sub combine
     $line;
 }
 
-=method get TAG [, INDEX]
+=method get $tag [, $index]
 
-Get the text from a line. If an INDEX is given, then the text of the Nth
+Get the text from a line. If an $index is given, then the text of the Nth
 instance will be returned. If it is not given the return value depends on the
 context in which C<get> was called. In an array context a list of all the
-text from all the instances of the TAG will be returned. In a scalar context
+text from all the instances of the $tag will be returned. In a scalar context
 the text for the first instance will be returned.
 
 The lines are unfolded, but still terminated with a new-line (see C<chomp>)
@@ -705,7 +705,7 @@ sub get
 }
 
 
-=method count TAG
+=method count $tag
 Returns the number of times the given atg appears in the header
 =cut
 
@@ -717,9 +717,9 @@ sub count
 }
 
 
-=method delete TAG [, INDEX ]
-Delete a tag from the header. If an INDEX id is given, then the Nth instance
-of the tag will be removed. If no INDEX is given, then all instances
+=method delete $tag [, $index ]
+Delete a tag from the header. If an $index id is given, then the Nth instance
+of the tag will be removed. If no $index is given, then all instances
 of tag will be removed.
 =cut
 
@@ -750,7 +750,7 @@ sub delete
 }
 
 
-=method print [FILEHANDLE]
+=method print [$fh]
 Print the header to the given file descriptor, or C<STDOUT> if no
 file descriptor is given.
 =cut
@@ -767,20 +767,20 @@ sub print
     1;
 }
 
-=method as_string
+=method as_string 
 Returns the header as a single string.
 =cut
 
 sub as_string { join '', grep {defined} @{shift->{mail_hdr_list}} }
 
-=method tags
+=method tags 
 Returns an array of all the tags that exist in the header. Each tag will
 only appear in the list once. The order of the tags is not specified.
 =cut
 
 sub tags { keys %{shift->{mail_hdr_hash}} }
 
-=method cleanup
+=method cleanup 
 Remove any header line that, other than the tag, only contains whitespace
 =cut
 
