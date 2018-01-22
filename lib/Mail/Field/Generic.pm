@@ -1,17 +1,24 @@
-package Mail::Field::Generic;
+# This code is part of the bundle MailTools.  Meta-POD processed with
+# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
+# Licensed under the same terms as Perl itself.
 
-use Carp;
+package Mail::Field::Generic;
 use base 'Mail::Field';
 
+use Carp;
+
 =chapter NAME
+
 Mail::Field::Generic - implementation for inspecific fields
 
 =chapter SYNOPSIS
+
  use Mail::Field;
  my $field = Mail::Field->new('Subject', 'some subject text');
  my $field = Mail::Field->new(subject => 'some subject text');
 
 =chapter DESCRIPTION
+
 A generic implementation for header fields without own
 implementation. This is fine for fields like C<Subject>, C<X-Mailer>,
 etc., where the field holds only a string of no particular
@@ -22,6 +29,7 @@ importance/format.
 =method create %options
 =option  Text STRING
 =default Text ''
+
 =cut
 
 sub create

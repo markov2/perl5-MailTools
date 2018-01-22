@@ -1,7 +1,11 @@
-use strict;
+# This code is part of the bundle MailTools.  Meta-POD processed with
+# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
+# Licensed under the same terms as Perl itself.
 
 package Mail::Mailer::rfc822;
 use base 'Mail::Mailer';
+
+use strict;
 
 sub set_headers
 {   my ($self, $hdrs) = @_;

@@ -1,9 +1,13 @@
-# Based on smtp.pm, adapted by Maciej Żenczykowski
+# This code is part of the bundle MailTools.  Meta-POD processed with
+# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
+# Licensed under the same terms as Perl itself.
 
-use strict;
+# Based on smtp.pm, adapted by Maciej Żenczykowski
 
 package Mail::Mailer::smtps;
 use base 'Mail::Mailer::rfc822';
+
+use strict;
 
 use Net::SMTP::SSL;
 use Mail::Util qw(mailaddress);

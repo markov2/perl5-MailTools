@@ -1,12 +1,17 @@
+# This code is part of the bundle MailTools.  Meta-POD processed with
+# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
+# Licensed under the same terms as Perl itself.
+
 package Mail::Filter;
 
 use strict;
 use Carp;
 
-=head1 NAME
+=chapter NAME
+
 Mail::Filter - filter mail through multiple subroutines
 
-=head1 SYNOPSIS
+=chapter SYNOPSIS
 
  use Mail::Filter;
     
@@ -18,7 +23,7 @@ Mail::Filter - filter mail through multiple subroutines
  my $folder = Mail::Folder->new( .... );
  my $filter->filter($folder);
 
-=head1 DESCRIPTION
+=chapter DESCRIPTION
 
 C<Mail::Filter> provides an interface to filtering Email through multiple
 subroutines.

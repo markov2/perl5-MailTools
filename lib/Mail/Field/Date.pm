@@ -1,7 +1,11 @@
-use strict;
+# This code is part of the bundle MailTools.  Meta-POD processed with
+# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
+# Licensed under the same terms as Perl itself.
 
 package Mail::Field::Date;
 use base 'Mail::Field';
+
+use strict;
 
 use Date::Format qw(time2str);
 use Date::Parse  qw(str2time);
@@ -9,6 +13,7 @@ use Date::Parse  qw(str2time);
 (bless [])->register('Date');
 
 =chapter NAME
+
 Mail::Field::Date - a date header field
 
 =chapter SYNOPSIS

@@ -1,12 +1,14 @@
 
 ==== version history for MailTools
 
-version 2.20:
+version 2.20: Mon 22 Jan 18:14:44 CET 2018
 
 	Improvements:
 	- rewrite doc syntax to my current standard style.
 	- text corrections rt.cpan.org#123823 [Ville Skyttä]
 	- text corrections rt.cpan.org#123824 [Ville Skyttä]
+	- convert to GIT
+	- move to GitHUB
 
 version 2.19: Tue 22 Aug 13:30:41 CEST 2017
 

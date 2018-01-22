@@ -1,6 +1,11 @@
+# This code is part of the bundle MailTools.  Meta-POD processed with
+# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
+# Licensed under the same terms as Perl itself.
+
 package MailTools;
 
 =chapter NAME
+
 MailTools - bundle of ancient email modules
 
 =chapter SYNOPSIS

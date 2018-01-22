@@ -1,9 +1,15 @@
+# This code is part of the bundle MailTools.  Meta-POD processed with
+# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
+# Licensed under the same terms as Perl itself.
+
 package Mail::Cap;
+
 use strict;
 
 sub Version { our $VERSION }
 
 =chapter NAME
+
 Mail::Cap - understand mailcap files
 
 =chapter SYNOPSIS
@@ -31,6 +37,7 @@ You could also take a look at the M<File::MimeInfo> distribution, which
 are accessing tables which are used by many applications on a system,
 and therefore have succeeded the mail-cap specifications on modern
 (UNIX) systems.
+
 =cut
 
 our $useCache = 1;  # don't evaluate tests every time
