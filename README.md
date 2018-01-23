@@ -24,7 +24,7 @@ considering modern emails.
 
 **Please note:** When you start all over, please consider Mail::Box!
 For a feature overview, take a look at the
-[MailBox feature overview](http://perl.overmeer.net/mailbox/Mail_Box-Overview.html)
+[MailBox feature overview](http://perl.overmeer.net/mailbox/Mail_Box-Overview/)
 
 ## Development &rarr; Release
 
