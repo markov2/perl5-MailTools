@@ -3,6 +3,9 @@
 
 version 2.21:
 
+	Fixes:
+	- fix metadata [Mohammad S Anwar]
+
 	Improvements:
 	- add more to the README
 
