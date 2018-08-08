@@ -20,7 +20,15 @@ sub exec {
     $opt{Debug} ||= 0;
 
     my $smtp = Net::SMTP->new($host, %opt)
-	or return undef;
+	    or return undef;
+
+    if($opt{StartTLS})
+    {   $Net::SMTP::VERSION >= 1.28
+			or die "StartTLS requires Net::SMTP 1.28";
+
+		$smtp->starttls
+			or return undef;
+	}
 
     if($opt{Auth})
     {   $smtp->auth(@{$opt{Auth}})
