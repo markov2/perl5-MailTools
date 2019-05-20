@@ -46,9 +46,10 @@ Mail::Send - Simple electronic mail interface
 =chapter DESCRIPTION
 M<Mail::Send> creates e-mail messages without using the M<Mail::Header>
 knowledge, which means that all escaping and folding must be done by
-you!  Simplicity has its price.
+you!  Also: do not forget to escape leading dots.  Simplicity has its price.
 
-When you have time, take a look at M<Mail::Transport>
+When you have time, take a look at M<Mail::Transport> which is part of
+the M<MailBox> suite.
 
 =chapter METHODS
 
@@ -119,7 +120,10 @@ sub subject	{ my $self=shift; $self->set('Subject', join (' ', @_)); }
 =method open %options
 The %options are used to initiate a mailer object via
 M<Mail::Mailer::new()>.  Then M<Mail::Mailer::open()> is called
-with the knowledge collected in this Mail::Send object.
+with the knowledge collected in this C<Mail::Send> object.
+
+Be warned: this module implements raw smtp, which means that you have
+to escape lines which start with a dot, by adding one in front.
 =cut
 
 sub open(@)
