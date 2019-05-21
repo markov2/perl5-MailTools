@@ -56,8 +56,10 @@ the M<MailBox> suite.
 =section Constructors
 
 =c_method new PAIRS
-A list of header fields (provided as key-value PAIRS) can be
-used to initialize the object.
+A list of header fields (provided as key-value PAIRS) can be used to
+initialize the object, limited to the few provided as method: C<to>,
+C<subject>, C<cc>, and C<bcc>.  For other header fields, use M<add()>.
+
 =cut
 
 sub new(@)
