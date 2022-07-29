@@ -50,9 +50,8 @@ The smtp mailer does not handle C<Cc> and C<Bcc> lines, neither their
 C<Resent-*> fellows. The C<Debug> options enables debugging output
 from C<Net::SMTP>.
 
-[added 2.21] You may also use the C<< StartTLS => 1 >> options to upgrade the
-connection with STARTTLS.  You need C<libnet> version 1.28 (2014) for this
-to work.
+[added 2.21] You may also use the C<< StartTLS => 1 >> options to upgrade
+the connection with STARTTLS.  The same for option C<< SSL => 1 >>.
 
 You may also use the C<< Auth => [ $user, $password ] >> option for SASL
 authentication. To make this work, you have to install the L<Authen::SASL>
@@ -164,7 +163,7 @@ sub is_exe($)
         if(defined $ENV{PATH})
         {   foreach my $dir (split /$Config{path_sep}/, $ENV{PATH})
             {   return "$dir/$cmd"
-        	    if -x "$dir/$name" && ! -d "$dir/$name";
+                   if -x "$dir/$name" && ! -d "$dir/$name";
             }
         }
     }

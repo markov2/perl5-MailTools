@@ -11,7 +11,7 @@ WriteMakefile
  , LICENSE   => 'perl_5'
 
  , PREREQ_PM =>
-   { Net::SMTP   => 1.03
+   { Net::SMTP   => 1.28
    , Net::Domain => 1.05
    , IO::Handle  => 0.00
    , Test::More  => 0.00

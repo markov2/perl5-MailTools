@@ -23,10 +23,7 @@ sub exec {
         or return undef;
 
     if($opt{StartTLS})
-    {   $Net::SMTP::VERSION >= 1.28
-            or die "StartTLS requires Net::SMTP 1.28";
-
-        $smtp->starttls
+    {   $smtp->starttls
             or return undef;
     }
 
