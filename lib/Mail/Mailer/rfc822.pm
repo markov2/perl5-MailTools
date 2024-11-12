@@ -15,13 +15,30 @@ sub set_headers
     foreach (keys %$hdrs)
     {   next unless m/^[A-Z]/;
 
-        foreach my $h ($self->to_array($hdrs->{$_}))
-        {   $h =~ s/\n+\Z//;
-            print $self "$_: $h\n";
+        if (_is_single_instance_header($_))
+        {
+            print $self "$_: ", join(', ', $self->to_array($hdrs->{$_})), "\n";
+        }
+        else {
+            foreach my $h ($self->to_array($hdrs->{$_})) {
+                $h =~ s/\n+\Z//;
+                print $self "$_: $h\n";
+            }
         }
     }
 
     print $self "\n";	# terminate headers
+}
+
+# RFC5322 says that these headers should only appear ONCE in the message
+sub _is_single_instance_header {
+  my $header = shift;
+
+  return 1 if lc $header eq 'reply-to';
+  return 1 if lc $header eq 'to';
+  return 1 if lc $header eq 'cc';
+  return 1 if lc $header eq 'bcc';
+  return 0;
 }
 
 1;
