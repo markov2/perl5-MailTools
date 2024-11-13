@@ -1,7 +1,11 @@
 
 ==== version history for MailTools
 
-version 2.23:
+version 2.22:
+
+	Fixes:
+	- To/Cc/Bcc/From fields may appear only once.
+	  github issue #4 [Michael Schout]
 
 version 2.21: Tue 21 May 16:26:30 CEST 2019
 
