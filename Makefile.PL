@@ -5,7 +5,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile
  ( NAME      => 'MailTools'
  , DISTNAME  => 'MailTools'
- , VERSION   => '2.22'
+ , VERSION   => '2.23'
  , AUTHOR    => 'Mark Overmeer <markov@cpan.org>'
  , ABSTRACT  => 'Various ancient e-mail related modules'
  , LICENSE   => 'perl_5'
