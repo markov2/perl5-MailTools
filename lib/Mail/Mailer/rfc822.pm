@@ -17,7 +17,7 @@ sub set_headers
     foreach my $f (grep /^[A-Z]/, keys %$hdrs)
     {   # s///r requires perl 5.12: too new :-)
         my @h = map { my $h = $_; $h =~ s/\n+\Z//; $h } $self->to_array($hdrs->{$f});
-        @h = join ', ', @h if $max_once{lc $f} && @h;
+        @h = join ', ', @h if @h && $max_once{lc $f};
         print $self "$f: $_\n" for @h;
     }
 

@@ -49,7 +49,7 @@ knowledge, which means that all escaping and folding must be done by
 you!  Also: do not forget to escape leading dots.  Simplicity has its price.
 
 When you have time, take a look at M<Mail::Transport> which is part of
-the M<MailBox> suite.
+the MailBox suite.
 
 =chapter METHODS
 
