@@ -1,21 +1,26 @@
-# This code is part of the bundle MailTools.  Meta-POD processed with
-# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
-# Licensed under the same terms as Perl itself.
+#oodist: *** DO NOT USE THIS VERSION FOR PRODUCTION ***
+#oodist: This file contains OODoc-style documentation which will get stripped
+#oodist: during its release in the distribution.  You can use this file for
+#oodist: testing, however the code of this development version may be broken!
 
 package Mail::Field::Generic;
 use base 'Mail::Field';
 
+use strict;
+use warnings;
+
 use Carp;
 
+#--------------------
 =chapter NAME
 
 Mail::Field::Generic - implementation for inspecific fields
 
 =chapter SYNOPSIS
 
- use Mail::Field;
- my $field = Mail::Field->new('Subject', 'some subject text');
- my $field = Mail::Field->new(subject => 'some subject text');
+  use Mail::Field;
+  my $field = Mail::Field->new('Subject', 'some subject text');
+  my $field = Mail::Field->new(subject => 'some subject text');
 
 =chapter DESCRIPTION
 
@@ -33,13 +38,12 @@ importance/format.
 =cut
 
 sub create
-{   my ($self, %arg) = @_;
-    $self->{Text} = delete $arg{Text};
+{	my ($self, %arg) = @_;
+	$self->{Text} = delete $arg{Text};
 
-    croak "Unknown options " . join(",", keys %arg)
-       if %arg;
+	! keys %arg or croak "Unknown options " . join(",", keys %arg);
 
-    $self;
+	$self;
 }
 
 =method parse [STRING]
@@ -47,11 +51,11 @@ Set the new text, which is empty when no STRING is provided.
 =cut
 
 sub parse
-{   my $self = shift;
-    $self->{Text} = shift || "";
-    $self;
+{	my $self = shift;
+	$self->{Text} = shift || "";
+	$self;
 }
 
-sub stringify { shift->{Text} }
+sub stringify { $_[0]->{Text} }
 
 1;

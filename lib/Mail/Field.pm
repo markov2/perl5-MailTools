@@ -1,32 +1,35 @@
-# This code is part of the bundle MailTools.  Meta-POD processed with
-# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
-# Licensed under the same terms as Perl itself.
+#oodist: *** DO NOT USE THIS VERSION FOR PRODUCTION ***
+#oodist: This file contains OODoc-style documentation which will get stripped
+#oodist: during its release in the distribution.  You can use this file for
+#oodist: testing, however the code of this development version may be broken!
 
 package Mail::Field;
 
 use strict;
+use warnings;
 
 use Carp;
-use Mail::Field::Generic;
+use Mail::Field::Generic  ();
 
+#--------------------
 =chapter NAME
 
 Mail::Field - base-class for manipulation of mail header fields
 
 =chapter SYNOPSIS
 
- use Mail::Field;
-    
- my $field = Mail::Field->new('Subject', 'some subject text');
- my $field = Mail::Field->new(Subject => 'some subject text');
- print $field->tag,": ",$field->stringify,"\n";
+  use Mail::Field;
 
- my $field = Mail::Field->subject('some subject text');
+  my $field = Mail::Field->new('Subject', 'some subject text');
+  my $field = Mail::Field->new(Subject => 'some subject text');
+  print $field->tag,": ",$field->stringify,"\n";
+
+  my $field = Mail::Field->subject('some subject text');
 
 =chapter DESCRIPTION
 
 C<Mail::Field> creates and manipulates fields in MIME headers, collected
-within a M<Mail::Header> object.  Different field types have their
+within a Mail::Header object.  Different field types have their
 own sub-class (extension), defining additional useful accessors to the
 field content.
 
@@ -37,90 +40,90 @@ MailTools, to maintain a consistent set of packages and documentation.
 =cut
 
 sub _header_pkg_name
-{   my $header = lc shift;
-    $header    =~ s/((\b|_)\w)/\U$1/g;
+{	my $header = lc shift;
+	$header    =~ s/((\b|_)\w)/\U$1/g;
 
-    if(length($header) > 8)
-    {   my @header = split /[-_]+/, $header;
-        my $chars  = int((7 + @header) / @header) || 1;
-        $header    = substr join('', map {substr $_,0,$chars} @header), 0, 8;
-    }
-    else
-    {   $header =~ s/[-_]+//g;
-    }
+	if(length($header) > 8)
+	{	my @header = split /[-_]+/, $header;
+		my $chars  = int((7 + @header) / @header) || 1;
+		$header    = substr join('', map {substr $_,0,$chars} @header), 0, 8;
+	}
+	else
+	{	$header =~ s/[-_]+//g;
+	}
 
-    'Mail::Field::' . $header;
+	'Mail::Field::' . $header;
 }
 
 sub _require_dir
-{   my($class, $dir, $dir_sep) = @_;
+{	my($class, $dir, $dir_sep) = @_;
 
-    local *DIR;
-    opendir DIR, $dir
-        or return;
+	local *DIR;
+	opendir DIR, $dir
+		or return;
 
-    my @inc;
-    foreach my $f (readdir DIR)
-    {   $f =~ /^([\w\-]+)/ or next;
-        my $p = $1;
-        my $n = "$dir$dir_sep$p";
+	my @inc;
+	foreach my $f (readdir DIR)
+	{	$f =~ /^([\w\-]+)/ or next;
+		my $p = $1;
+		my $n = "$dir$dir_sep$p";
 
-        if(-d $n )
-        {   _require_dir("${class}::$f", $n, $dir_sep);
-        }
-        else
-        {   $p =~ s/-/_/go;
-            eval "require ${class}::$p";
+		if(-d $n )
+		{	_require_dir("${class}::$f", $n, $dir_sep);
+		}
+		else
+		{	$p =~ s/-/_/go;
+			eval "require ${class}::$p";
 
-            # added next warning in 2.14, may be ignored for ancient code
-            warn $@ if $@;
-        }
-    }
-    closedir DIR;
+			# added next warning in 2.14, may be ignored for ancient code
+			warn $@ if $@;
+		}
+	}
+	closedir DIR;
 }
 
 sub import
-{   my $class = shift;
+{	my $class = shift;
 
-    if(@_)
-    {   local $_;
-        eval "require " . _header_pkg_name($_) || die $@
-            for @_;
-        return;
-    }
+	if(@_)
+	{	local $_;
+		eval "require " . _header_pkg_name($_) || die $@
+			for @_;
+		return;
+	}
 
-    my ($dir, $dir_sep);
-    foreach my $f (grep defined $INC{$_}, keys %INC)
-    {   next if $f !~ /^Mail(\W)Field\W/i;
-        $dir_sep = $1;
+	my ($dir, $dir_sep);
+	foreach my $f (grep defined $INC{$_}, keys %INC)
+	{	next if $f !~ /^Mail(\W)Field\W/i;
+		$dir_sep = $1;
 # $dir = ($INC{$f} =~ /(.*Mail\W+Field)/i)[0] . $dir_sep;
-        ($dir = $INC{$f}) =~ s/(Mail\W+Field).*/$1$dir_sep/;
-        last;
-    }
+		($dir = $INC{$f}) =~ s/(Mail\W+Field).*/$1$dir_sep/;
+		last;
+	}
 
-    _require_dir('Mail::Field', $dir, $dir_sep);
+	_require_dir('Mail::Field', $dir, $dir_sep);
 }
 
 # register a header class, this creates a new method in Mail::Field
 # which will call new on that class
 sub register
-{   my $thing  = shift;
-    my $method = lc shift;
-    my $class  = shift || ref($thing) || $thing;
+{	my $thing  = shift;
+	my $method = lc shift;
+	my $class  = shift || ref($thing) || $thing;
 
-    $method    =~ tr/-/_/;
-    $class     = _header_pkg_name $method
-	if $class eq "Mail::Field";
+	$method    =~ tr/-/_/;
+	$class     = _header_pkg_name $method
+		if $class eq "Mail::Field";
 
-    croak "Re-register of $method"
-	if Mail::Field->can($method);
+	! Mail::Field->can($method)
+		or croak "Re-register of $method";
 
-    no strict 'refs';
-    *{$method} = sub {
-	shift;
-	$class->can('stringify') or eval "require $class" or die $@;
-	$class->_build(@_);
-    };
+	no strict 'refs';
+	*{$method} = sub {
+		shift;
+		$class->can('stringify') or eval "require $class" or die $@;
+		$class->_build(@_);
+	};
 }
 
 # the *real* constructor
@@ -128,11 +131,11 @@ sub register
 # otherwise the `create' method is called
 
 sub _build
-{   my $self = bless {}, shift;
-    @_==1 ? $self->parse(@_) : $self->create(@_);
+{	my $self = bless {}, shift;
+	@_==1 ? $self->parse(@_) : $self->create(@_);
 }
 
-#-------------
+#--------------------
 =section Constructors
 Mail::Field (and it's sub-classes) define several methods which return
 new objects. These can all be categorized as constructor.
@@ -148,47 +151,45 @@ class of the field object.
 =cut
 
 sub new
-{   my $class = shift;
-    my $field = lc shift;
-    $field =~ tr/-/_/;
-    $class->$field(@_);
+{	my $class = shift;
+	my $field = lc shift;
+	$field =~ tr/-/_/;
+	$class->$field(@_);
 }
 
 =c_method combine $fields
-
 Take a LIST of C<Mail::Field> objects (which should all be of the same
 sub-class) and create a new object in that same class.
-
 =cut
 
 sub combine {confess "Combine not implemented" }
 
 our $AUTOLOAD;
 sub AUTOLOAD
-{   my $method = $AUTOLOAD;
-    $method    =~ s/.*:://;
+{	my $method = $AUTOLOAD;
+	$method    =~ s/.*:://;
 
-    $method    =~ /^[^A-Z\x00-\x1f\x80-\xff :]+$/
-        or croak "Undefined subroutine &$AUTOLOAD called";
+	$method    =~ /^[^A-Z\x00-\x1f\x80-\xff :]+$/
+		or croak "Undefined subroutine &$AUTOLOAD called";
 
-    my $class = _header_pkg_name $method;
+	my $class = _header_pkg_name $method;
 
-    unless(eval "require $class")
-    {   my $tag = $method;
-        $tag    =~ s/_/-/g;
-        $tag    = join '-',
-            map { /^[b-df-hj-np-tv-z]+$|^MIME$/i ? uc($_) : ucfirst(lc $_) }
-                split /\-/, $tag;
+	unless(eval "require $class")
+	{	my $tag = $method;
+		$tag    =~ s/_/-/g;
+		$tag    = join '-',
+			map { /^[b-df-hj-np-tv-z]+$|^MIME$/i ? uc($_) : ucfirst(lc $_) }
+				split /\-/, $tag;
 
-        no strict;
-        @{"${class}::ISA"} = qw(Mail::Field::Generic);
-        *{"${class}::tag"} = sub { $tag };
-    }
+		no strict;
+		@{"${class}::ISA"} = qw(Mail::Field::Generic);
+		*{"${class}::tag"} = sub { $tag };
+	}
 
-    Mail::Field->can($method)
-        or $class->register($method);
+	Mail::Field->can($method)
+		or $class->register($method);
 
-    goto &$AUTOLOAD;
+	goto &$AUTOLOAD;
 }
 
 =c_method extract $tag, $head [, $index ]
@@ -208,30 +209,30 @@ C<Mail::Field> objects will be returned.
 
 # Of course, the functionality should have been in the Mail::Header class
 sub extract
-{   my ($class, $tag, $head) = (shift, shift, shift);
+{	my ($class, $tag, $head) = (shift, shift, shift);
 
-    my $method = lc $tag;
-    $method    =~ tr/-/_/;
+	my $method = lc $tag;
+	$method    =~ tr/-/_/;
 
-    if(@_==0 && wantarray)
-    {   my @ret;
-        my $text;  # need real copy!
-        foreach $text ($head->get($tag))
-        {   chomp $text;
-            push @ret, $class->$method($text);
-        }
-        return @ret;
-    }
+	if(@_==0 && wantarray)
+	{	my @ret;
+		my $text;  # need real copy!
+		foreach $text ($head->get($tag))
+		{	chomp $text;
+			push @ret, $class->$method($text);
+		}
+		return @ret;
+	}
 
-    my $idx  = shift || 0;
-    my $text = $head->get($tag,$idx)
-        or return undef;
+	my $idx  = shift || 0;
+	my $text = $head->get($tag,$idx)
+		or return undef;
 
-    chomp $text;
-    $class->$method($text);
+	chomp $text;
+	$class->$method($text);
 }
 
-#-------------
+#--------------------
 =section "Fake" constructors
 
 =method create %options
@@ -243,46 +244,46 @@ replaced.
 # before 2.00, this method could be called as class method, however
 # not all extensions supported that.
 sub create
-{   my ($self, %arg) = @_;
-    %$self = ();
-    $self->set(\%arg);
+{	my ($self, %arg) = @_;
+	%$self = ();
+	$self->set(\%arg);
 }
 
-=method parse 
+=method parse
 Parse a field line.
 =cut
 
 # before 2.00, this method could be called as class method, however
 # not all extensions supported that.
 sub parse
-{   my $class = ref shift;
-    confess "parse() not implemented";
+{	my $class = ref shift;
+	confess "parse() not implemented";
 }
 
-#-------------
+#--------------------
 =section Accessors
 
-=method stringify 
+=method stringify
 Returns the field as a string.
 =cut
 
-sub stringify { confess "stringify() not implemented" } 
+sub stringify { confess "stringify() not implemented" }
 
-=ci_method tag 
+=ci_method tag
 Return the tag (in the correct case) for this item.  Well, actually any
 casing is OK, because the field tags are treated case-insensitive; however
 people have some preferences.
 =cut
 
 sub tag
-{   my $thing = shift;
-    my $tag   = ref($thing) || $thing;
-    $tag =~ s/.*:://;
-    $tag =~ s/_/-/g;
+{	my $thing = shift;
+	my $tag   = ref($thing) || $thing;
+	$tag =~ s/.*:://;
+	$tag =~ s/_/-/g;
 
-    join '-',
-        map { /^[b-df-hj-np-tv-z]+$|^MIME$/i ? uc($_) : ucfirst(lc $_) }
-            split /\-/, $tag;
+	join '-',
+		map { /^[b-df-hj-np-tv-z]+$|^MIME$/i ? uc($_) : ucfirst(lc $_) }
+			split /\-/, $tag;
 }
 
 =method set %options
@@ -294,7 +295,7 @@ sub set(@) { confess "set() not implemented" }
 # prevent the calling of AUTOLOAD for DESTROY :-)
 sub DESTROY {}
 
-#-------------
+#--------------------
 =section Smart accessors
 
 =method text [STRING]
@@ -306,11 +307,11 @@ this method does not add additional processing.
 =cut
 
 sub text
-{   my $self = shift;
-    @_ ? $self->parse(@_) : $self->stringify;
+{	my $self = shift;
+	@_ ? $self->parse(@_) : $self->stringify;
 }
 
-#-------------
+#--------------------
 =chapter DETAILS
 
 =section SUB-CLASS PACKAGE NAMES
@@ -334,7 +335,7 @@ N characters from each element.
 =item *
 N is calculated by using the formula :-
 
-    int((7 + #elements) / #elements)
+  int((7 + #elements) / #elements)
 
 =item *
 I<name> is then limited to a maximum of 8 characters, keeping the first 8
@@ -342,7 +343,7 @@ characters.
 
 =back
 
-For an example of this take a look at the definition of the 
+For an example of this take a look at the definition of the
 C<_header_pkg_name()> subroutine in C<Mail::Field>
 
 =cut

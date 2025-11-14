@@ -1,11 +1,14 @@
-# This code is part of the bundle MailTools.  Meta-POD processed with
-# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
-# Licensed under the same terms as Perl itself.
+#oodist: *** DO NOT USE THIS VERSION FOR PRODUCTION ***
+#oodist: This file contains OODoc-style documentation which will get stripped
+#oodist: during its release in the distribution.  You can use this file for
+#oodist: testing, however the code of this development version may be broken!
 
 package Mail::Util;
 use base 'Exporter';
 
 use strict;
+use warnings;
+
 use Carp;
 
 our @EXPORT_OK = qw(read_mbox maildomain mailaddress);
@@ -13,9 +16,9 @@ our @EXPORT_OK = qw(read_mbox maildomain mailaddress);
 sub Version { our $VERSION }
 
 my ($domain, $mailaddress);
-my @sendmailcf = qw(/etc /etc/sendmail /etc/ucblib
-    /etc/mail /usr/lib /var/adm/sendmail);
+my @sendmailcf = qw(/etc /etc/sendmail /etc/ucblib /etc/mail /usr/lib /var/adm/sendmail);
 
+#--------------------
 =chapter NAME
 
 Mail::Util - mail utility functions
@@ -39,55 +42,48 @@ Each reference is a reference to an array containing one message.
 WARNING:
 This method does not quote lines which accidentally also start with the
 message separator C<From>, so this implementation can be considered
-broken.  See M<Mail::Box::Mbox>
+broken.  See Mail::Box::Mbox
 =cut
 
 sub read_mbox($)
-{   my $file  = shift;
+{	my $file  = shift;
 
-    local *FH;
-    open FH,'<', $file
-	or croak "cannot open '$file': $!\n";
+	local *FH;
+	open FH, '<', $file
+		or croak "cannot open '$file': $!\n";
 
-    local $_;
-    my @mbox;
-    my $mail  = [];
-    my $blank = 1;
+	local $_;
+	my @mbox;
+	my $mail  = [];
+	my $blank = 1;
 
-    while(<FH>)
-    {   if($blank && /^From .*\d{4}/)
-        {   push @mbox, $mail if @$mail;
-            $mail  = [ $_ ];
-            $blank = 0;
-        }
-        else
-        {   $blank = m/^$/ ? 1 : 0;
-            push @$mail, $_;
-        }
-    }
+	while(<FH>)
+	{	if($blank && /^From .*\d{4}/)
+		{	push @mbox, $mail if @$mail;
+			$mail  = [ $_ ];
+			$blank = 0;
+		}
+		else
+		{	$blank = m/^$/ ? 1 : 0;
+			push @$mail, $_;
+		}
+	}
 
-    push @mbox, $mail if @$mail;
-    close FH;
+	push @mbox, $mail if @$mail;
+	close FH;
 
-    wantarray ? @mbox : \@mbox;
+	wantarray ? @mbox : \@mbox;
 }
 
-=function maildomain 
-Attempt to determine the current user mail domain string via the following
-methods
+=function maildomain
+Attempt to determine the current user mail domain string via the following methods:
 
 =over 4
-
 =item * Look for the MAILDOMAIN environment variable, which can be set from outside the program.  This is by far the best way to configure the domain.
-
 =item * Look for a sendmail.cf file and extract DH parameter
-
 =item * Look for a smail config file and usr the first host defined in hostname(s)
-
 =item * Try an SMTP connect (if Net::SMTP exists) first to mailhost then localhost
-
 =item * Use value from Net::Domain::domainname (if Net::Domain exists)
-
 =back
 
 WARNING:
@@ -95,80 +91,80 @@ On modern machines, there is only one good way to provide information to
 this method: the first; always explicitly configure the MAILDOMAIN.
 
 =example
- # in your main script
- $ENV{MAILDOMAIN} = 'example.com';
+  # in your main script
+  $ENV{MAILDOMAIN} = 'example.com';
 
- # everywhere else
- use Mail::Util 'maildomain';
- print maildomain;
+  # everywhere else
+  use Mail::Util 'maildomain';
+  print maildomain;
 =cut
 
 sub maildomain()
-{   return $domain
+{	return $domain
 	if defined $domain;
 
-    $domain = $ENV{MAILDOMAIN}
-        and return $domain;
+	$domain = $ENV{MAILDOMAIN}
+		and return $domain;
 
-    # Try sendmail configuration file
+	# Try sendmail configuration file
 
-    my $config = (grep -r, map {"$_/sendmail.cf"} @sendmailcf)[0];
+	my $config = (grep -r, map {"$_/sendmail.cf"} @sendmailcf)[0];
 
-    local *CF;
-    local $_;
-    if(defined $config && open CF, '<', $config)
-    {   my %var;
-	while(<CF>)
-        {   if(my ($v, $arg) = /^D([a-zA-Z])([\w.\$\-]+)/)
-            {   $arg =~ s/\$([a-zA-Z])/exists $var{$1} ? $var{$1} : '$'.$1/eg;
-		$var{$v} = $arg;
-	    }
+	local *CF;
+	local $_;
+	if(defined $config && open CF, '<', $config)
+	{	my %var;
+		while(<CF>) {
+			if(my ($v, $arg) = /^D([a-zA-Z])([\w.\$\-]+)/)
+			{	$arg =~ s/\$([a-zA-Z])/exists $var{$1} ? $var{$1} : '$'.$1/eg;
+				$var{$v} = $arg;
+			}
+		}
+		close CF;
+		$domain = $var{j} if defined $var{j};
+		$domain = $var{M} if defined $var{M};
+
+		$domain = $1
+			if $domain && $domain =~ m/([A-Za-z0-9](?:[\.\-A-Za-z0-9]+))/;
+
+		return $domain
+			if defined $domain && $domain !~ /\$/;
 	}
-	close CF;
-	$domain = $var{j} if defined $var{j};
-	$domain = $var{M} if defined $var{M};
 
-        $domain = $1
-            if $domain && $domain =~ m/([A-Za-z0-9](?:[\.\-A-Za-z0-9]+))/;
+	# Try smail config file if exists
 
-	return $domain
-	    if defined $domain && $domain !~ /\$/;
-    }
+	if(open CF, '<', "/usr/lib/smail/config")
+	{	while(<CF>)
+		{	if( /\A\s*hostnames?\s*=\s*(\S+)/ )
+			{	$domain = (split /\:/,$1)[0];
+				last;
+			}
+		}
+		close CF;
 
-    # Try smail config file if exists
-
-    if(open CF, '<', "/usr/lib/smail/config")
-    {   while(<CF>)
-        {   if( /\A\s*hostnames?\s*=\s*(\S+)/ )
-            {   $domain = (split /\:/,$1)[0];
-		last;
-	    }
+		return $domain
+			if defined $domain;
 	}
-	close CF;
 
-	return $domain
-	    if defined $domain;
-    }
+	# Try a SMTP connection to 'mailhost'
 
-    # Try a SMTP connection to 'mailhost'
-
-    if(eval {require Net::SMTP})
-    {   foreach my $host (qw(mailhost localhost))
-        {   # hosts are local, so short timeout
-            my $smtp = eval { Net::SMTP->new($host, Timeout => 5) };
-	    if(defined $smtp)
-            {   $domain = $smtp->domain;
-		$smtp->quit;
-		last;
-	    }
+	if(eval {require Net::SMTP})
+	{	foreach my $host (qw(mailhost localhost))
+		{	# hosts are local, so short timeout
+			my $smtp = eval { Net::SMTP->new($host, Timeout => 5) };
+			if(defined $smtp)
+			{	$domain = $smtp->domain;
+				$smtp->quit;
+				last;
+			}
+		}
 	}
-    }
 
-    # Use internet(DNS) domain name, if it can be found
-    $domain = Net::Domain::domainname()
-        if !defined $domain && eval {require Net::Domain};
+	# Use internet(DNS) domain name, if it can be found
+	$domain = Net::Domain::domainname()
+		if !defined $domain && eval {require Net::Domain};
 
-    $domain ||= "localhost";
+	$domain ||= "localhost";
 }
 
 =function mailaddress [$address]
@@ -185,43 +181,40 @@ the "automatic detection", even when that produces a correct address
 (on the moment)
 
 =example
- # in your main script
- $ENV{MAILADDRESS} = 'me@example.com';
+  # in your main script
+  $ENV{MAILADDRESS} = 'me@example.com';
 
- # everywhere else
- use Mail::Util 'mailaddress';
- print mailaddress;
+  # everywhere else
+  use Mail::Util 'mailaddress';
+  print mailaddress;
 
- # since v2.10
- mailaddress "me@example.com";
+  # since v2.10
+  mailaddress "me@example.com";
 =cut
 
 sub mailaddress(;$)
-{   $mailaddress = shift if @_;
+{	$mailaddress = shift if @_;
+	return $mailaddress if defined $mailaddress;
 
-    return $mailaddress
-        if defined $mailaddress;
+	# Get user name from environment
+	$mailaddress = $ENV{MAILADDRESS};
 
-    # Get user name from environment
-    $mailaddress = $ENV{MAILADDRESS};
+	unless($mailaddress || $^O ne 'MacOS')
+	{	require Mac::InternetConfig;
 
-    unless($mailaddress || $^O ne 'MacOS')
-    {   require Mac::InternetConfig;
+		no strict;
+		Mac::InternetConfig->import;
+		$mailaddress = $InternetConfig{kICEmail()};
+	}
 
-        no strict;
-	Mac::InternetConfig->import;
-	$mailaddress = $InternetConfig{kICEmail()};
-    }
+	$mailaddress ||= $ENV{USER} || $ENV{LOGNAME} || eval {getpwuid $>} ||  "postmaster";
 
-    $mailaddress ||= $ENV{USER} || $ENV{LOGNAME} || eval {getpwuid $>}
-                 ||  "postmaster";
+	# Add domain if it does not exist
+	$mailaddress .= '@' . maildomain
+		if $mailaddress !~ /\@/;
 
-    # Add domain if it does not exist
-    $mailaddress .= '@' . maildomain
-	if $mailaddress !~ /\@/;
-
-    $mailaddress =~ s/(^.*<|>.*$)//g;
-    $mailaddress;
+	$mailaddress =~ s/(^.*<|>.*$)//g;
+	$mailaddress;
 }
 
 1;

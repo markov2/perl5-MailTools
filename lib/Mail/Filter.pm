@@ -1,27 +1,31 @@
-# This code is part of the bundle MailTools.  Meta-POD processed with
-# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
-# Licensed under the same terms as Perl itself.
+#oodist: *** DO NOT USE THIS VERSION FOR PRODUCTION ***
+#oodist: This file contains OODoc-style documentation which will get stripped
+#oodist: during its release in the distribution.  You can use this file for
+#oodist: testing, however the code of this development version may be broken!
 
 package Mail::Filter;
 
 use strict;
+use warnings;
+
 use Carp;
 
+#--------------------
 =chapter NAME
 
 Mail::Filter - filter mail through multiple subroutines
 
 =chapter SYNOPSIS
 
- use Mail::Filter;
-    
- my $filter = Mail::Filter->new( \&filter1, \&filter2 );
-    
- my $mail   = Mail::Internet->new( [<>] );
- my $mail   = $filter->filter($mail);
+  use Mail::Filter;
 
- my $folder = Mail::Folder->new( .... );
- my $filter->filter($folder);
+  my $filter = Mail::Filter->new( \&filter1, \&filter2 );
+
+  my $mail   = Mail::Internet->new( [<>] );
+  my $mail   = $filter->filter($mail);
+
+  my $folder = Mail::Folder->new( .... );
+  my $filter->filter($folder);
 
 =chapter DESCRIPTION
 
@@ -36,8 +40,8 @@ The result from each filter sub is passed to the next filter as the mail
 object. If a filter subroutine returns undef, then C<Mail::Filter> will abort
 and return immediately.
 
-The function returns the result from the last subroutine to operate on the 
-mail object.  
+The function returns the result from the last subroutine to operate on the
+mail object.
 
 =chapter METHODS
 
@@ -51,80 +55,81 @@ on the <Mail::Filter> object.
 =cut
 
 sub new(@)
-{   my $class = shift;
-    bless { filters => [ @_ ] }, $class;
+{	my $class = shift;
+	bless +{ filters => [ @_ ] }, $class;
 }
 
-#------------
+#--------------------
 =section Accessors
 =method add @filters
 Add the given @filters to the end of the filter list.
 =cut
 
 sub add(@)
-{   my $self = shift;
-    push @{$self->{filters}}, @_;
+{	my $self = shift;
+	push @{$self->{filters}}, @_;
 }
 
-#------------
+#--------------------
 =section Processing
 
 =method filter $mail|$folder
-If the first argument is a M<Mail::Internet> object, then this object will
-be passed through the filter list. If the first argument is a M<Mail::Folder>
+If the first argument is a Mail::Internet object, then this object will
+be passed through the filter list. If the first argument is a Mail::Folder
 object, then each message in turn will be passed through the filter list.
 =cut
 
 sub _filter($)
-{   my ($self, $mail) = @_;
+{	my ($self, $mail) = @_;
 
-    foreach my $sub ( @{$self->{filters}} )
-    {   my $mail
-          = ref $sub eq 'CODE' ? $sub->($self,$mail)
-	  : !ref $sub          ? $self->$sub($mail)
-	  : carp "Cannot call filter '$sub', ignored";
+	foreach my $sub ( @{$self->{filters}} )
+	{	my $mail
+		  = ref $sub eq 'CODE' ? $sub->($self,$mail)
+		  : !ref $sub          ? $self->$sub($mail)
+		  :     carp "Cannot call filter '$sub', ignored";
 
-	ref $mail or last;
-    }
-
-    $mail;
-}
-
-sub filter
-{   my ($self, $obj) = @_;
-    if($obj->isa('Mail::Folder'))
-    {   $self->{folder} = $obj;
-	foreach my $m ($obj->message_list)
-	{   my $mail = $obj->get_message($m) or next;
-	    $self->{msgnum} = $m;
-	    $self->_filter($mail);
+		ref $mail or last;
 	}
-	delete $self->{folder};
-	delete $self->{msgnum};
-    }
-    elsif($obj->isa('Mail::Internet'))
-    {   return $self->filter($obj);
-    }
-    else
-    {   carp "Cannot process '$obj'";
-	return undef;
-    }
+
+	$mail;
 }
 
-=method folder 
-While the M<filter()> method is called with a M<Mail::Folder> object, these
+sub filter($)
+{	my ($self, $obj) = @_;
+
+	if($obj->isa('Mail::Folder'))
+	{	$self->{folder} = $obj;
+		foreach my $m ($obj->message_list)
+		{	my $mail = $obj->get_message($m) or next;
+			$self->{msgnum} = $m;
+			$self->_filter($mail);
+		}
+		delete $self->{folder};
+		delete $self->{msgnum};
+	}
+	elsif($obj->isa('Mail::Internet'))
+	{	return $self->filter($obj);
+	}
+	else
+	{	carp "Cannot process '$obj'";
+		return undef;
+	}
+}
+
+=method folder
+While the M<filter()> method is called with a Mail::Folder object, these
 filter subroutines can call this method to obtain the folder object that is
 being processed.
 =cut
 
-sub folder() {shift->{folder}}
+sub folder() { $_[0]->{folder} }
 
-=method msgnum 
-If the M<filter()> method is called with a M<Mail::Folder> object, then the
+=method msgnum
+If the M<filter()> method is called with a Mail::Folder object, then the
 filter subroutines may call this method to obtain the message number
 of the message that is being processed.
 =cut
 
-sub msgnum() {shift->{msgnum}}
+sub msgnum() { $_[0]->{msgnum} }
 
 1;

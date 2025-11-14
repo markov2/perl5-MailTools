@@ -1,11 +1,13 @@
-# This code is part of the bundle MailTools.  Meta-POD processed with
-# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
-# Licensed under the same terms as Perl itself.
+#oodist: *** DO NOT USE THIS VERSION FOR PRODUCTION ***
+#oodist: This file contains OODoc-style documentation which will get stripped
+#oodist: during its release in the distribution.  You can use this file for
+#oodist: testing, however the code of this development version may be broken!
 
 package Mail::Mailer::testfile;
 use base 'Mail::Mailer::rfc822';
 
 use strict;
+use warnings;
 
 use Mail::Util qw/mailaddress/;
 
@@ -13,20 +15,20 @@ my $num = 0;
 sub can_cc() { 0 }
 
 sub exec($$$)
-{   my ($self, $exe, $args, $to) = @_;
+{	my ($self, $exe, $args, $to) = @_;
 
-    my $outfn = $Mail::Mailer::testfile::config{outfile} || 'mailer.testfile';
-    open F, '>>', $outfn
-        or die "Cannot append message to testfile $outfn: $!";
+	my $outfn = $Mail::Mailer::testfile::config{outfile} || 'mailer.testfile';
+	open F, '>>', $outfn
+		or die "Cannot append message to testfile $outfn: $!";
 
-    print F "\n===\ntest ", ++$num, " ", (scalar localtime),
-            "\nfrom: " . mailaddress(),
-            "\nto: " . join(' ',@{$to}), "\n\n";
-    close F;
+	print F "\n===\ntest ", ++$num, " ", (scalar localtime),
+			"\nfrom: " . mailaddress(),
+			"\nto: " . join(' ', @$to), "\n\n";
+	close F;
 
-    untie *$self if tied *$self;
-    tie *$self, 'Mail::Mailer::testfile::pipe', $self;
-    $self;
+	untie *$self if tied *$self;
+	tie *$self, 'Mail::Mailer::testfile::pipe', $self;
+	$self;
 }
 
 sub close { 1 }
@@ -34,15 +36,15 @@ sub close { 1 }
 package Mail::Mailer::testfile::pipe;
 
 sub TIEHANDLE
-{   my ($class, $self) = @_;
-    bless \$self, $class;
+{	my ($class, $self) = @_;
+	bless \$self, $class;
 }
 
 sub PRINT
-{   my $self = shift;
-    open F, '>>', $Mail::Mailer::testfile::config{outfile} || 'mailer.testfile';
-    print F @_;
-    close F;
+{	my $self = shift;
+	open F, '>>', $Mail::Mailer::testfile::config{outfile} || 'mailer.testfile';
+	print F @_;
+	close F;
 }
 
 1;

@@ -1,102 +1,103 @@
-# This code is part of the bundle MailTools.  Meta-POD processed with
-# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
-# Licensed under the same terms as Perl itself.
+#oodist: *** DO NOT USE THIS VERSION FOR PRODUCTION ***
+#oodist: This file contains OODoc-style documentation which will get stripped
+#oodist: during its release in the distribution.  You can use this file for
+#oodist: testing, however the code of this development version may be broken!
 
 package Mail::Mailer::smtp;
 use base 'Mail::Mailer::rfc822';
 
 use strict;
+use warnings;
 
 use Net::SMTP;
-use Mail::Util qw(mailaddress);
+use Mail::Util qw/mailaddress/;
 use Carp;
 
 sub can_cc { 0 }
 
 sub exec {
-    my ($self, $exe, $args, $to) = @_;
-    my %opt   = @$args;
-    my $host  = $opt{Server} || undef;
-    $opt{Debug} ||= 0;
+	my ($self, $exe, $args, $to) = @_;
+	my %opt   = @$args;
+	my $host  = $opt{Server} || undef;
+	$opt{Debug} ||= 0;
 
-    my $smtp = Net::SMTP->new($host, %opt)
-        or return undef;
+	my $smtp = Net::SMTP->new($host, %opt)
+		or return undef;
 
-    if($opt{StartTLS})
-    {   $smtp->starttls
-            or return undef;
-    }
+	if($opt{StartTLS})
+	{	$smtp->starttls
+			or return undef;
+	}
 
-    if($opt{Auth})
-    {   $smtp->auth(@{$opt{Auth}})
-           or return undef;
-    }
+	if($opt{Auth})
+	{	$smtp->auth(@{$opt{Auth}})
+			or return undef;
+	}
 
-    ${*$self}{sock} = $smtp;
+	${*$self}{sock} = $smtp;
 
-    $smtp->mail($opt{From} || mailaddress());
-    $smtp->to($_) for @$to;
-    $smtp->data;
+	$smtp->mail($opt{From} || mailaddress());
+	$smtp->to($_) for @$to;
+	$smtp->data;
 
-    untie *$self if tied *$self;
-    tie *$self, 'Mail::Mailer::smtp::pipe', $self;
-    $self;
+	untie *$self if tied *$self;
+	tie *$self, 'Mail::Mailer::smtp::pipe', $self;
+	$self;
 }
 
 sub set_headers($)
-{   my ($self, $hdrs) = @_;
-    $self->SUPER::set_headers
-     ( { From => "<" . mailaddress() . ">"
-       , %$hdrs
-       , 'X-Mailer' => "Mail::Mailer[v$Mail::Mailer::VERSION] Net::SMTP[v$Net::SMTP::VERSION]"
-       }
-     );
+{	my ($self, $hdrs) = @_;
+	$self->SUPER::set_headers( {
+		From => "<" . mailaddress() . ">",
+		%$hdrs,
+		'X-Mailer' => "Mail::Mailer[v$Mail::Mailer::VERSION] Net::SMTP[v$Net::SMTP::VERSION]",
+	});
 }
 
 sub epilogue()
-{   my $self = shift;
-    my $sock = ${*$self}{sock};
+{	my $self = shift;
+	my $sock = ${*$self}{sock};
 
-    my $ok = $sock->dataend;
-    $sock->quit;
+	my $ok = $sock->dataend;
+	$sock->quit;
 
-    delete ${*$self}{sock};
-    untie *$self;
-    $ok;
+	delete ${*$self}{sock};
+	untie *$self;
+	$ok;
 }
 
 sub close(@)
-{   my ($self, @to) = @_;
-    my $sock = ${*$self}{sock};
+{	my ($self, @to) = @_;
+	my $sock = ${*$self}{sock};
 
-    $sock && fileno $sock
-        or return 1;
+	$sock && fileno $sock
+		or return 1;
 
-    my $ok = $self->epilogue;
+	my $ok = $self->epilogue;
 
-    # Epilogue should destroy the SMTP filehandle,
-    # but just to be on the safe side.
-    $sock && fileno $sock
-        or return $ok;
+	# Epilogue should destroy the SMTP filehandle,
+	# but just to be on the safe side.
+	$sock && fileno $sock
+		or return $ok;
 
-    close $sock
-        or croak 'Cannot destroy socket filehandle';
+	close $sock
+		or croak 'Cannot destroy socket filehandle';
 
-    $ok;
+	$ok;
 }
 
 package Mail::Mailer::smtp::pipe;
 
 sub TIEHANDLE
-{   my ($class, $self) = @_;
-    my $sock = ${*$self}{sock};
-    bless \$sock, $class;
+{	my ($class, $self) = @_;
+	my $sock = ${*$self}{sock};
+	bless \$sock, $class;
 }
 
 sub PRINT
-{   my $self = shift;
-    my $sock = $$self;
-    $sock->datasend( @_ );
+{	my $self = shift;
+	my $sock = $$self;
+	$sock->datasend( @_ );
 }
 
 1;

@@ -1,6 +1,7 @@
-# This code is part of the bundle MailTools.  Meta-POD processed with
-# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
-# Licensed under the same terms as Perl itself.
+#oodist: *** DO NOT USE THIS VERSION FOR PRODUCTION ***
+#oodist: This file contains OODoc-style documentation which will get stripped
+#oodist: during its release in the distribution.  You can use this file for
+#oodist: testing, however the code of this development version may be broken!
 
 package Mail::Mailer::rfc822;
 use base 'Mail::Mailer';
@@ -11,17 +12,17 @@ use strict;
 my %max_once = map +($_ => 1), qw/from to cc bcc reply-to/;
 
 sub set_headers
-{   my ($self, $hdrs) = @_;
-    local $\ = "";
+{	my ($self, $hdrs) = @_;
+	local $\ = "";
 
-    foreach my $f (grep /^[A-Z]/, keys %$hdrs)
-    {   # s///r requires perl 5.12: too new :-)
-        my @h = map { my $h = $_; $h =~ s/\n+\Z//; $h } $self->to_array($hdrs->{$f});
-        @h = join ', ', @h if @h && $max_once{lc $f};
-        print $self "$f: $_\n" for @h;
-    }
+	foreach my $f (grep /^[A-Z]/, keys %$hdrs)
+	{	# s///r requires perl 5.12: too new :-)
+		my @h = map { my $h = $_; $h =~ s/\n+\Z//; $h } $self->to_array($hdrs->{$f});
+		@h = join ', ', @h if @h && $max_once{lc $f};
+		print $self "$f: $_\n" for @h;
+	}
 
-    print $self "\n";  # end of headers
+	print $self "\n";  # end of headers
 }
 
 1;

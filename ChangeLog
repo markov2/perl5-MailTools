@@ -11,6 +11,8 @@ version 2.22: Mon 18 Nov 11:08:22 CET 2024
 
 	Improvements:
 	- add .gitignore
+	- convert install to OODoc 3.05
+	- restyle to OODoc 3
 
 version 2.21: Tue 21 May 16:26:30 CEST 2019
 

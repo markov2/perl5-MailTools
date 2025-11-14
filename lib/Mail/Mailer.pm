@@ -1,17 +1,20 @@
-# This code is part of the bundle MailTools.  Meta-POD processed with
-# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
-# Licensed under the same terms as Perl itself.
+#oodist: *** DO NOT USE THIS VERSION FOR PRODUCTION ***
+#oodist: This file contains OODoc-style documentation which will get stripped
+#oodist: during its release in the distribution.  You can use this file for
+#oodist: testing, however the code of this development version may be broken!
 
 package Mail::Mailer;
 use base 'IO::Handle';
 
 use strict;
-use POSIX qw/_exit/;
+use warnings;
+
+use POSIX    qw/_exit/;
 
 use Carp;
 use Config;
 
-#--------------
+#--------------------
 =chapter NAME
 
 Mail::Mailer - send simple emails
@@ -41,10 +44,10 @@ Use the C<sendmail> program to deliver the mail.
 
 =item C<smtp>
 
-Use the C<smtp> protocol via M<Net::SMTP> to deliver the mail. The server
+Use the C<smtp> protocol via Net::SMTP to deliver the mail. The server
 to use can be specified in C<@args> with
 
- $mailer = Mail::Mailer->new('smtp', Server => $server);
+  $mailer = Mail::Mailer->new('smtp', Server => $server);
 
 The smtp mailer does not handle C<Cc> and C<Bcc> lines, neither their
 C<Resent-*> fellows. The C<Debug> options enables debugging output
@@ -62,10 +65,10 @@ distribution yourself: it is not automatically installed.
 This option is B<deprecated> when you have C<libnet> 1.28 (2014) and above.
 
 Use the smtp over ssl protocol via L<Net::SMTP::SSL> to deliver the mail.
-Usage is identical to C<smtp>. You have to install M<Authen::SASL> as
+Usage is identical to C<smtp>. You have to install Authen::SASL as
 well.
 
- $mailer = Mail::Mailer->new('smtps', Server => $server);
+  $mailer = Mail::Mailer->new('smtps', Server => $server);
 
 =item C<qmail>
 
@@ -93,17 +96,16 @@ sub is_exe($);
 
 sub Version { our $VERSION }
 
-our @Mailers =
-  ( sendmail => '/usr/lib/sendmail;/usr/sbin/sendmail;/usr/ucblib/sendmail'
-  , smtp     => undef
-  , smtps    => undef
-  , qmail    => '/usr/sbin/qmail-inject;/var/qmail/bin/qmail-inject'
-  , testfile => undef
-  );
+our @Mailers = (
+	sendmail => '/usr/lib/sendmail;/usr/sbin/sendmail;/usr/ucblib/sendmail',
+	smtp     => undef,
+	smtps    => undef,
+	qmail    => '/usr/sbin/qmail-inject;/var/qmail/bin/qmail-inject',
+	testfile => undef,
+);
 
-push @Mailers, map { split /\:/, $_, 2 }
-                   split /$Config{path_sep}/, $ENV{PERL_MAILERS}
-    if $ENV{PERL_MAILERS};
+push @Mailers, map { split /\:/, $_, 2 } split /$Config{path_sep}/, $ENV{PERL_MAILERS}
+	if $ENV{PERL_MAILERS};
 
 our %Mailers = @Mailers;
 our $MailerType;
@@ -112,62 +114,62 @@ our $MailerBinary;
 # does this really need to be done? or should a default mailer be specified?
 
 $Mailers{sendmail} = 'sendmail'
-    if $^O eq 'os2' && ! is_exe $Mailers{sendmail};
+	if $^O eq 'os2' && ! is_exe $Mailers{sendmail};
 
 if($^O =~ m/MacOS|VMS|MSWin|os2|NetWare/i )
-{   $MailerType   = 'smtp';
-    $MailerBinary = $Mailers{$MailerType};
+{	$MailerType   = 'smtp';
+	$MailerBinary = $Mailers{$MailerType};
 }
 else
-{   for(my $i = 0 ; $i < @Mailers ; $i += 2)
-    {   $MailerType = $Mailers[$i];
-        if(my $binary = is_exe $Mailers{$MailerType})
-        {   $MailerBinary = $binary;
-            last;
-        }
-    }
+{	for(my $i = 0 ; $i < @Mailers ; $i += 2)
+	{	$MailerType = $Mailers[$i];
+		if(my $binary = is_exe $Mailers{$MailerType})
+		{	$MailerBinary = $binary;
+			last;
+		}
+	}
 }
 
 sub import
-{   shift;  # class
-    @_ or return;
+{	shift;  # class
+	@_ or return;
 
-    my $type = shift;
-    my $exe  = shift || $Mailers{$type};
+	my $type = shift;
+	my $exe  = shift || $Mailers{$type};
 
-    is_exe $exe
-        or carp "Cannot locate '$exe'";
+	is_exe $exe
+		or carp "Cannot locate '$exe'";
 
-    $MailerType = $type;
-    $Mailers{$MailerType} = $exe;
+	$MailerType = $type;
+	$Mailers{$MailerType} = $exe;
 }
 
 sub to_array($)
-{   my ($self, $thing) = @_;
-    ref $thing ? @$thing : $thing;
+{	my ($self, $thing) = @_;
+	ref $thing ? @$thing : $thing;
 }
 
 sub is_exe($)
-{   my $exe = shift || '';
+{	my $exe = shift || '';
 
-    foreach my $cmd (split /\;/, $exe)
-    {   $cmd =~ s/^\s+//;
+	foreach my $cmd (split /\;/, $exe)
+	{	$cmd =~ s/^\s+//;
 
-        # remove any options
-        my $name = ($cmd =~ /^(\S+)/)[0];
+		# remove any options
+		my $name = ($cmd =~ /^(\S+)/)[0];
 
-        # check for absolute or relative path
-        return $cmd
-            if -x $name && ! -d $name && $name =~ m![\\/]!;
+		# check for absolute or relative path
+		return $cmd
+			if -x $name && ! -d $name && $name =~ m![\\/]!;
 
-        if(defined $ENV{PATH})
-        {   foreach my $dir (split /$Config{path_sep}/, $ENV{PATH})
-            {   return "$dir/$cmd"
-                   if -x "$dir/$name" && ! -d "$dir/$name";
-            }
-        }
-    }
-    0;
+		if(defined $ENV{PATH})
+		{	foreach my $dir (split /$Config{path_sep}/, $ENV{PATH})
+			{	return "$dir/$cmd"
+					if -x "$dir/$name" && ! -d "$dir/$name";
+			}
+		}
+	}
+	0;
 }
 
 =c_method new $type, %options
@@ -177,127 +179,127 @@ that back-end.
 =cut
 
 sub new($@)
-{   my ($class, $type, @args) = @_;
+{	my ($class, $type, @args) = @_;
 
-    unless($type)
-    {   $MailerType or croak "No MailerType specified";
+	unless($type)
+	{	$MailerType or croak "No MailerType specified";
 
-        warn "No real MTA found, using '$MailerType'"
-             if $MailerType eq 'testfile';
+		warn "No real MTA found, using '$MailerType'"
+			if $MailerType eq 'testfile';
 
-        $type = $MailerType;
-    }
+		$type = $MailerType;
+	}
 
-    my $exe = $Mailers{$type};
+	my $exe = $Mailers{$type};
 
-    if(defined $exe)
-    {   $exe   = is_exe $exe
-            if defined $type;
+	if(defined $exe)
+	{	$exe   = is_exe $exe
+			if defined $type;
 
-        $exe ||= $MailerBinary
-            or croak "No mailer type specified (and no default available), thus can not find executable program.";
-    }
+		$exe ||= $MailerBinary
+			or croak "No mailer type specified (and no default available), thus can not find executable program.";
+	}
 
-    $class = "Mail::Mailer::$type";
-    eval "require $class" or die $@;
+	$class = "Mail::Mailer::$type";
+	eval "require $class" or die $@;
 
-    my $glob = $class->SUPER::new;   # object is a GLOB!
-    %{*$glob} = (Exe => $exe, Args => [ @args ]);
-    $glob;
+	my $glob = $class->SUPER::new;   # object is a GLOB!
+	%{*$glob} = (Exe => $exe, Args => [ @args ]);
+	$glob;
 }
 
 =method open HASH
 The HASH consists of key and value pairs, the key being the name of
 the header field (eg, C<To>), and the value being the corresponding
 contents of the header field.  The value can either be a scalar
-(eg, C<gnat@frii.com>) or a reference to an array of scalars
+(eg, C<<gnat@frii.com>>) or a reference to an array of scalars
 (C<< eg, ['gnat@frii.com', 'Tim.Bunce@ig.co.uk'] >>).
-
 =cut
 
 sub open($)
-{   my ($self, $hdrs) = @_;
-    my $exe    = *$self->{Exe};   # no exe, then direct smtp
-    my $args   = *$self->{Args};
+{	my ($self, $hdrs) = @_;
+	my $exe    = *$self->{Exe};   # no exe, then direct smtp
+	my $args   = *$self->{Args};
 
-    my @to     = $self->who_to($hdrs);
-    my $sender = $self->who_sender($hdrs);
-    
-    $self->close;	# just in case;
+	my @to     = $self->who_to($hdrs);
+	my $sender = $self->who_sender($hdrs);
 
-    if(defined $exe)
-    {   # Fork and start a mailer
-        my $child = open $self, '|-';
-        defined $child or die "Failed to send: $!";
+	$self->close;	# just in case;
 
-        if($child==0)
-        {   # Child process will handle sending, but this is not real exec()
-            # this is a setup!!!
-            unless($self->exec($exe, $args, \@to, $sender))
-            {   warn $!;     # setup failed
-                _exit(1);    # no DESTROY(), keep it for parent
-            }
-        }
-    }
-    else
-    {   # Sending is handled by a subclass
-        $self->exec(undef, $args, \@to)
-            or die $!;    
-    }
+	if(defined $exe)
+	{	# Fork and start a mailer
+		my $child = open $self, '|-';
+		defined $child or die "Failed to send: $!";
 
-    $self->set_headers($hdrs);
-    $self;
+		if($child==0)
+		{	# Child process will handle sending, but this is not real exec()
+			# this is a setup!!!
+			unless($self->exec($exe, $args, \@to, $sender))
+			{	warn $!;     # setup failed
+				_exit(1);    # no DESTROY(), keep it for parent
+			}
+		}
+	}
+	else
+	{	# Sending is handled by a subclass
+		$self->exec(undef, $args, \@to)
+			or die $!;
+	}
+
+	$self->set_headers($hdrs);
+	$self;
 }
 
 sub _cleanup_hdrs($)
-{   foreach my $h (values %{(shift)})
-    {   foreach (ref $h ? @$h : $h)
-        {   s/\n\s*/ /g;
-            s/\s+$//;
-        }
-    }
+{	foreach my $h (values %{(shift)})
+	{	foreach (ref $h ? @$h : $h)
+		{	s/\n\s*/ /g;
+			s/\s+$//;
+		}
+	}
 }
 
 sub exec($$$$)
-{   my($self, $exe, $args, $to, $sender) = @_;
+{	my($self, $exe, $args, $to, $sender) = @_;
 
-    # Fork and exec the mailer (no shell involved to avoid risks)
-    my @exe = split /\s+/, $exe;
-    exec @exe, @$args, @$to;
+	# Fork and exec the mailer (no shell involved to avoid risks)
+	my @exe = split /\s+/, $exe;
+	exec @exe, @$args, @$to;
 }
 
 sub can_cc { 1 }	# overridden in subclass for mailer that can't
 
 sub who_to($)
-{   my($self, $hdrs) = @_;
-    my @to = $self->to_array($hdrs->{To});
-    unless($self->can_cc)  # Can't cc/bcc so add them to @to
-    {   push @to, $self->to_array($hdrs->{Cc} ) if $hdrs->{Cc};
-        push @to, $self->to_array($hdrs->{Bcc}) if $hdrs->{Bcc};
-    }
-    @to;
+{	my($self, $hdrs) = @_;
+	my @to = $self->to_array($hdrs->{To});
+
+	unless($self->can_cc)  # Can't cc/bcc so add them to @to
+	{	push @to, $self->to_array($hdrs->{Cc} ) if $hdrs->{Cc};
+		push @to, $self->to_array($hdrs->{Bcc}) if $hdrs->{Bcc};
+	}
+	@to;
 }
 
 sub who_sender($)
-{   my ($self, $hdrs) = @_;
-    ($self->to_array($hdrs->{Sender} || $hdrs->{From}))[0];
+{	my ($self, $hdrs) = @_;
+	($self->to_array($hdrs->{Sender} || $hdrs->{From}))[0];
 }
 
 sub epilogue {
-    # This could send a .signature, also see ::smtp subclass
+	# This could send a .signature, also see ::smtp subclass
 }
 
 sub close(@)
-{   my $self = shift;
-    fileno $self or return;
+{	my $self = shift;
+	fileno $self or return;
 
-    $self->epilogue;
-    CORE::close $self;
+	$self->epilogue;
+	CORE::close $self;
 }
 
-sub DESTROY { shift->close }
+sub DESTROY { $_[0]->close }
 
-#--------------
+#--------------------
 =chapter DETAILS
 
 =section ENVIRONMENT VARIABLES
@@ -311,17 +313,17 @@ our mail messages.
 
 Format:
 
-    "type1:mailbinary1;mailbinary2;...:type2:mailbinaryX;...:..."
+  "type1:mailbinary1;mailbinary2;...:type2:mailbinaryX;...:..."
 
 Example: assume you want you use private sendmail binary instead
 of mailx, one could set C<PERL_MAILERS> to:
 
-    "mail:/does/not/exists:sendmail:$HOME/test/bin/sendmail"
+  "mail:/does/not/exists:sendmail:$HOME/test/bin/sendmail"
 
 On systems which may include C<:> in file names, use C<|> as separator
 between type-groups.
 
-    "mail:c:/does/not/exists|sendmail:$HOME/test/bin/sendmail"
+  "mail:c:/does/not/exists|sendmail:$HOME/test/bin/sendmail"
 
 =back
 

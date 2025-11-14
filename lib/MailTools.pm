@@ -1,16 +1,21 @@
-# This code is part of the bundle MailTools.  Meta-POD processed with
-# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
-# Licensed under the same terms as Perl itself.
+#oodist: *** DO NOT USE THIS VERSION FOR PRODUCTION ***
+#oodist: This file contains OODoc-style documentation which will get stripped
+#oodist: during its release in the distribution.  You can use this file for
+#oodist: testing, however the code of this development version may be broken!
 
 package MailTools;
 
+use strict;
+use warnings;
+
+#--------------------
 =chapter NAME
 
 MailTools - bundle of ancient email modules
 
 =chapter SYNOPSIS
 
- # This is a place-holder for the distribution
+  # This is a place-holder for the distribution
 
 =chapter DESCRIPTION
 
@@ -37,24 +42,24 @@ Interpret mailcap files: mappings of file-types to applications as used
 by many command-line email programs.
 
 =item Mail::Field
-Simplifies access to (some) email header fields.  Used by M<Mail::Header>.
+Simplifies access to (some) email header fields.  Used by Mail::Header.
 
 =item Mail::Filter
-Process M<Mail::Internet> messages.
+Process Mail::Internet messages.
 
 =item Mail::Header
-Collection of M<Mail::Field> objects, representing the header of a
-M<Mail::Internet> object.
+Collection of Mail::Field objects, representing the header of a
+Mail::Internet object.
 
 =item Mail::Internet
 Represents a single email message, with header and body.
 
 =item Mail::Mailer
-Send M<Mail::Internet> emails via direct smtp or local MTA's.
+Send Mail::Internet emails via direct smtp or local MTA's.
 
 =item Mail::Send
-Build a M<Mail::Internet> object, and then send it out using
-M<Mail::Mailer>.
+Build a Mail::Internet object, and then send it out using
+Mail::Mailer.
 
 =item Mail::Util
 "Smart functions" you should not depend on.

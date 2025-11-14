@@ -1,25 +1,28 @@
-# This code is part of the bundle MailTools.  Meta-POD processed with
-# OODoc into POD and HTML manual-pages.  See README.md for Copyright.
-# Licensed under the same terms as Perl itself.
+#oodist: *** DO NOT USE THIS VERSION FOR PRODUCTION ***
+#oodist: This file contains OODoc-style documentation which will get stripped
+#oodist: during its release in the distribution.  You can use this file for
+#oodist: testing, however the code of this development version may be broken!
 
 package Mail::Cap;
 
 use strict;
+use warnings;
 
 sub Version { our $VERSION }
 
+#--------------------
 =chapter NAME
 
 Mail::Cap - understand mailcap files
 
 =chapter SYNOPSIS
 
- my $mc   = Mail::Cap->new;
+  my $mc   = Mail::Cap->new;
 
- my $desc = $mc->description('image/gif');
- print "GIF desc: $desc\n";
+  my $desc = $mc->description('image/gif');
+  print "GIF desc: $desc\n";
 
- my $cmd  = $mc->viewCmd('text/plain; charset=iso-8859-1', 'file.txt');
+  my $cmd  = $mc->viewCmd('text/plain; charset=iso-8859-1', 'file.txt');
 
 =chapter DESCRIPTION
 
@@ -33,7 +36,7 @@ types are:
   text/html
   text/plain; charset=iso-8859-1
 
-You could also take a look at the M<File::MimeInfo> distribution, which
+You could also take a look at the File::MimeInfo distribution, which
 are accessing tables which are used by many applications on a system,
 and therefore have succeeded the mail-cap specifications on modern
 (UNIX) systems.
@@ -44,16 +47,16 @@ our $useCache = 1;  # don't evaluate tests every time
 
 my @path;
 if($^O eq "MacOS")
-{   @path = split /\,/, $ENV{MAILCAPS} || "$ENV{HOME}mailcap";
+{	@path = split /\,/, $ENV{MAILCAPS} || "$ENV{HOME}mailcap";
 }
 else
-{   @path = split /\:/
-      , ( $ENV{MAILCAPS} || (defined $ENV{HOME} ? "$ENV{HOME}/.mailcap:" : '')
-        . '/etc/mailcap:/usr/etc/mailcap:/usr/local/etc/mailcap'
-        );   # this path is specified under RFC1524 appendix A 
+{	@path = split /\:/,
+	  ($ENV{MAILCAPS} || (defined $ENV{HOME} ? "$ENV{HOME}/.mailcap:" : '')
+	. '/etc/mailcap:/usr/etc/mailcap:/usr/local/etc/mailcap'
+	);   # this path is specified under RFC1524 appendix A
 }
 
-#--------
+#--------------------
 =chapter METHODS
 
 =section Constructors
@@ -64,116 +67,115 @@ argument it will try to parse the specified file.  Without any
 arguments it will search for the mailcap file using the standard
 mailcap path, or the MAILCAPS environment variable if it is defined.
 
-=option take 'ALL'|'FIRST'
+=option  take 'ALL'|'FIRST'
 =default take 'FIRST'
 Include all mailcap files you can find.  By default, only the first
 file is parsed, however the RFC tells us to include ALL.  To maintain
 backwards compatibility, the default only takes the FIRST.
 
-=option  filename FILENAME
-=default filename C<undef>
-Add the specified file to the list to standard locations.  This file
+=option  filename $file
+=default filename undef
+Add the specified $file to the list to standard locations.  This file
 is tried first.
 
 =examples
-  $mcap = new Mail::Cap;
-  $mcap = new Mail::Cap "/mydir/mailcap";
-  $mcap = new Mail::Cap filename => "/mydir/mailcap";
-  $mcap = new Mail::Cap take => 'ALL';
+  $mcap = Mail::Cap->new;
+  $mcap = Mail::Cap->new("/mydir/mailcap");
+  $mcap = Mail::Cap->new(filename => "/mydir/mailcap");
+  $mcap = Mail::Cap->new(take => 'ALL');
   $mcap = Mail::Cap->new(take => 'ALL');
 
 =cut
 
 sub new
-{   my $class = shift;
-    
-    unshift @_, 'filename' if @_ % 2;
-    my %args  = @_;
+{	my $class = shift;
 
-    my $take_all = $args{take} && uc $args{take} eq 'ALL';
+	unshift @_, 'filename' if @_ % 2;
+	my %args  = @_;
+	my $take_all = $args{take} && uc $args{take} eq 'ALL';
 
-    my $self  = bless {_count => 0}, $class;
+	my $self  = bless +{ _count => 0 }, $class;
 
-    $self->_process_file($args{filename})
-        if defined $args{filename} && -r $args{filename};
+	$self->_process_file($args{filename})
+		if defined $args{filename} && -r $args{filename};
 
-    if(!defined $args{filename} || $take_all)
-    {   foreach my $fname (@path)
-        {   -r $fname or next;
+	if(!defined $args{filename} || $take_all)
+	{	foreach my $fname (@path)
+		{	-r $fname or next;
 
-            $self->_process_file($fname);
-            last unless $take_all;
-        }
-    }
+			$self->_process_file($fname);
+			$take_all or last;
+		}
+	}
 
-    unless($self->{_count})
-    {   # Set up default mailcap
-        $self->{'audio/*'} = [{'view' => "showaudio %s"}];
-        $self->{'image/*'} = [{'view' => "xv %s"}];
-        $self->{'message/rfc822'} = [{'view' => "xterm -e metamail %s"}];
-    }
+	unless($self->{_count})
+	{	# Set up default mailcap
+		$self->{'audio/*'} = [ +{view => 'showaudio %s' } ];
+		$self->{'image/*'} = [ +{view => 'xv %s' } ];
+		$self->{'message/rfc822'} = [ +{view => 'xterm -e metamail %s' } ];
+	}
 
-    $self;
+	$self;
 }
 
 sub _process_file
-{   my $self = shift;
-    my $file = shift or return;
+{	my $self = shift;
+	my $file = shift or return;
 
-    local *MAILCAP;
-    open MAILCAP, $file
-        or return;
+	local *MAILCAP;
+	open MAILCAP, $file
+		or return;
 
-    $self->{_file} = $file;
+	$self->{_file} = $file;
 
-    local $_;
-    while(<MAILCAP>)
-    {   next if /^\s*#/; # comment
-        next if /^\s*$/; # blank line
-        $_ .= <MAILCAP>  # continuation line
-           while s/(^|[^\\])((?:\\\\)*)\\\s*$/$1$2/;
-        chomp;
-        s/\0//g;              # ensure no NULs in the line
-        s/(^|[^\\]);/$1\0/g;  # make field separator NUL
-        my ($type, $view, @parts) = split /\s*\0\s*/;
+	local $_;
+	while(<MAILCAP>)
+	{	next if /^\s*#/; # comment
+		next if /^\s*$/; # blank line
+		$_ .= <MAILCAP>  # continuation line
+			while s/(^|[^\\])((?:\\\\)*)\\\s*$/$1$2/;
+		chomp;
+		s/\0//g;              # ensure no NULs in the line
+		s/(^|[^\\]);/$1\0/g;  # make field separator NUL
+		my ($type, $view, @parts) = split /\s*\0\s*/;
 
-        $type    .= "/*" if $type !~ m[/];
-        $view     =~ s/\\;/;/g;
-        $view     =~ s/\\\\/\\/g;
-        my %field = (view => $view);
+		$type    .= "/*" if $type !~ m[/];
+		$view     =~ s/\\;/;/g;
+		$view     =~ s/\\\\/\\/g;
+		my %field = (view => $view);
 
-        foreach (@parts)
-        {   my($key, $val) = split /\s*\=\s*/, $_, 2;
-            if(defined $val)
-            {   $val =~ s/\\;/;/g;
-                $val =~ s/\\\\/\\/g;
-                $field{$key} = $val;
-            }
-            else
-            {   $field{$key} = 1;
-            }
-        }
+		foreach (@parts)
+		{	my($key, $val) = split /\s*\=\s*/, $_, 2;
+			if(defined $val)
+			{	$val =~ s/\\;/;/g;
+				$val =~ s/\\\\/\\/g;
+				$field{$key} = $val;
+			}
+			else
+			{	$field{$key} = 1;
+			}
+		}
 
-        if(my $test = $field{test})
-        {   unless ($test =~ /\%/)
-            {   # No parameters in test, can perform it right away
-                system $test;
-                next if $?;
-            }
-        }
+		if(my $test = $field{test})
+		{	unless ($test =~ /\%/)
+			{	# No parameters in test, can perform it right away
+				system $test;
+				next if $?;
+			}
+		}
 
-        # record this entry
-        unless(exists $self->{$type})
-        {   $self->{$type} = [];
-            $self->{_count}++; 
-        }
-        push @{$self->{$type}}, \%field;
-    }
+		# record this entry
+		unless(exists $self->{$type})
+		{	$self->{$type} = [];
+			$self->{_count}++;
+		}
+		push @{$self->{$type}}, \%field;
+	}
 
-    close MAILCAP;
+	close MAILCAP;
 }
 
-#------------------
+#--------------------
 =section Run commands
 These methods invoke a suitable program presenting or manipulating the
 media object in the specified file.  They all return C<1> if a command
@@ -192,19 +194,19 @@ sub edit    { my $self = shift; $self->_run($self->editCmd(@_))    }
 sub print   { my $self = shift; $self->_run($self->printCmd(@_))   }
 
 sub _run($)
-{   my ($self, $cmd) = @_;
-    defined $cmd or return 0;
+{	my ($self, $cmd) = @_;
+	defined $cmd or return 0;
 
-    system $cmd;
-    1;
+	system $cmd;
+	1;
 }
 
-#------------------
+#--------------------
 =section Command creator
 
 These methods return a string that is suitable for feeding to system()
 in order to invoke a suitable program presenting or manipulating the
-media object in the specified file.  It will return C<undef> if no
+media object in the specified file.  It will return undef if no
 suitable specification exists.
 
 =method viewCmd $type, $file
@@ -219,25 +221,25 @@ sub editCmd    { shift->_createCommand(edit    => @_) }
 sub printCmd   { shift->_createCommand(print   => @_) }
 
 sub _createCommand($$$)
-{   my ($self, $method, $type, $file) = @_;
-    my $entry = $self->getEntry($type, $file);
+{	my ($self, $method, $type, $file) = @_;
+	my $entry = $self->getEntry($type, $file);
 
-    $entry && exists $entry->{$method}
-        or return undef;
+	$entry && exists $entry->{$method}
+		or return undef;
 
-    $self->expandPercentMacros($entry->{$method}, $type, $file);
+	$self->expandPercentMacros($entry->{$method}, $type, $file);
 }
 
 sub makeName($$)
-{   my ($self, $type, $basename) = @_;
-    my $template = $self->nametemplate($type)
-        or return $basename;
+{	my ($self, $type, $basename) = @_;
+	my $template = $self->nametemplate($type)
+		or return $basename;
 
-    $template =~ s/%s/$basename/g;
-    $template;
+	$template =~ s/%s/$basename/g;
+	$template;
 }
 
-#------------------
+#--------------------
 =section Look-up definitions
 Methods return the corresponding mailcap field for the type.
 
@@ -247,9 +249,9 @@ specification exists.
 =cut
 
 sub field($$)
-{   my($self, $type, $field) = @_;
-    my $entry = $self->getEntry($type);
-    $entry->{$field};
+{	my($self, $type, $field) = @_;
+	my $entry = $self->getEntry($type);
+	$entry->{$field};
 }
 
 =method description $type
@@ -258,86 +260,84 @@ sub field($$)
 =method nametemplate $type
 =cut
 
-sub description     { shift->field(shift, 'description');     }
-sub textualnewlines { shift->field(shift, 'textualnewlines'); }
-sub x11_bitmap      { shift->field(shift, 'x11-bitmap');      }
-sub nametemplate    { shift->field(shift, 'nametemplate');    }
+sub description     { $_[0]->field($_[1], 'description')     }
+sub textualnewlines { $_[0]->field($_[1], 'textualnewlines') }
+sub x11_bitmap      { $_[0]->field($_[1], 'x11-bitmap')      }
+sub nametemplate    { $_[0]->field($_[1], 'nametemplate')    }
 
 sub getEntry
-{   my($self, $origtype, $file) = @_;
+{	my($self, $origtype, $file) = @_;
 
-    return $self->{_cache}{$origtype}
-        if $useCache && exists $self->{_cache}{$origtype};
+	return $self->{_cache}{$origtype}
+		if $useCache && exists $self->{_cache}{$origtype};
 
-    my ($fulltype, @params) = split /\s*;\s*/, $origtype;
-    my ($type, $subtype)    = split m[/], $fulltype, 2;
-    $subtype ||= '';
+	my ($fulltype, @params) = split /\s*;\s*/, $origtype;
+	my ($type, $subtype)    = split m[/], $fulltype, 2;
+	$subtype ||= '';
 
-    my $entry;
-    foreach (@{$self->{"$type/$subtype"}}, @{$self->{"$type/*"}})
-    {   if(exists $_->{'test'})
-        {   # must run test to see if it applies
-            my $test = $self->expandPercentMacros($_->{'test'},
-        					  $origtype, $file);
-            system $test;
-            next if $?;
-        }
-        $entry = { %$_ };  # make copy
-        last;
-    }
-    $self->{_cache}{$origtype} = $entry if $useCache;
-    $entry;
+	my $entry;
+	foreach (@{$self->{"$type/$subtype"}}, @{$self->{"$type/*"}})
+	{	if(exists $_->{'test'})
+		{	# must run test to see if it applies
+			my $test = $self->expandPercentMacros($_->{'test'},
+							$origtype, $file);
+			system $test;
+			next if $?;
+		}
+		$entry = { %$_ };  # make copy
+		last;
+	}
+	$self->{_cache}{$origtype} = $entry if $useCache;
+	$entry;
 }
 
 sub expandPercentMacros
-{   my ($self, $text, $type, $file) = @_;
-    defined $type or return $text;
-    defined $file or $file = "";
+{	my ($self, $text, $type, $file) = @_;
+	defined $type or return $text;
+	defined $file or $file = "";
 
-    my ($fulltype, @params) = split /\s*;\s*/, $type;
-    ($type, my $subtype)    = split m[/], $fulltype, 2;
+	my ($fulltype, @params) = split /\s*;\s*/, $type;
+	($type, my $subtype)    = split m[/], $fulltype, 2;
 
-    my %params;
-    foreach (@params)
-    {   my($key, $val) = split /\s*=\s*/, $_, 2;
-        $params{$key} = $val;
-    }
-    $text =~ s/\\%/\0/g;        # hide all escaped %'s
-    $text =~ s/%t/$fulltype/g;  # expand %t
-    $text =~ s/%s/$file/g;      # expand %s
-    {   # expand %{field}
-        local $^W = 0;  # avoid warnings when expanding %params
-        $text =~ s/%\{\s*(.*?)\s*\}/$params{$1}/g;
-    }
-    $text =~ s/\0/%/g;
-    $text;
+	my %params;
+	foreach (@params)
+	{	my($key, $val) = split /\s*=\s*/, $_, 2;
+		$params{$key} = $val;
+	}
+	$text =~ s/\\%/\0/g;        # hide all escaped %'s
+	$text =~ s/%t/$fulltype/g;  # expand %t
+	$text =~ s/%s/$file/g;      # expand %s
+	{	# expand %{field}
+		no warnings 'uninitialized';
+		$text =~ s/%\{\s*(.*?)\s*\}/$params{$1}/g;
+	}
+	$text =~ s/\0/%/g;
+	$text;
 }
 
 # This following procedures can be useful for debugging purposes
 
 sub dumpEntry
-{   my($hash, $prefix) = @_;
-    defined $prefix or $prefix = "";
-    print "$prefix$_ = $hash->{$_}\n"
-        for sort keys %$hash;
+{	my($hash, $prefix) = @_;
+	defined $prefix or $prefix = "";
+	print "$prefix$_ = $hash->{$_}\n" for sort keys %$hash;
 }
 
 sub dump
-{   my $self = shift;
-    foreach (keys %$self)
-    {   next if /^_/;
-        print "$_\n";
-        foreach (@{$self->{$_}})
-        {   dumpEntry($_, "\t");
-            print "\n";
-        }
-    }
+{	my $self = shift;
+	foreach (keys %$self)
+	{	next if /^_/;
+		print "$_\n";
+		foreach (@{$self->{$_}})
+		{	dumpEntry($_, "\t");
+			print "\n";
+		}
+	}
 
-    if(exists $self->{_cache})
-    {   print "Cached types\n";
-        print "\t$_\n"
-            for keys %{$self->{_cache}};
-    }
+	if(exists $self->{_cache})
+	{	print "Cached types\n";
+		print "\t$_\n" for keys %{$self->{_cache}};
+	}
 }
 
 1;
